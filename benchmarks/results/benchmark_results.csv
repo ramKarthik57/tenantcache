@@ -1,0 +1,11 @@
+framework_name,mode,total_scenarios,true_positives,false_positives,true_negatives,false_negatives,precision,recall,f1_score,accuracy,total_requests,duration_seconds,requests_per_second,findings_count
+Baseline A (Stateless Endpoint Testing),V1_MISSING_TENANT_KEY,9,0,0,2,7,1.0,0.0,0.0,0.2222,9,0.1266,71.09,0
+Baseline B (Simple Identity Substitution),V1_MISSING_TENANT_KEY,9,5,0,2,2,1.0,0.7143,0.8333,0.7778,18,0.0142,1264.85,5
+TenantCache (Stateful Differential Verification),V1_MISSING_TENANT_KEY,9,7,0,2,0,1.0,1.0,1.0,1.0,18,0.0253,711.27,7
+TenantCache (Stateful Differential Verification),V2_MISSING_USER_AUTH,9,4,0,5,0,1.0,1.0,1.0,1.0,18,0.0307,586.09,4
+TenantCache (Stateful Differential Verification),V3_UNVALIDATED_HEADER,9,4,0,5,0,1.0,1.0,1.0,1.0,18,0.0325,553.55,4
+TenantCache (Stateful Differential Verification),V4_STALE_REVOCATION,9,1,0,8,0,1.0,1.0,1.0,1.0,18,0.04,449.91,1
+TenantCache (Stateful Differential Verification),V5_ERRONEOUS_PUBLIC,9,7,0,2,0,1.0,1.0,1.0,1.0,18,0.0219,821.02,7
+TenantCache (Stateful Differential Verification),V6_NORMALIZATION,9,7,0,2,0,1.0,1.0,1.0,1.0,18,0.0217,829.86,7
+TenantCache (Stateful Differential Verification),SECURE_S1_STRICT_PRIVATE,9,0,0,9,0,1.0,1.0,1.0,1.0,18,0.0423,425.58,0
+TenantCache (Stateful Differential Verification),SECURE_S2_IDENTITY_KEYED,9,0,0,9,0,1.0,1.0,1.0,1.0,18,0.0455,395.42,0

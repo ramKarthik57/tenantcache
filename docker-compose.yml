@@ -1,0 +1,28 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: lab/application/Dockerfile
+    container_name: tenantcache_app
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - tenantcache_net
+
+  proxy:
+    build:
+      context: .
+      dockerfile: lab/nginx/Dockerfile
+    container_name: tenantcache_proxy
+    ports:
+      - "8080:80"
+    depends_on:
+      - app
+    networks:
+      - tenantcache_net
+
+networks:
+  tenantcache_net:
+    driver: bridge
