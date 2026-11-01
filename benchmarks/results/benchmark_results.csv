@@ -1,11 +1,11 @@
-framework_name,mode,total_scenarios,true_positives,false_positives,true_negatives,false_negatives,precision,recall,f1_score,accuracy,total_requests,duration_seconds,requests_per_second,findings_count
-Baseline A (Stateless Endpoint Testing),V1_MISSING_TENANT_KEY,9,0,0,2,7,1.0,0.0,0.0,0.2222,9,0.1266,71.09,0
-Baseline B (Simple Identity Substitution),V1_MISSING_TENANT_KEY,9,5,0,2,2,1.0,0.7143,0.8333,0.7778,18,0.0142,1264.85,5
-TenantCache (Stateful Differential Verification),V1_MISSING_TENANT_KEY,9,7,0,2,0,1.0,1.0,1.0,1.0,18,0.0253,711.27,7
-TenantCache (Stateful Differential Verification),V2_MISSING_USER_AUTH,9,4,0,5,0,1.0,1.0,1.0,1.0,18,0.0307,586.09,4
-TenantCache (Stateful Differential Verification),V3_UNVALIDATED_HEADER,9,4,0,5,0,1.0,1.0,1.0,1.0,18,0.0325,553.55,4
-TenantCache (Stateful Differential Verification),V4_STALE_REVOCATION,9,1,0,8,0,1.0,1.0,1.0,1.0,18,0.04,449.91,1
-TenantCache (Stateful Differential Verification),V5_ERRONEOUS_PUBLIC,9,7,0,2,0,1.0,1.0,1.0,1.0,18,0.0219,821.02,7
-TenantCache (Stateful Differential Verification),V6_NORMALIZATION,9,7,0,2,0,1.0,1.0,1.0,1.0,18,0.0217,829.86,7
-TenantCache (Stateful Differential Verification),SECURE_S1_STRICT_PRIVATE,9,0,0,9,0,1.0,1.0,1.0,1.0,18,0.0423,425.58,0
-TenantCache (Stateful Differential Verification),SECURE_S2_IDENTITY_KEYED,9,0,0,9,0,1.0,1.0,1.0,1.0,18,0.0455,395.42,0
+framework_name,mode,total_scenarios,true_positives,false_positives,true_negatives,false_negatives,precision,precision_ci_95,recall,recall_ci_95,f1_score,accuracy,accuracy_ci_95,total_requests,duration_seconds,requests_per_second,findings_count
+Baseline A (Stateless Endpoint Testing),V1_MISSING_TENANT_KEY,54,0,0,10,44,None,"(0.0, 0.0)",0.0,"(0.0, 0.0803)",0.0,0.1852,"(0.1038, 0.3084)",54,0.2374,227.43,0
+Baseline B (Simple Identity Substitution),V1_MISSING_TENANT_KEY,54,34,4,6,10,0.8947,"(0.7587, 0.9583)",0.7727,"(0.6301, 0.8716)",0.8293,0.7407,"(0.6107, 0.8388)",108,0.0299,3616.04,38
+TenantCache (Stateful Differential Verification),V1_MISSING_TENANT_KEY,54,40,0,10,4,1.0,"(0.9124, 1.0)",0.9091,"(0.7884, 0.9641)",0.9524,0.9259,"(0.8245, 0.9708)",108,0.1469,735.07,40
+TenantCache (Stateful Differential Verification),V2_MISSING_USER_AUTH,54,23,0,24,7,1.0,"(0.8569, 1.0)",0.7667,"(0.5907, 0.8821)",0.8679,0.8704,"(0.7558, 0.9358)",108,0.2076,520.33,23
+TenantCache (Stateful Differential Verification),V3_UNVALIDATED_HEADER,54,23,0,24,7,1.0,"(0.8569, 1.0)",0.7667,"(0.5907, 0.8821)",0.8679,0.8704,"(0.7558, 0.9358)",108,0.2142,504.12,23
+TenantCache (Stateful Differential Verification),V4_STALE_REVOCATION,54,4,0,46,4,1.0,"(0.5101, 1.0)",0.5,"(0.2152, 0.7848)",0.6667,0.9259,"(0.8245, 0.9708)",108,0.2695,400.77,4
+TenantCache (Stateful Differential Verification),V5_ERRONEOUS_PUBLIC,54,40,0,10,4,1.0,"(0.9124, 1.0)",0.9091,"(0.7884, 0.9641)",0.9524,0.9259,"(0.8245, 0.9708)",108,0.1723,626.83,40
+TenantCache (Stateful Differential Verification),V6_NORMALIZATION,54,40,0,10,4,1.0,"(0.9124, 1.0)",0.9091,"(0.7884, 0.9641)",0.9524,0.9259,"(0.8245, 0.9708)",108,0.1519,711.16,40
+TenantCache (Stateful Differential Verification),SECURE_S1_STRICT_PRIVATE,54,0,0,54,0,1.0,"(0.0, 0.0)",1.0,"(0.0, 0.0)",1.0,1.0,"(0.9336, 1.0)",108,0.2533,426.37,0
+TenantCache (Stateful Differential Verification),SECURE_S2_IDENTITY_KEYED,54,0,0,54,0,1.0,"(0.0, 0.0)",1.0,"(0.0, 0.0)",1.0,1.0,"(0.9336, 1.0)",108,0.2549,423.72,0

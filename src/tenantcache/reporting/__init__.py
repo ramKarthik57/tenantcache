@@ -1,29 +1,30 @@
-"""Reporting module: exports experiment outputs to Markdown, JSON, and CSV."""
+"""Reporting module: exports experiment outputs to Markdown, JSON, and CSV with statistical confidence intervals."""
 
 import json
 import csv
 import os
 from typing import List, Dict, Any
-from src.tenantcache.models import BenchmarkResult, Finding
+from src.tenantcache.evaluation import StatisticalBenchmarkResult
 
 
 class ReportGenerator:
-    """Generates structured research reports."""
+    """Generates structured research reports with rigorous statistical metrics."""
 
     @staticmethod
-    def export_json(results: List[BenchmarkResult], output_path: str):
+    def export_json(results: List[StatisticalBenchmarkResult], output_path: str):
         os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
         data = [r.model_dump() for r in results]
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
 
     @staticmethod
-    def export_csv(results: List[BenchmarkResult], output_path: str):
+    def export_csv(results: List[StatisticalBenchmarkResult], output_path: str):
         os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
         fieldnames = [
             "framework_name", "mode", "total_scenarios", "true_positives",
             "false_positives", "true_negatives", "false_negatives",
-            "precision", "recall", "f1_score", "accuracy",
+            "precision", "precision_ci_95", "recall", "recall_ci_95",
+            "f1_score", "accuracy", "accuracy_ci_95",
             "total_requests", "duration_seconds", "requests_per_second", "findings_count"
         ]
         with open(output_path, "w", newline="", encoding="utf-8") as f:
@@ -31,32 +32,42 @@ class ReportGenerator:
             writer.writeheader()
             for r in results:
                 row = r.model_dump()
-                filtered_row = {k: row[k] for k in fieldnames}
+                filtered_row = {k: str(row[k]) for k in fieldnames}
                 writer.writerow(filtered_row)
 
     @staticmethod
-    def export_markdown(results: List[BenchmarkResult], output_path: str) -> str:
+    def export_markdown(results: List[StatisticalBenchmarkResult], output_path: str) -> str:
         os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
         lines = [
-            "# TenantCache: Experimental Evaluation and Benchmark Report",
+            "# TenantCache: Experimental Evaluation and Statistical Benchmark Report",
             "",
-            "## 1. Quantitative Benchmark Summary",
+            "## 1. Quantitative Benchmark Summary (with 95% Wilson Confidence Intervals)",
             "",
-            "| Framework / Approach | Configuration Mode | Total Scenarios | TP | FP | TN | FN | Precision | Recall | F1 Score | Accuracy | Duration (s) | Req/s |",
+            "| Framework / Approach | Archetype | Scenarios | TP | FP | TN | FN | Precision (95% CI) | Recall (95% CI) | F1 Score | Accuracy (95% CI) | Duration | Req/s |",
             "|---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|"
         ]
 
         for r in results:
+            prec_str = f"{r.precision:.4f} `[{r.precision_ci_95[0]:.2f}, {r.precision_ci_95[1]:.2f}]`" if r.precision is not None else "*Undefined (N/A)*"
+            rec_str = f"{r.recall:.4f} `[{r.recall_ci_95[0]:.2f}, {r.recall_ci_95[1]:.2f}]`"
+            acc_str = f"{r.accuracy:.4f} `[{r.accuracy_ci_95[0]:.2f}, {r.accuracy_ci_95[1]:.2f}]`"
+
             lines.append(
                 f"| **{r.framework_name}** | `{r.mode}` | {r.total_scenarios} | {r.true_positives} | "
                 f"{r.false_positives} | {r.true_negatives} | {r.false_negatives} | "
-                f"{r.precision:.4f} | {r.recall:.4f} | {r.f1_score:.4f} | {r.accuracy:.4f} | "
-                f"{r.duration_seconds:.3f} | {r.requests_per_second:.1f} |"
+                f"{prec_str} | {rec_str} | {r.f1_score:.4f} | {acc_str} | "
+                f"{r.duration_seconds:.3f}s | {r.requests_per_second:.1f} |"
             )
 
         lines.extend([
             "",
-            "## 2. Confirmed Vulnerability Findings Breakdown",
+            "## 2. Statistical Invariant and Methodology Notes",
+            "",
+            "- **Baseline A Precision:** When a baseline makes 0 positive predictions (TP=0, FP=0), Precision is mathematically undefined ($0/0$) and is explicitly reported as *Undefined (N/A)* rather than artificially defaulted to 1.0.",
+            "- **Wilson Score Intervals:** Reported as `[lower, upper]` at a 95% confidence level ($z = 1.96$), reflecting the sample size uncertainty over the 54-scenario benchmark corpus.",
+            "- **Expanded Corpus:** Evaluates 54 scenarios across 5 distinct enterprise tenants and multiple departments (14 cross-tenant, 10 cross-user private, 8 privilege boundary, 8 stateful revocation, 6 header spoofing, 8 benign public/shared controls).",
+            "",
+            "## 3. Confirmed Vulnerability Findings Breakdown",
             ""
         ])
 
@@ -64,7 +75,6 @@ class ReportGenerator:
         for r in results:
             all_findings.extend(r.findings)
 
-        # Deduplicate findings by title and adversary
         unique_findings = {}
         for f in all_findings:
             key = f"{f.leakage_type.value}:{f.resource_id}:{f.adversary_principal}"

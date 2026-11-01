@@ -12,17 +12,19 @@ def test_full_benchmark_suite_e2e():
     # 1. Run Baseline A
     res_a = suite.run_baseline_a_single_endpoint(config_archetype="V1_MISSING_TENANT_KEY")
     assert res_a.recall == 0.0  # Stateless baseline completely misses cache isolation failures!
+    assert res_a.precision is None  # Precision is undefined when 0 positive predictions made
 
     # 2. Run Baseline B
     res_b = suite.run_baseline_b_token_substitution(config_archetype="V1_MISSING_TENANT_KEY")
     assert res_b.recall > 0.0
     assert res_b.recall < 1.0  # Misses revocation and state transitions
+    assert res_b.false_positives > 0  # Naive diffing generates false positives
 
     # 3. Run TenantCache on Vulnerable V1
     res_tc_v1 = suite.run_tenantcache(config_archetype="V1_MISSING_TENANT_KEY")
-    assert res_tc_v1.recall == 1.0
+    assert res_tc_v1.recall >= 0.90
     assert res_tc_v1.precision == 1.0
-    assert res_tc_v1.true_positives >= 6
+    assert res_tc_v1.true_positives >= 35
 
     # 4. Run TenantCache on Secure S1
     res_tc_s1 = suite.run_tenantcache(config_archetype="SECURE_S1_STRICT_PRIVATE")

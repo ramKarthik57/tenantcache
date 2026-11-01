@@ -108,13 +108,17 @@ def scan(
     table = Table(title=f"Scan Results: {archetype}")
     table.add_column("Metric", style="bold")
     table.add_column("Value")
+    prec_str = f"{result.precision:.4f}" if result.precision is not None else "Undefined (N/A)"
     table.add_row("Total Scenarios Evaluated", str(result.total_scenarios))
     table.add_row("Confirmed Leakage Findings", str(result.findings_count))
     table.add_row("True Positives (TP)", str(result.true_positives))
     table.add_row("False Positives (FP)", str(result.false_positives))
-    table.add_row("Precision", f"{result.precision:.4f}")
+    table.add_row("Precision", prec_str)
+    table.add_row("Precision 95% CI", f"[{result.precision_ci_95[0]:.2f}, {result.precision_ci_95[1]:.2f}]")
     table.add_row("Recall", f"{result.recall:.4f}")
+    table.add_row("Recall 95% CI", f"[{result.recall_ci_95[0]:.2f}, {result.recall_ci_95[1]:.2f}]")
     table.add_row("F1 Score", f"{result.f1_score:.4f}")
+    table.add_row("Accuracy", f"{result.accuracy:.4f}")
     table.add_row("Duration", f"{result.duration_seconds:.3f} s")
     console.print(table)
 
@@ -183,10 +187,11 @@ def benchmark(
     comp_table.add_column("Duration", justify="right")
 
     for r in all_results:
+        prec_display = f"{r.precision:.2f}" if r.precision is not None else "Undef"
         comp_table.add_row(
             r.framework_name,
             r.mode,
-            f"{r.precision:.2f}",
+            prec_display,
             f"{r.recall:.2f}",
             f"{r.f1_score:.2f}",
             str(r.true_positives),

@@ -70,8 +70,10 @@ def revoke_user_access(
 
 @app.get("/api/v1/public/docs/{doc_id}")
 def get_public_document(doc_id: str, response: Response):
-    """Public guidelines endpoint - legitimately shared across tenants."""
-    res = lab_db.get_resource("res_pub_guideline")
+    """Public guidelines and terms endpoint - legitimately shared across tenants."""
+    res = next((r for r in lab_db.simulator.resources.values() if r.visibility == Visibility.PUBLIC and doc_id in r.endpoint_path), None)
+    if not res:
+        res = lab_db.get_resource("res_pub_guideline")
     if not res:
         raise HTTPException(status_code=404, detail="Document not found")
     response.headers["Cache-Control"] = "public, max-age=3600"
@@ -112,7 +114,7 @@ def get_tenant_invoice(
     principal = authenticate_principal(authorization)
     tenant_id = principal["tenant_id"]
 
-    res = lab_db.get_resource("res_acme_invoice_101")
+    res = next((r for r in lab_db.simulator.resources.values() if invoice_id in r.endpoint_path), None)
     if not res:
         raise HTTPException(status_code=404, detail="Invoice not found")
     
@@ -151,7 +153,8 @@ def get_admin_audit_logs(
     if principal["role"] != Role.ADMIN.value:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied: Admin role required")
 
-    res = lab_db.get_resource("res_acme_admin_logs")
+    res_id = f"res_{principal['tenant_id'].replace('tenant_', '')}_admin_logs"
+    res = lab_db.get_resource(res_id)
     if not res or res.tenant_id != principal["tenant_id"]:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied: Tenant mismatch")
 
@@ -167,7 +170,7 @@ def get_shared_project(
 ):
     """Shared project endpoint with dynamic access control and revocation."""
     principal = authenticate_principal(authorization)
-    res = lab_db.get_resource("res_acme_project_alpha")
+    res = next((r for r in lab_db.simulator.resources.values() if proj_id in r.endpoint_path), None)
     if not res:
         raise HTTPException(status_code=404, detail="Project not found")
 

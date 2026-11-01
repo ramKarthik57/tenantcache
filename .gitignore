@@ -1,3 +1,5 @@
+lab/nginx_runtime/
+*.zip
 __pycache__/
 *.py[cod]
 *$py.class

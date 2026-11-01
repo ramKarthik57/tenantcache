@@ -57,7 +57,7 @@ class DifferentialRunner:
                 status_code = res.status_code
                 headers = dict(res.headers)
                 body_text = res.text
-                cache_status_raw = headers.get("X-Cache-Status", "UNKNOWN").upper()
+                cache_status_raw = (headers.get("x-cache-status") or headers.get("X-Cache-Status") or "UNKNOWN").upper()
                 try:
                     cache_status = CacheStatus(cache_status_raw)
                 except ValueError:

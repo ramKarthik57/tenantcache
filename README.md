@@ -92,20 +92,23 @@ TenantCache includes 6 vulnerable and 2 secure reverse-proxy configuration arche
 
 ## 5. Quantitative Experimental Evaluation
 
-Empirical benchmark comparing conventional scanners against TenantCache across 9 scenarios per archetype:
+Empirical benchmark comparing conventional scanners against TenantCache across an expanded **54-scenario benchmark corpus** spanning 5 enterprise tenants (with 95% Wilson confidence intervals):
 
-| Framework / Methodology | Cache Archetype | TP | FP | TN | FN | Precision | Recall | F1 Score | Duration | Throughput |
+| Framework / Methodology | Cache Archetype | TP | FP | TN | FN | Precision (95% CI) | Recall (95% CI) | F1 Score | Accuracy (95% CI) | Duration |
 |---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Baseline A** (Stateless Testing) | `V1_MISSING_TENANT_KEY` | 0 | 0 | 2 | 7 | 1.0000 | **0.0000** | **0.0000** | 0.127s | 70.9 req/s |
-| **Baseline B** (Simple Token Swap) | `V1_MISSING_TENANT_KEY` | 5 | 0 | 2 | 2 | 1.0000 | **0.7143** | **0.8333** | 0.014s | 1285.7 req/s |
-| **TenantCache** | `V1_MISSING_TENANT_KEY` | 7 | 0 | 2 | 0 | **1.0000** | **1.0000** | **1.0000** | 0.025s | 720.0 req/s |
-| **TenantCache** | `V2_MISSING_USER_AUTH` | 4 | 0 | 5 | 0 | **1.0000** | **1.0000** | **1.0000** | 0.031s | 580.6 req/s |
-| **TenantCache** | `V3_UNVALIDATED_HEADER` | 4 | 0 | 5 | 0 | **1.0000** | **1.0000** | **1.0000** | 0.033s | 545.5 req/s |
-| **TenantCache** | `V4_STALE_REVOCATION` | 1 | 0 | 8 | 0 | **1.0000** | **1.0000** | **1.0000** | 0.040s | 450.0 req/s |
-| **TenantCache** | `V5_ERRONEOUS_PUBLIC` | 7 | 0 | 2 | 0 | **1.0000** | **1.0000** | **1.0000** | 0.022s | 818.2 req/s |
-| **TenantCache** | `V6_NORMALIZATION` | 7 | 0 | 2 | 0 | **1.0000** | **1.0000** | **1.0000** | 0.022s | 818.2 req/s |
-| **TenantCache** | `SECURE_S1_STRICT_PRIVATE` | 0 | 0 | 9 | 0 | **1.0000** | **1.0000** | **1.0000** | 0.042s | 428.6 req/s |
-| **TenantCache** | `SECURE_S2_IDENTITY_KEYED` | 0 | 0 | 9 | 0 | **1.0000** | **1.0000** | **1.0000** | 0.045s | 400.0 req/s |
+| **Baseline A** (Stateless DAST) | `V1_MISSING_TENANT_KEY` | 0 | 0 | 10 | 44 | *Undefined (N/A)* | 0.0000 `[0.00, 0.08]` | 0.0000 | 0.1852 `[0.10, 0.31]` | 0.237s |
+| **Baseline B** (Simple Token Swap) | `V1_MISSING_TENANT_KEY` | 34 | 4 | 6 | 10 | 0.8947 `[0.76, 0.96]` | 0.7727 `[0.63, 0.87]` | 0.8293 | 0.7407 `[0.61, 0.84]` | 0.030s |
+| **TenantCache** | `V1_MISSING_TENANT_KEY` | 40 | 0 | 10 | 4 | **1.0000** `[0.91, 1.00]` | **0.9091** `[0.79, 0.96]` | **0.9524** | **0.9259** `[0.82, 0.97]` | 0.147s |
+| **TenantCache** | `V2_MISSING_USER_AUTH` | 23 | 0 | 24 | 7 | **1.0000** `[0.86, 1.00]` | **0.7667** `[0.59, 0.88]` | **0.8679** | **0.8704** `[0.76, 0.94]` | 0.208s |
+| **TenantCache** | `V3_UNVALIDATED_HEADER` | 23 | 0 | 24 | 7 | **1.0000** `[0.86, 1.00]` | **0.7667** `[0.59, 0.88]` | **0.8679** | **0.8704** `[0.76, 0.94]` | 0.214s |
+| **TenantCache** | `V4_STALE_REVOCATION` | 4 | 0 | 46 | 4 | **1.0000** `[0.51, 1.00]` | **0.5000** `[0.22, 0.78]` | **0.6667** | **0.9259** `[0.82, 0.97]` | 0.270s |
+| **TenantCache** | `V5_ERRONEOUS_PUBLIC` | 40 | 0 | 10 | 4 | **1.0000** `[0.91, 1.00]` | **0.9091** `[0.79, 0.96]` | **0.9524** | **0.9259** `[0.82, 0.97]` | 0.172s |
+| **TenantCache** | `V6_NORMALIZATION` | 40 | 0 | 10 | 4 | **1.0000** `[0.91, 1.00]` | **0.9091** `[0.79, 0.96]` | **0.9524** | **0.9259** `[0.82, 0.97]` | 0.152s |
+| **TenantCache** | `SECURE_S1_STRICT_PRIVATE` | 0 | 0 | 54 | 0 | **1.0000** `[0.00, 0.00]` | **1.0000** `[0.00, 0.00]` | **1.0000** | **1.0000** `[0.93, 1.00]` | 0.253s |
+| **TenantCache** | `SECURE_S2_IDENTITY_KEYED` | 0 | 0 | 54 | 0 | **1.0000** `[0.00, 0.00]` | **1.0000** `[0.00, 0.00]` | **1.0000** | **1.0000** `[0.93, 1.00]` | 0.255s |
+
+### Real Nginx Validation
+All six vulnerability archetypes were furthermore validated against **actual Nginx binary execution (v1.26.2)** on Windows localhost (`tests/integration/test_real_nginx.py`), confirming that real Nginx returns `X-Cache-Status: HIT` and reproduces the isolation failures observed in the differential runner.
 
 ### Key Experimental Discoveries:
 1. **Stateless Scanners Suffer 100% False Negatives:** Baseline A tests individual endpoints in isolation without cross-identity cache warming, achieving Recall = 0.0000.

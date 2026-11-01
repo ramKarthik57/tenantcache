@@ -1,13 +1,13 @@
 """Tenant Simulator module: generates synthetic multi-tenant structures, resources, and canaries."""
 
 import zlib
-import uuid
-from typing import Dict, List, Tuple
+import hashlib
+from typing import Dict, List, Tuple, Set
 from src.tenantcache.models import Tenant, User, Resource, Principal, Role, Visibility
 
 
 class TenantSimulator:
-    """Simulates a multi-tenant enterprise universe with synthetic users, resources, and canaries."""
+    """Simulates an expanded enterprise multi-tenant universe with synthetic users, resources, and canaries."""
 
     def __init__(self, seed: int = 42):
         self.seed = seed
@@ -19,184 +19,257 @@ class TenantSimulator:
         self._initialize_universe()
 
     def _generate_canary(self, tenant_id: str, resource_id: str, field: str) -> str:
-        import hashlib
         unique_id = hashlib.sha256(f"{self.seed}:{tenant_id}:{resource_id}:{field}".encode("utf-8")).hexdigest()[:12]
         crc = hex(zlib.crc32(f"{tenant_id}:{resource_id}:{field}".encode("utf-8")) & 0xFFFFFFFF)[2:]
         token = f"TC_CANARY_{unique_id}_{crc.upper()}"
         return token
 
     def _initialize_universe(self):
-        # 1. Create Tenants
+        # 1. Five Enterprise Tenants
         t_acme = Tenant(id="tenant_acme", name="Acme Corporation", slug="acme")
         t_beta = Tenant(id="tenant_beta", name="Beta Dynamics", slug="beta")
         t_gamma = Tenant(id="tenant_gamma", name="Gamma Industries", slug="gamma")
-        for t in [t_acme, t_beta, t_gamma]:
+        t_delta = Tenant(id="tenant_delta", name="Delta Technologies", slug="delta")
+        t_epsilon = Tenant(id="tenant_epsilon", name="Epsilon Logistics", slug="epsilon")
+
+        for t in [t_acme, t_beta, t_gamma, t_delta, t_epsilon]:
             self.tenants[t.id] = t
 
-        # 2. Create Users for each Tenant
-        # Acme: Alice (Admin), Alex (Standard)
-        u_alice = User(id="user_alice", tenant_id="tenant_acme", username="alice", role=Role.ADMIN, email="alice@acme.test")
-        u_alex = User(id="user_alex", tenant_id="tenant_acme", username="alex", role=Role.STANDARD_USER, email="alex@acme.test")
+        # 2. Ten Principals across Tenants and Roles
+        user_specs = [
+            ("user_alice", "tenant_acme", "alice", Role.ADMIN, "alice@acme.test"),
+            ("user_alex", "tenant_acme", "alex", Role.STANDARD_USER, "alex@acme.test"),
+            ("user_amanda", "tenant_acme", "amanda", Role.STANDARD_USER, "amanda@acme.test"),
+            ("user_bob", "tenant_beta", "bob", Role.ADMIN, "bob@beta.test"),
+            ("user_brian", "tenant_beta", "brian", Role.STANDARD_USER, "brian@beta.test"),
+            ("user_charlie", "tenant_gamma", "charlie", Role.STANDARD_USER, "charlie@gamma.test"),
+            ("user_clara", "tenant_gamma", "clara", Role.ADMIN, "clara@gamma.test"),
+            ("user_david", "tenant_delta", "david", Role.ADMIN, "david@delta.test"),
+            ("user_diana", "tenant_delta", "diana", Role.STANDARD_USER, "diana@delta.test"),
+            ("user_eric", "tenant_epsilon", "eric", Role.GUEST, "eric@epsilon.test"),
+        ]
 
-        # Beta: Bob (Admin), Brian (Standard)
-        u_bob = User(id="user_bob", tenant_id="tenant_beta", username="bob", role=Role.ADMIN, email="bob@beta.test")
-        u_brian = User(id="user_brian", tenant_id="tenant_beta", username="brian", role=Role.STANDARD_USER, email="brian@beta.test")
-
-        # Gamma: Charlie (Standard)
-        u_charlie = User(id="user_charlie", tenant_id="tenant_gamma", username="charlie", role=Role.STANDARD_USER, email="charlie@gamma.test")
-
-        for u in [u_alice, u_alex, u_bob, u_brian, u_charlie]:
+        for u_id, t_id, uname, role, email in user_specs:
+            u = User(id=u_id, tenant_id=t_id, username=uname, role=role, email=email)
             self.users[u.id] = u
+            token = f"TOKEN_{t_id}_{uname.upper()}_SECURE_SIG"
             p = Principal(
                 user_id=u.id,
                 username=u.username,
                 tenant_id=u.tenant_id,
                 role=u.role,
-                auth_token=f"TOKEN_{u.tenant_id}_{u.username.upper()}_SECURE_SIG",
+                auth_token=token,
                 headers={
-                    "Authorization": f"Bearer TOKEN_{u.tenant_id}_{u.username.upper()}_SECURE_SIG",
+                    "Authorization": f"Bearer {token}",
                     "X-Tenant-ID": u.tenant_id,
                 },
                 cookies={"session_id": f"sess_{u.tenant_id}_{u.username}"}
             )
             self.principals[u.id] = p
 
-        # 3. Create Resources across Visibility spectrum
-        # (A) Public Guidelines (legitimately shareable across all tenants)
-        pub_canary = "TC_PUBLIC_DOC_GENERAL_COMPLIANCE_2026"
-        res_public_doc = Resource(
-            id="res_pub_guideline",
+        # 3. Comprehensive Multi-Tenant Resource Catalog
+        # (A) Public Guidelines and Public Terms (Visibility = PUBLIC)
+        self._add_resource(
+            res_id="res_pub_guideline",
             tenant_id="SYSTEM",
             owner_id="SYSTEM",
             name="Public Security Guidelines",
             endpoint_path="/api/v1/public/docs/guidelines",
             visibility=Visibility.PUBLIC,
-            canary_token=pub_canary,
-            payload={"title": "Public Security Guidelines", "content": f"Official guidelines. Public Token: {pub_canary}"},
+            canary="TC_PUBLIC_DOC_GENERAL_COMPLIANCE_2026",
+            payload={"title": "Public Security Guidelines", "token": "TC_PUBLIC_DOC_GENERAL_COMPLIANCE_2026", "content": "Official Public Compliance Guidelines"}
         )
-        self.resources[res_public_doc.id] = res_public_doc
-        self.canary_registry[pub_canary] = res_public_doc.id
-
-        # (B) Acme Tenant Dashboard (Tenant Shared)
-        acme_dash_canary = self._generate_canary("tenant_acme", "dash", "kpi")
-        res_acme_dash = Resource(
-            id="res_acme_dashboard",
-            tenant_id="tenant_acme",
-            owner_id="user_alice",
-            name="Acme Quarterly Dashboard",
-            endpoint_path="/api/v1/tenant/dashboard",
-            visibility=Visibility.TENANT_SHARED,
-            canary_token=acme_dash_canary,
-            payload={"tenant": "tenant_acme", "revenue_target": "$42M", "secret_kpi": acme_dash_canary},
-            allowed_user_ids={"user_alice", "user_alex"},
-            allowed_roles={Role.ADMIN, Role.STANDARD_USER}
+        self._add_resource(
+            res_id="res_pub_terms",
+            tenant_id="SYSTEM",
+            owner_id="SYSTEM",
+            name="Public Terms of Service",
+            endpoint_path="/api/v1/public/docs/terms",
+            visibility=Visibility.PUBLIC,
+            canary="TC_PUBLIC_TERMS_OF_SERVICE_V2",
+            payload={"title": "Terms of Service", "token": "TC_PUBLIC_TERMS_OF_SERVICE_V2"}
         )
-        self.resources[res_acme_dash.id] = res_acme_dash
-        self.canary_registry[acme_dash_canary] = res_acme_dash.id
 
-        # (C) Beta Tenant Dashboard (Tenant Shared)
-        beta_dash_canary = self._generate_canary("tenant_beta", "dash", "kpi")
-        res_beta_dash = Resource(
-            id="res_beta_dashboard",
-            tenant_id="tenant_beta",
-            owner_id="user_bob",
-            name="Beta Quarterly Dashboard",
-            endpoint_path="/api/v1/tenant/dashboard",
-            visibility=Visibility.TENANT_SHARED,
-            canary_token=beta_dash_canary,
-            payload={"tenant": "tenant_beta", "revenue_target": "$18M", "secret_kpi": beta_dash_canary},
-            allowed_user_ids={"user_bob", "user_brian"},
-            allowed_roles={Role.ADMIN, Role.STANDARD_USER}
-        )
-        self.resources[res_beta_dash.id] = res_beta_dash
-        self.canary_registry[beta_dash_canary] = res_beta_dash.id
+        # (B) Tenant Dashboards (Visibility = TENANT_SHARED)
+        for t_id, owner_id in [
+            ("tenant_acme", "user_alice"),
+            ("tenant_beta", "user_bob"),
+            ("tenant_gamma", "user_clara"),
+            ("tenant_delta", "user_david")
+        ]:
+            c = self._generate_canary(t_id, "dash", "kpi")
+            self._add_resource(
+                res_id=f"res_{t_id.replace('tenant_', '')}_dashboard",
+                tenant_id=t_id,
+                owner_id=owner_id,
+                name=f"{t_id.title()} Executive Dashboard",
+                endpoint_path="/api/v1/tenant/dashboard",
+                visibility=Visibility.TENANT_SHARED,
+                canary=c,
+                payload={"tenant": t_id, "kpi_metric": c},
+                allowed_roles={Role.ADMIN, Role.STANDARD_USER}
+            )
 
-        # (D) Acme Invoices (Tenant Invoices: /api/v1/tenant/invoices/inv-101)
-        acme_inv_canary = self._generate_canary("tenant_acme", "inv-101", "invoice_sum")
-        res_acme_inv = Resource(
-            id="res_acme_invoice_101",
+        # (C) Invoices and Financial Records (Visibility = TENANT_SHARED)
+        inv_c1 = self._generate_canary("tenant_acme", "inv-101", "sum")
+        self._add_resource(
+            res_id="res_acme_invoice_101",
             tenant_id="tenant_acme",
             owner_id="user_alice",
             name="Acme Master Invoice 101",
             endpoint_path="/api/v1/tenant/invoices/inv-101",
             visibility=Visibility.TENANT_SHARED,
-            canary_token=acme_inv_canary,
-            payload={"invoice_id": "inv-101", "amount": "$890,000", "confidential_code": acme_inv_canary},
+            canary=inv_c1,
+            payload={"invoice_id": "inv-101", "amount": "$890,000", "code": inv_c1},
+            allowed_roles={Role.ADMIN, Role.STANDARD_USER}
+        )
+
+        inv_c2 = self._generate_canary("tenant_beta", "inv-202", "sum")
+        self._add_resource(
+            res_id="res_beta_invoice_202",
+            tenant_id="tenant_beta",
+            owner_id="user_bob",
+            name="Beta Enterprise Invoice 202",
+            endpoint_path="/api/v1/tenant/invoices/inv-202",
+            visibility=Visibility.TENANT_SHARED,
+            canary=inv_c2,
+            payload={"invoice_id": "inv-202", "amount": "$450,000", "code": inv_c2},
+            allowed_roles={Role.ADMIN, Role.STANDARD_USER}
+        )
+
+        # (D) User Private Profiles (Visibility = USER_PRIVATE)
+        for u_id, uname, t_id in [
+            ("user_alice", "alice", "tenant_acme"),
+            ("user_alex", "alex", "tenant_acme"),
+            ("user_amanda", "amanda", "tenant_acme"),
+            ("user_bob", "bob", "tenant_beta"),
+            ("user_brian", "brian", "tenant_beta"),
+            ("user_charlie", "charlie", "tenant_gamma"),
+            ("user_david", "david", "tenant_delta")
+        ]:
+            c = self._generate_canary(t_id, f"prof_{uname}", "ssn")
+            self._add_resource(
+                res_id=f"res_{uname}_profile",
+                tenant_id=t_id,
+                owner_id=u_id,
+                name=f"{uname.title()} Private Profile",
+                endpoint_path="/api/v1/user/profile",
+                visibility=Visibility.USER_PRIVATE,
+                canary=c,
+                payload={"username": uname, "ssn_vault": c},
+                allowed_user_ids={u_id}
+            )
+
+        # (E) Admin Audit Logs (Visibility = USER_PRIVATE, Role = ADMIN)
+        for t_id, admin_id in [
+            ("tenant_acme", "user_alice"),
+            ("tenant_beta", "user_bob"),
+            ("tenant_gamma", "user_clara"),
+            ("tenant_delta", "user_david")
+        ]:
+            c = self._generate_canary(t_id, "audit", "master_key")
+            self._add_resource(
+                res_id=f"res_{t_id.replace('tenant_', '')}_admin_logs",
+                tenant_id=t_id,
+                owner_id=admin_id,
+                name=f"{t_id.title()} Root Audit Logs",
+                endpoint_path="/api/v1/admin/audit-logs",
+                visibility=Visibility.USER_PRIVATE,
+                canary=c,
+                payload={"admin": admin_id, "root_key": c},
+                allowed_user_ids={admin_id},
+                allowed_roles={Role.ADMIN}
+            )
+
+        # (F) Multiple Revocable Shared Projects (Visibility = TENANT_SHARED with dynamic revocation)
+        # Project Alpha: Alex revoked
+        c_p1 = self._generate_canary("tenant_acme", "proj_alpha", "blueprint")
+        self._add_resource(
+            res_id="res_acme_project_alpha",
+            tenant_id="tenant_acme",
+            owner_id="user_alice",
+            name="Project Alpha Stealth Blueprint",
+            endpoint_path="/api/v1/shared/projects/proj-alpha",
+            visibility=Visibility.TENANT_SHARED,
+            canary=c_p1,
+            payload={"project": "Alpha", "secret_blueprint": c_p1},
             allowed_user_ids={"user_alice", "user_alex"},
             allowed_roles={Role.ADMIN, Role.STANDARD_USER}
         )
-        self.resources[res_acme_inv.id] = res_acme_inv
-        self.canary_registry[acme_inv_canary] = res_acme_inv.id
 
-        # (E) Alice's Private Profile (User Private)
-        alice_prof_canary = self._generate_canary("tenant_acme", "prof_alice", "ssn")
-        res_alice_profile = Resource(
-            id="res_alice_profile",
-            tenant_id="tenant_acme",
-            owner_id="user_alice",
-            name="Alice Executive Profile",
-            endpoint_path="/api/v1/user/profile",
-            visibility=Visibility.USER_PRIVATE,
-            canary_token=alice_prof_canary,
-            payload={"user": "alice", "ssn_last4": "8812", "vault_secret": alice_prof_canary},
-            allowed_user_ids={"user_alice"},
-            allowed_roles={Role.ADMIN}
-        )
-        self.resources[res_alice_profile.id] = res_alice_profile
-        self.canary_registry[alice_prof_canary] = res_alice_profile.id
-
-        # (F) Alex's Private Profile (User Private)
-        alex_prof_canary = self._generate_canary("tenant_acme", "prof_alex", "ssn")
-        res_alex_profile = Resource(
-            id="res_alex_profile",
-            tenant_id="tenant_acme",
-            owner_id="user_alex",
-            name="Alex User Profile",
-            endpoint_path="/api/v1/user/profile",
-            visibility=Visibility.USER_PRIVATE,
-            canary_token=alex_prof_canary,
-            payload={"user": "alex", "ssn_last4": "1244", "vault_secret": alex_prof_canary},
-            allowed_user_ids={"user_alex"},
-            allowed_roles={Role.STANDARD_USER}
-        )
-        self.resources[res_alex_profile.id] = res_alex_profile
-        self.canary_registry[alex_prof_canary] = res_alex_profile.id
-
-        # (G) Alice's Private Admin Audit Logs (/api/v1/admin/audit-logs)
-        alice_admin_canary = self._generate_canary("tenant_acme", "audit", "security_key")
-        res_admin_logs = Resource(
-            id="res_acme_admin_logs",
-            tenant_id="tenant_acme",
-            owner_id="user_alice",
-            name="Acme Admin Audit Logs",
-            endpoint_path="/api/v1/admin/audit-logs",
-            visibility=Visibility.USER_PRIVATE,
-            canary_token=alice_admin_canary,
-            payload={"admin": "alice", "security_events": ["root_key_rotate"], "secret_token": alice_admin_canary},
-            allowed_user_ids={"user_alice"},
-            allowed_roles={Role.ADMIN}
-        )
-        self.resources[res_admin_logs.id] = res_admin_logs
-        self.canary_registry[alice_admin_canary] = res_admin_logs.id
-
-        # (H) Shared Project with Revocable Access (/api/v1/shared/projects/proj-alpha)
-        # Initially granted to Alice and Alex; Alex will have access revoked dynamically!
-        proj_canary = self._generate_canary("tenant_acme", "proj-alpha", "intellectual_prop")
-        res_shared_project = Resource(
-            id="res_acme_project_alpha",
-            tenant_id="tenant_acme",
-            owner_id="user_alice",
-            name="Project Alpha R&D Blueprint",
-            endpoint_path="/api/v1/shared/projects/proj-alpha",
+        # Project Beta: Brian revoked
+        c_p2 = self._generate_canary("tenant_beta", "proj_beta", "merger")
+        self._add_resource(
+            res_id="res_beta_project_merger",
+            tenant_id="tenant_beta",
+            owner_id="user_bob",
+            name="Project Titan M&A Dossier",
+            endpoint_path="/api/v1/shared/projects/proj-titan",
             visibility=Visibility.TENANT_SHARED,
-            canary_token=proj_canary,
-            payload={"project": "Alpha", "patent_pending": proj_canary, "status": "CONFIDENTIAL"},
-            allowed_user_ids={"user_alice", "user_alex"},
-            allowed_roles={Role.ADMIN, Role.STANDARD_USER},
+            canary=c_p2,
+            payload={"project": "Titan", "merger_secrets": c_p2},
+            allowed_user_ids={"user_bob", "user_brian"},
+            allowed_roles={Role.ADMIN, Role.STANDARD_USER}
+        )
+
+        # Project Gamma: Charlie revoked
+        c_p3 = self._generate_canary("tenant_gamma", "proj_gamma", "ai_weights")
+        self._add_resource(
+            res_id="res_gamma_project_ai",
+            tenant_id="tenant_gamma",
+            owner_id="user_clara",
+            name="Project Neural Weight Matrix",
+            endpoint_path="/api/v1/shared/projects/proj-neural",
+            visibility=Visibility.TENANT_SHARED,
+            canary=c_p3,
+            payload={"project": "Neural", "weights_hash": c_p3},
+            allowed_user_ids={"user_clara", "user_charlie"},
+            allowed_roles={Role.ADMIN, Role.STANDARD_USER}
+        )
+
+        # Project Delta: Diana revoked
+        c_p4 = self._generate_canary("tenant_delta", "proj_delta", "patent")
+        self._add_resource(
+            res_id="res_delta_project_patent",
+            tenant_id="tenant_delta",
+            owner_id="user_david",
+            name="Quantum Cryptography Patent Draft",
+            endpoint_path="/api/v1/shared/projects/proj-quantum",
+            visibility=Visibility.TENANT_SHARED,
+            canary=c_p4,
+            payload={"project": "Quantum", "claims_token": c_p4},
+            allowed_user_ids={"user_david", "user_diana"},
+            allowed_roles={Role.ADMIN, Role.STANDARD_USER}
+        )
+
+    def _add_resource(
+        self,
+        res_id: str,
+        tenant_id: str,
+        owner_id: str,
+        name: str,
+        endpoint_path: str,
+        visibility: Visibility,
+        canary: str,
+        payload: Dict,
+        allowed_user_ids: Set[str] = None,
+        allowed_roles: Set[Role] = None
+    ):
+        r = Resource(
+            id=res_id,
+            tenant_id=tenant_id,
+            owner_id=owner_id,
+            name=name,
+            endpoint_path=endpoint_path,
+            visibility=visibility,
+            canary_token=canary,
+            payload=payload,
+            allowed_user_ids=allowed_user_ids or set(),
+            allowed_roles=allowed_roles or set(),
             is_revoked_for=set()
         )
-        self.resources[res_shared_project.id] = res_shared_project
-        self.canary_registry[proj_canary] = res_shared_project.id
+        self.resources[r.id] = r
+        self.canary_registry[canary] = r.id
 
     def get_principal(self, user_id: str) -> Principal:
         return self.principals[user_id]
@@ -205,7 +278,6 @@ class TenantSimulator:
         return self.resources[resource_id]
 
     def revoke_access(self, resource_id: str, user_id: str):
-        """Simulate dynamic revocation in the origin security state."""
         if resource_id in self.resources:
             self.resources[resource_id].allowed_user_ids.discard(user_id)
             self.resources[resource_id].is_revoked_for.add(user_id)
