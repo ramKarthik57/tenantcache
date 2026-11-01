@@ -160,10 +160,11 @@ def scan(
 @app.command()
 def benchmark(
     profile: str = typer.Option("comprehensive", help="Benchmark profile: 'quick' (V1 and S1) or 'comprehensive' (all archetypes)"),
+    version: str = typer.Option("v1.1", help="Dataset version: 'v1.0' (legacy 54) or 'v1.1' (reconciled 66)"),
     output_dir: str = typer.Option("benchmarks/results", help="Directory for exported benchmark data")
 ):
     """Executes full scientific benchmark comparing Baselines A and B against TenantCache."""
-    console.print(Panel.fit(f"[bold cyan]TenantCache Research Benchmark: Profile = {profile}[/bold cyan]"))
+    console.print(Panel.fit(f"[bold cyan]TenantCache Research Benchmark: Profile = {profile}, Dataset = {version}[/bold cyan]"))
     suite = BenchmarkSuite()
 
     archetypes = ["V1_MISSING_TENANT_KEY", "V4_STALE_REVOCATION", "SECURE_S1_STRICT_PRIVATE"] if profile == "quick" else [
@@ -179,19 +180,25 @@ def benchmark(
 
     all_results = []
     with console.status("[bold green]Executing controlled comparative benchmarks...[/bold green]"):
-        # Run Baselines on V1
-        res_baseline_a = suite.run_baseline_a_single_endpoint(config_archetype="V1_MISSING_TENANT_KEY")
-        res_baseline_b = suite.run_baseline_b_token_substitution(config_archetype="V1_MISSING_TENANT_KEY")
-        all_results.append(res_baseline_a)
-        all_results.append(res_baseline_b)
+        # 1. Matched-Budget Baselines on V1
+        res_baseline_a_matched = suite.run_baseline_a_single_endpoint(config_archetype="V1_MISSING_TENANT_KEY", dataset_version=version, matched_budget=True)
+        res_baseline_b_matched = suite.run_baseline_b_token_substitution(config_archetype="V1_MISSING_TENANT_KEY", dataset_version=version, matched_budget=True)
+        all_results.append(res_baseline_a_matched)
+        all_results.append(res_baseline_b_matched)
 
-        # Run TenantCache across archetypes
+        # 2. Capability Baselines on V1
+        res_baseline_a_cap = suite.run_baseline_a_single_endpoint(config_archetype="V1_MISSING_TENANT_KEY", dataset_version=version, matched_budget=False)
+        res_baseline_b_cap = suite.run_baseline_b_token_substitution(config_archetype="V1_MISSING_TENANT_KEY", dataset_version=version, matched_budget=False)
+        all_results.append(res_baseline_a_cap)
+        all_results.append(res_baseline_b_cap)
+
+        # 3. TenantCache across archetypes
         for arch in archetypes:
-            res_tc = suite.run_tenantcache(config_archetype=arch)
+            res_tc = suite.run_tenantcache(config_archetype=arch, dataset_version=version)
             all_results.append(res_tc)
 
     # Display comparison table
-    comp_table = Table(title="Benchmark Evaluation: Baselines vs TenantCache (Expanded 54-Scenario Matrix)")
+    comp_table = Table(title=f"Benchmark Evaluation: Baselines vs TenantCache (Dataset {version})")
     comp_table.add_column("Methodology", style="bold")
     comp_table.add_column("Archetype", style="cyan")
     comp_table.add_column("Precision", justify="right")
@@ -202,6 +209,7 @@ def benchmark(
     comp_table.add_column("FP", justify="right")
     comp_table.add_column("FN", justify="right")
     comp_table.add_column("TN", justify="right")
+    comp_table.add_column("Requests", justify="right")
     comp_table.add_column("Duration", justify="right")
 
     for r in all_results:
@@ -220,6 +228,7 @@ def benchmark(
             str(r.false_positives),
             str(r.false_negatives),
             str(r.true_negatives),
+            str(r.total_requests),
             f"{r.duration_seconds:.3f}s"
         )
     console.print(comp_table)
@@ -241,13 +250,77 @@ def benchmark(
 
 
 @app.command()
-def ablation(output_path: str = typer.Option("benchmarks/results/ablation_report.md", help="Path to export ablation report")):
-    """Executes systematic component ablation study across testing dimensions."""
-    console.print(Panel.fit("[bold cyan]TenantCache Component Ablation Study[/bold cyan]"))
+def manifest(
+    version: str = typer.Option("v1.1", help="Manifest dataset version: v1.0 or v1.1"),
+    output_dir: str = typer.Option("benchmarks/manifests", help="Output directory for manifests")
+):
+    """Exports declared, versioned scenario manifest as JSON and CSV."""
+    console.print(Panel.fit(f"[bold cyan]TenantCache Scenario Manifest Export ({version})[/bold cyan]"))
     suite = BenchmarkSuite()
-    records = suite.run_ablation_study()
+    j_path, c_path = suite.export_scenario_manifest(version=version, output_dir=output_dir)
+    console.print(f"[green]Manifest exported successfully:[/green]")
+    console.print(f"  • JSON: {j_path}")
+    console.print(f"  • CSV:  {c_path}")
 
-    table = Table(title="Component Ablation Results (V1 Archetype)")
+
+@app.command()
+def reproducibility(
+    seeds: str = typer.Option("42,43,44,45,46", help="Comma-separated deterministic seeds"),
+    version: str = typer.Option("v1.1", help="Dataset version to evaluate"),
+    output_path: str = typer.Option("benchmarks/results/reproducibility_report.md", help="Path to export report")
+):
+    """Executes multi-seed deterministic repetitions to measure execution variability."""
+    console.print(Panel.fit(f"[bold cyan]TenantCache Reproducibility Evaluation ({version})[/bold cyan]"))
+    seed_list = [int(s.strip()) for s in seeds.split(",")]
+    suite = BenchmarkSuite()
+    summary = suite.run_multi_seed_repetitions(seeds=seed_list, dataset_version=version)
+
+    table = Table(title=f"Multi-Seed Reproducibility Across {len(seed_list)} Repetitions")
+    table.add_column("Seed", style="bold")
+    table.add_column("Recall", justify="right")
+    table.add_column("Precision", justify="right")
+    table.add_column("Specificity", justify="right")
+    table.add_column("Duration (s)", justify="right")
+    table.add_column("Throughput (Req/s)", justify="right")
+
+    for r in summary["runs"]:
+        table.add_row(
+            str(r["seed"]),
+            f"{r['recall']:.4f}",
+            f"{r['precision']:.4f}",
+            f"{r['specificity']:.4f}",
+            f"{r['duration']:.4f}",
+            f"{r['throughput']:.1f}"
+        )
+    console.print(table)
+    console.print(f"[bold green]Mean Recall: {summary['mean_recall']:.4f} (std: {summary['std_recall']:.4f}), Mean Precision: {summary['mean_precision']:.4f} (std: {summary['std_precision']:.4f})[/bold green]")
+
+    os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(f"# Multi-Seed Reproducibility Report ({version})\n\n")
+        f.write(f"- **Seeds Tested:** {seed_list}\n")
+        f.write(f"- **Mean Recall:** {summary['mean_recall']:.4f} (std: {summary['std_recall']:.4f})\n")
+        f.write(f"- **Mean Precision:** {summary['mean_precision']:.4f} (std: {summary['std_precision']:.4f})\n")
+        f.write(f"- **Mean Duration:** {summary['mean_duration']:.4f}s (std: {summary['std_duration']:.4f}s)\n\n")
+        f.write("| Seed | Recall | Precision | Specificity | Duration (s) | Throughput (Req/s) |\n")
+        f.write("|---|:---:|:---:|:---:|:---:|:---:|\n")
+        for r in summary["runs"]:
+            f.write(f"| {r['seed']} | {r['recall']:.4f} | {r['precision']:.4f} | {r['specificity']:.4f} | {r['duration']:.4f} | {r['throughput']:.1f} |\n")
+    console.print(f"[green]Report saved to {output_path}[/green]")
+
+
+@app.command()
+def ablation(
+    version: str = typer.Option("v1.1", help="Dataset version for ablation study"),
+    output_path: str = typer.Option("benchmarks/results/ablation_report.md", help="Path to export ablation report")
+):
+    """Executes systematic component ablation study across testing dimensions with category confusion matrices."""
+    console.print(Panel.fit(f"[bold cyan]TenantCache Component Ablation Study ({version})[/bold cyan]"))
+    suite = BenchmarkSuite()
+    result = suite.run_ablation_study(dataset_version=version)
+    records = result["records"]
+
+    table = Table(title=f"Component Ablation Results (V1 Archetype, {version})")
     table.add_column("System Variant", style="bold")
     table.add_column("Identity", justify="center")
     table.add_column("Cache Seq", justify="center")
@@ -275,17 +348,29 @@ def ablation(output_path: str = typer.Option("benchmarks/results/ablation_report
         )
     console.print(table)
 
-    # Save to markdown
+    # Save to markdown with category confusion matrices
     os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
-        f.write("# TenantCache Component Ablation Study\n\n")
+        f.write(f"# TenantCache Component Ablation Study (Dataset Version: {version})\n\n")
+        f.write("## 1. High-Level Performance Comparison\n\n")
         f.write("| Variant | Identity | Cache Seq | Oracle | Precision | Recall | F1 Score | FPR | TP | FN |\n")
         f.write("|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|\n")
         for rec in records:
-            p = f"{rec['precision']:.4f}" if rec['precision'] is not None else "N/A"
-            r = f"{rec['recall']:.4f}" if rec['recall'] is not None else "N/A"
-            f1_s = f"{rec['f1_score']:.4f}" if rec['f1_score'] is not None else "N/A"
+            p = f"{rec['precision']:.4f}" if rec['precision'] is not None else "*N/A (Undefined)*"
+            r = f"{rec['recall']:.4f}" if rec['recall'] is not None else "*N/A (Undefined)*"
+            f1_s = f"{rec['f1_score']:.4f}" if rec['f1_score'] is not None else "*N/A (Undefined)*"
             f.write(f"| **{rec['variant']}** | {'Yes' if rec['identity_aware'] else 'No'} | {'Yes' if rec['cache_sequenced'] else 'No'} | {'Yes' if rec['oracle_enabled'] else 'No'} | {p} | {r} | {f1_s} | {rec['false_positive_rate']:.4f} | {rec['tp']} | {rec['fn']} |\n")
+        
+        f.write("\n## 2. Category-Wise Confusion Matrices\n\n")
+        for rec in records:
+            f.write(f"### {rec['variant']}\n\n")
+            f.write("| Vulnerability Category | TP | FP | TN | FN | Total |\n")
+            f.write("|---|:---:|:---:|:---:|:---:|:---:|\n")
+            for cat, cm in rec["confusion_matrix"].items():
+                tot = cm["tp"] + cm["fp"] + cm["tn"] + cm["fn"]
+                f.write(f"| **{cat}** | {cm['tp']} | {cm['fp']} | {cm['tn']} | {cm['fn']} | {tot} |\n")
+            f.write("\n")
+            
     console.print(f"[green]Ablation study saved to {output_path}[/green]")
 
 

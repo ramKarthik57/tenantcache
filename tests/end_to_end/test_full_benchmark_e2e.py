@@ -20,14 +20,23 @@ def test_full_benchmark_suite_e2e():
     assert res_b.recall < 1.0  # Misses revocation and state transitions
     assert res_b.false_positives > 0  # Naive diffing generates false positives
 
-    # 3. Run TenantCache on Vulnerable V1
-    res_tc_v1 = suite.run_tenantcache(config_archetype="V1_MISSING_TENANT_KEY")
+    # 3. Run TenantCache on Vulnerable V1 (v1.1 Corpus: 46 Vulns, 20 Benign Controls)
+    res_tc_v1 = suite.run_tenantcache(config_archetype="V1_MISSING_TENANT_KEY", dataset_version="v1.1")
     assert res_tc_v1.recall == 1.0
     assert res_tc_v1.precision == 1.0
-    assert res_tc_v1.true_positives == 44
+    assert res_tc_v1.true_positives == 46
+    assert res_tc_v1.true_negatives == 20
+    assert res_tc_v1.false_positives == 0
+    assert res_tc_v1.false_negatives == 0
 
-    # 4. Run TenantCache on Secure S1
-    res_tc_s1 = suite.run_tenantcache(config_archetype="SECURE_S1_STRICT_PRIVATE")
+    # 4. Verify Backward Compatibility with Legacy v1.0 Corpus (46 Vulns, 8 Benign Controls = 54 Total Scenarios)
+    res_tc_v1_legacy = suite.run_tenantcache(config_archetype="V1_MISSING_TENANT_KEY", dataset_version="v1.0")
+    assert res_tc_v1_legacy.total_scenarios == 54
+    assert res_tc_v1_legacy.true_positives == 46
+    assert res_tc_v1_legacy.true_negatives == 8
+
+    # 5. Run TenantCache on Secure S1
+    res_tc_s1 = suite.run_tenantcache(config_archetype="SECURE_S1_STRICT_PRIVATE", dataset_version="v1.1")
     assert res_tc_s1.findings_count == 0
     assert res_tc_s1.false_positives == 0
     assert res_tc_s1.precision is None  # Undefined on secure configs
