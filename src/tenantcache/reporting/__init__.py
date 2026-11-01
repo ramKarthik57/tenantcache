@@ -24,7 +24,8 @@ class ReportGenerator:
             "framework_name", "mode", "total_scenarios", "true_positives",
             "false_positives", "true_negatives", "false_negatives",
             "precision", "precision_ci_95", "recall", "recall_ci_95",
-            "f1_score", "accuracy", "accuracy_ci_95",
+            "f1_score", "specificity", "specificity_ci_95", "accuracy", "accuracy_ci_95",
+            "false_positive_rate", "cache_resets", "state_transitions", "distinct_principals_covered",
             "total_requests", "duration_seconds", "requests_per_second", "findings_count"
         ]
         with open(output_path, "w", newline="", encoding="utf-8") as f:
@@ -32,7 +33,7 @@ class ReportGenerator:
             writer.writeheader()
             for r in results:
                 row = r.model_dump()
-                filtered_row = {k: str(row[k]) for k in fieldnames}
+                filtered_row = {k: str(row.get(k, "")) for k in fieldnames}
                 writer.writerow(filtered_row)
 
     @staticmethod
@@ -43,29 +44,32 @@ class ReportGenerator:
             "",
             "## 1. Quantitative Benchmark Summary (with 95% Wilson Confidence Intervals)",
             "",
-            "| Framework / Approach | Archetype | Scenarios | TP | FP | TN | FN | Precision (95% CI) | Recall (95% CI) | F1 Score | Accuracy (95% CI) | Duration | Req/s |",
-            "|---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|"
+            "| Framework / Approach | Archetype | Scenarios | TP | FP | TN | FN | Precision (95% CI) | Recall (95% CI) | Specificity (95% CI) | Accuracy (95% CI) | FPR | Resets | Trans | Principals | Duration |",
+            "|---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|"
         ]
 
         for r in results:
-            prec_str = f"{r.precision:.4f} `[{r.precision_ci_95[0]:.2f}, {r.precision_ci_95[1]:.2f}]`" if r.precision is not None else "*Undefined (N/A)*"
-            rec_str = f"{r.recall:.4f} `[{r.recall_ci_95[0]:.2f}, {r.recall_ci_95[1]:.2f}]`"
+            prec_str = f"{r.precision:.4f} `[{r.precision_ci_95[0]:.2f}, {r.precision_ci_95[1]:.2f}]`" if r.precision is not None else "*N/A (Undefined)*"
+            rec_str = f"{r.recall:.4f} `[{r.recall_ci_95[0]:.2f}, {r.recall_ci_95[1]:.2f}]`" if r.recall is not None else "*N/A (Undefined)*"
+            spec_str = f"{r.specificity:.4f} `[{r.specificity_ci_95[0]:.2f}, {r.specificity_ci_95[1]:.2f}]`" if r.specificity is not None else "*N/A (Undefined)*"
             acc_str = f"{r.accuracy:.4f} `[{r.accuracy_ci_95[0]:.2f}, {r.accuracy_ci_95[1]:.2f}]`"
 
             lines.append(
                 f"| **{r.framework_name}** | `{r.mode}` | {r.total_scenarios} | {r.true_positives} | "
                 f"{r.false_positives} | {r.true_negatives} | {r.false_negatives} | "
-                f"{prec_str} | {rec_str} | {r.f1_score:.4f} | {acc_str} | "
-                f"{r.duration_seconds:.3f}s | {r.requests_per_second:.1f} |"
+                f"{prec_str} | {rec_str} | {spec_str} | {acc_str} | "
+                f"{r.false_positive_rate:.2f} | {r.cache_resets} | {r.state_transitions} | {r.distinct_principals_covered} | "
+                f"{r.duration_seconds:.3f}s |"
             )
 
         lines.extend([
             "",
             "## 2. Statistical Invariant and Methodology Notes",
             "",
-            "- **Baseline A Precision:** When a baseline makes 0 positive predictions (TP=0, FP=0), Precision is mathematically undefined ($0/0$) and is explicitly reported as *Undefined (N/A)* rather than artificially defaulted to 1.0.",
-            "- **Wilson Score Intervals:** Reported as `[lower, upper]` at a 95% confidence level ($z = 1.96$), reflecting the sample size uncertainty over the 54-scenario benchmark corpus.",
-            "- **Expanded Corpus:** Evaluates 54 scenarios across 5 distinct enterprise tenants and multiple departments (14 cross-tenant, 10 cross-user private, 8 privilege boundary, 8 stateful revocation, 6 header spoofing, 8 benign public/shared controls).",
+            "- **Zero-Denominator Precision & Recall (Secure S1 & S2):** When a secure configuration yields 0 positive scenarios ($TP + FP = 0, TP + FN = 0$), Precision and Recall are mathematically undefined and reported as *N/A (Undefined)*. Specificity is calculated as $TN / (TN + FP) = 54/54 = 1.000$ (with Wilson CI $[0.93, 1.00]$) and Accuracy is $1.000$.",
+            "- **Baseline A Precision:** When Baseline A generates zero positive predictions ($TP=0, FP=0$), Precision is mathematically undefined and reported as *N/A (Undefined)*.",
+            "- **Exploration Budget Documentation:** Baseline comparisons track explicit operational parameters: `Total Requests`, `Cache Resets`, `State Transitions`, and `Distinct Principals Covered`.",
+            "- **Wilson Score Intervals:** Calculated at a 95% confidence level ($z = 1.96$), capturing sample size uncertainty over the 54-scenario benchmark corpus.",
             "",
             "## 3. Confirmed Vulnerability Findings Breakdown",
             ""

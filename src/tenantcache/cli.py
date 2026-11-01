@@ -108,17 +108,33 @@ def scan(
     table = Table(title=f"Scan Results: {archetype}")
     table.add_column("Metric", style="bold")
     table.add_column("Value")
-    prec_str = f"{result.precision:.4f}" if result.precision is not None else "Undefined (N/A)"
+    prec_str = f"{result.precision:.4f}" if result.precision is not None else "N/A (Undefined)"
+    rec_str = f"{result.recall:.4f}" if result.recall is not None else "N/A (Undefined)"
+    f1_str = f"{result.f1_score:.4f}" if result.f1_score is not None else "N/A (Undefined)"
+    spec_str = f"{result.specificity:.4f}" if result.specificity is not None else "N/A (Undefined)"
+
     table.add_row("Total Scenarios Evaluated", str(result.total_scenarios))
     table.add_row("Confirmed Leakage Findings", str(result.findings_count))
     table.add_row("True Positives (TP)", str(result.true_positives))
     table.add_row("False Positives (FP)", str(result.false_positives))
+    table.add_row("True Negatives (TN)", str(result.true_negatives))
+    table.add_row("False Negatives (FN)", str(result.false_negatives))
     table.add_row("Precision", prec_str)
-    table.add_row("Precision 95% CI", f"[{result.precision_ci_95[0]:.2f}, {result.precision_ci_95[1]:.2f}]")
-    table.add_row("Recall", f"{result.recall:.4f}")
-    table.add_row("Recall 95% CI", f"[{result.recall_ci_95[0]:.2f}, {result.recall_ci_95[1]:.2f}]")
-    table.add_row("F1 Score", f"{result.f1_score:.4f}")
+    if result.precision is not None:
+        table.add_row("Precision 95% CI", f"[{result.precision_ci_95[0]:.2f}, {result.precision_ci_95[1]:.2f}]")
+    table.add_row("Recall", rec_str)
+    if result.recall is not None:
+        table.add_row("Recall 95% CI", f"[{result.recall_ci_95[0]:.2f}, {result.recall_ci_95[1]:.2f}]")
+    table.add_row("F1 Score", f1_str)
+    table.add_row("Specificity", spec_str)
+    if result.specificity is not None:
+        table.add_row("Specificity 95% CI", f"[{result.specificity_ci_95[0]:.2f}, {result.specificity_ci_95[1]:.2f}]")
     table.add_row("Accuracy", f"{result.accuracy:.4f}")
+    table.add_row("Accuracy 95% CI", f"[{result.accuracy_ci_95[0]:.2f}, {result.accuracy_ci_95[1]:.2f}]")
+    table.add_row("False Positive Rate (FPR)", f"{result.false_positive_rate:.4f}")
+    table.add_row("Cache Resets Executed", str(result.cache_resets))
+    table.add_row("State Transitions Explored", str(result.state_transitions))
+    table.add_row("Distinct Principals Tested", str(result.distinct_principals_covered))
     table.add_row("Duration", f"{result.duration_seconds:.3f} s")
     console.print(table)
 
@@ -175,28 +191,35 @@ def benchmark(
             all_results.append(res_tc)
 
     # Display comparison table
-    comp_table = Table(title="Benchmark Evaluation: Baselines vs TenantCache")
+    comp_table = Table(title="Benchmark Evaluation: Baselines vs TenantCache (Expanded 54-Scenario Matrix)")
     comp_table.add_column("Methodology", style="bold")
     comp_table.add_column("Archetype", style="cyan")
     comp_table.add_column("Precision", justify="right")
     comp_table.add_column("Recall", justify="right")
     comp_table.add_column("F1", justify="right")
+    comp_table.add_column("Specificity", justify="right")
     comp_table.add_column("TP", justify="right")
     comp_table.add_column("FP", justify="right")
     comp_table.add_column("FN", justify="right")
+    comp_table.add_column("TN", justify="right")
     comp_table.add_column("Duration", justify="right")
 
     for r in all_results:
-        prec_display = f"{r.precision:.2f}" if r.precision is not None else "Undef"
+        prec_display = f"{r.precision:.2f}" if r.precision is not None else "N/A"
+        rec_display = f"{r.recall:.2f}" if r.recall is not None else "N/A"
+        f1_display = f"{r.f1_score:.2f}" if r.f1_score is not None else "N/A"
+        spec_display = f"{r.specificity:.2f}" if r.specificity is not None else "N/A"
         comp_table.add_row(
             r.framework_name,
             r.mode,
             prec_display,
-            f"{r.recall:.2f}",
-            f"{r.f1_score:.2f}",
+            rec_display,
+            f1_display,
+            spec_display,
             str(r.true_positives),
             str(r.false_positives),
             str(r.false_negatives),
+            str(r.true_negatives),
             f"{r.duration_seconds:.3f}s"
         )
     console.print(comp_table)
@@ -215,6 +238,55 @@ def benchmark(
     console.print(f"  • JSON: {json_path}")
     console.print(f"  • CSV:  {csv_path}")
     console.print(f"  • MD:   {md_path}")
+
+
+@app.command()
+def ablation(output_path: str = typer.Option("benchmarks/results/ablation_report.md", help="Path to export ablation report")):
+    """Executes systematic component ablation study across testing dimensions."""
+    console.print(Panel.fit("[bold cyan]TenantCache Component Ablation Study[/bold cyan]"))
+    suite = BenchmarkSuite()
+    records = suite.run_ablation_study()
+
+    table = Table(title="Component Ablation Results (V1 Archetype)")
+    table.add_column("System Variant", style="bold")
+    table.add_column("Identity", justify="center")
+    table.add_column("Cache Seq", justify="center")
+    table.add_column("Oracle", justify="center")
+    table.add_column("Precision", justify="right")
+    table.add_column("Recall", justify="right")
+    table.add_column("F1", justify="right")
+    table.add_column("FPR", justify="right")
+    table.add_column("TP / FN", justify="right")
+
+    for rec in records:
+        prec = f"{rec['precision']:.2f}" if rec['precision'] is not None else "N/A"
+        rec_val = f"{rec['recall']:.2f}" if rec['recall'] is not None else "N/A"
+        f1 = f"{rec['f1_score']:.2f}" if rec['f1_score'] is not None else "N/A"
+        table.add_row(
+            rec["variant"],
+            "YES" if rec["identity_aware"] else "NO",
+            "YES" if rec["cache_sequenced"] else "NO",
+            "YES" if rec["oracle_enabled"] else "NO",
+            prec,
+            rec_val,
+            f1,
+            f"{rec['false_positive_rate']:.2f}",
+            f"{rec['tp']} / {rec['fn']}"
+        )
+    console.print(table)
+
+    # Save to markdown
+    os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write("# TenantCache Component Ablation Study\n\n")
+        f.write("| Variant | Identity | Cache Seq | Oracle | Precision | Recall | F1 Score | FPR | TP | FN |\n")
+        f.write("|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|\n")
+        for rec in records:
+            p = f"{rec['precision']:.4f}" if rec['precision'] is not None else "N/A"
+            r = f"{rec['recall']:.4f}" if rec['recall'] is not None else "N/A"
+            f1_s = f"{rec['f1_score']:.4f}" if rec['f1_score'] is not None else "N/A"
+            f.write(f"| **{rec['variant']}** | {'Yes' if rec['identity_aware'] else 'No'} | {'Yes' if rec['cache_sequenced'] else 'No'} | {'Yes' if rec['oracle_enabled'] else 'No'} | {p} | {r} | {f1_s} | {rec['false_positive_rate']:.4f} | {rec['tp']} | {rec['fn']} |\n")
+    console.print(f"[green]Ablation study saved to {output_path}[/green]")
 
 
 @app.command()

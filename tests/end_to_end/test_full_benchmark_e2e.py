@@ -22,14 +22,17 @@ def test_full_benchmark_suite_e2e():
 
     # 3. Run TenantCache on Vulnerable V1
     res_tc_v1 = suite.run_tenantcache(config_archetype="V1_MISSING_TENANT_KEY")
-    assert res_tc_v1.recall >= 0.90
+    assert res_tc_v1.recall == 1.0
     assert res_tc_v1.precision == 1.0
-    assert res_tc_v1.true_positives >= 35
+    assert res_tc_v1.true_positives == 44
 
     # 4. Run TenantCache on Secure S1
     res_tc_s1 = suite.run_tenantcache(config_archetype="SECURE_S1_STRICT_PRIVATE")
     assert res_tc_s1.findings_count == 0
     assert res_tc_s1.false_positives == 0
+    assert res_tc_s1.precision is None  # Undefined on secure configs
+    assert res_tc_s1.recall is None  # Undefined on secure configs
+    assert res_tc_s1.specificity == 1.0
 
     # 5. Export reports to temp dir and verify file integrity
     with tempfile.TemporaryDirectory() as tmpdir:

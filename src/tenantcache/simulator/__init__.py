@@ -181,66 +181,32 @@ class TenantSimulator:
                 allowed_roles={Role.ADMIN}
             )
 
-        # (F) Multiple Revocable Shared Projects (Visibility = TENANT_SHARED with dynamic revocation)
-        # Project Alpha: Alex revoked
-        c_p1 = self._generate_canary("tenant_acme", "proj_alpha", "blueprint")
-        self._add_resource(
-            res_id="res_acme_project_alpha",
-            tenant_id="tenant_acme",
-            owner_id="user_alice",
-            name="Project Alpha Stealth Blueprint",
-            endpoint_path="/api/v1/shared/projects/proj-alpha",
-            visibility=Visibility.TENANT_SHARED,
-            canary=c_p1,
-            payload={"project": "Alpha", "secret_blueprint": c_p1},
-            allowed_user_ids={"user_alice", "user_alex"},
-            allowed_roles={Role.ADMIN, Role.STANDARD_USER}
-        )
+        # (F) Eight Revocable Shared Projects (Visibility = TENANT_SHARED with dynamic revocation)
+        revocable_specs = [
+            ("res_acme_project_alpha", "tenant_acme", "user_alice", "Project Alpha Stealth Blueprint", "/api/v1/shared/projects/proj-alpha", "blueprint", {"user_alice", "user_alex"}),
+            ("res_beta_project_merger", "tenant_beta", "user_bob", "Project Titan M&A Dossier", "/api/v1/shared/projects/proj-titan", "merger", {"user_bob", "user_brian"}),
+            ("res_gamma_project_ai", "tenant_gamma", "user_clara", "Project Neural Weight Matrix", "/api/v1/shared/projects/proj-neural", "ai_weights", {"user_clara", "user_charlie"}),
+            ("res_delta_project_patent", "tenant_delta", "user_david", "Quantum Cryptography Patent Draft", "/api/v1/shared/projects/proj-quantum", "patent", {"user_david", "user_diana"}),
+            ("res_acme_project_supply", "tenant_acme", "user_alice", "Project Supply Chain Logistics", "/api/v1/shared/projects/proj-supply", "supply", {"user_alice", "user_amanda"}),
+            ("res_beta_project_audit", "tenant_beta", "user_bob", "Project Sovereign Ledger Audit", "/api/v1/shared/projects/proj-audit", "audit_sec", {"user_bob", "user_brian"}),
+            ("res_gamma_project_cloud", "tenant_gamma", "user_clara", "Project Orbital Cloud Relay", "/api/v1/shared/projects/proj-cloud", "relay", {"user_clara", "user_charlie"}),
+            ("res_delta_project_crypto", "tenant_delta", "user_david", "Project Post-Quantum Lattice Key", "/api/v1/shared/projects/proj-crypto", "lattice", {"user_david", "user_diana"}),
+        ]
 
-        # Project Beta: Brian revoked
-        c_p2 = self._generate_canary("tenant_beta", "proj_beta", "merger")
-        self._add_resource(
-            res_id="res_beta_project_merger",
-            tenant_id="tenant_beta",
-            owner_id="user_bob",
-            name="Project Titan M&A Dossier",
-            endpoint_path="/api/v1/shared/projects/proj-titan",
-            visibility=Visibility.TENANT_SHARED,
-            canary=c_p2,
-            payload={"project": "Titan", "merger_secrets": c_p2},
-            allowed_user_ids={"user_bob", "user_brian"},
-            allowed_roles={Role.ADMIN, Role.STANDARD_USER}
-        )
-
-        # Project Gamma: Charlie revoked
-        c_p3 = self._generate_canary("tenant_gamma", "proj_gamma", "ai_weights")
-        self._add_resource(
-            res_id="res_gamma_project_ai",
-            tenant_id="tenant_gamma",
-            owner_id="user_clara",
-            name="Project Neural Weight Matrix",
-            endpoint_path="/api/v1/shared/projects/proj-neural",
-            visibility=Visibility.TENANT_SHARED,
-            canary=c_p3,
-            payload={"project": "Neural", "weights_hash": c_p3},
-            allowed_user_ids={"user_clara", "user_charlie"},
-            allowed_roles={Role.ADMIN, Role.STANDARD_USER}
-        )
-
-        # Project Delta: Diana revoked
-        c_p4 = self._generate_canary("tenant_delta", "proj_delta", "patent")
-        self._add_resource(
-            res_id="res_delta_project_patent",
-            tenant_id="tenant_delta",
-            owner_id="user_david",
-            name="Quantum Cryptography Patent Draft",
-            endpoint_path="/api/v1/shared/projects/proj-quantum",
-            visibility=Visibility.TENANT_SHARED,
-            canary=c_p4,
-            payload={"project": "Quantum", "claims_token": c_p4},
-            allowed_user_ids={"user_david", "user_diana"},
-            allowed_roles={Role.ADMIN, Role.STANDARD_USER}
-        )
+        for res_id, t_id, owner_id, name, path, canary_field, allowed_users in revocable_specs:
+            c = self._generate_canary(t_id, res_id, canary_field)
+            self._add_resource(
+                res_id=res_id,
+                tenant_id=t_id,
+                owner_id=owner_id,
+                name=name,
+                endpoint_path=path,
+                visibility=Visibility.TENANT_SHARED,
+                canary=c,
+                payload={"project_id": res_id, "project_name": name, "confidential_token": c},
+                allowed_user_ids=allowed_users,
+                allowed_roles={Role.ADMIN, Role.STANDARD_USER}
+            )
 
     def _add_resource(
         self,

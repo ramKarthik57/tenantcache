@@ -17,15 +17,24 @@
       0.0,
       0.0803
     ],
-    "f1_score": 0.0,
+    "f1_score": null,
+    "specificity": 1.0,
+    "specificity_ci_95": [
+      0.7225,
+      1.0
+    ],
     "accuracy": 0.1852,
     "accuracy_ci_95": [
       0.1038,
       0.3084
     ],
+    "false_positive_rate": 0.0,
     "total_requests": 54,
-    "duration_seconds": 0.2374,
-    "requests_per_second": 227.43,
+    "cache_resets": 54,
+    "state_transitions": 0,
+    "distinct_principals_covered": 9,
+    "duration_seconds": 0.2365,
+    "requests_per_second": 228.29,
     "findings_count": 0,
     "findings": []
   },
@@ -33,33 +42,42 @@
     "framework_name": "Baseline B (Simple Identity Substitution)",
     "mode": "V1_MISSING_TENANT_KEY",
     "total_scenarios": 54,
-    "true_positives": 34,
-    "false_positives": 4,
-    "true_negatives": 6,
-    "false_negatives": 10,
-    "precision": 0.8947,
+    "true_positives": 33,
+    "false_positives": 8,
+    "true_negatives": 2,
+    "false_negatives": 11,
+    "precision": 0.8049,
     "precision_ci_95": [
-      0.7587,
-      0.9583
+      0.6599,
+      0.8977
     ],
-    "recall": 0.7727,
+    "recall": 0.75,
     "recall_ci_95": [
-      0.6301,
-      0.8716
+      0.6056,
+      0.8543
     ],
-    "f1_score": 0.8293,
-    "accuracy": 0.7407,
+    "f1_score": 0.7765,
+    "specificity": 0.2,
+    "specificity_ci_95": [
+      0.0567,
+      0.5098
+    ],
+    "accuracy": 0.6481,
     "accuracy_ci_95": [
-      0.6107,
-      0.8388
+      0.5148,
+      0.7618
     ],
+    "false_positive_rate": 0.8,
     "total_requests": 108,
-    "duration_seconds": 0.0299,
-    "requests_per_second": 3616.04,
-    "findings_count": 38,
+    "cache_resets": 0,
+    "state_transitions": 0,
+    "distinct_principals_covered": 10,
+    "duration_seconds": 0.0375,
+    "requests_per_second": 2876.81,
+    "findings_count": 37,
     "findings": [
       {
-        "id": "FINDING-1512121F",
+        "id": "FINDING-33A10857",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to bob",
@@ -81,10 +99,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-F94EE80A",
+        "id": "FINDING-969B0E6A",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to david",
@@ -106,10 +124,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-0E634300",
+        "id": "FINDING-12272C2C",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to charlie",
@@ -131,10 +149,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-DD356D6B",
+        "id": "FINDING-A7DEB39D",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to charlie",
@@ -156,10 +174,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-D59C00D4",
+        "id": "FINDING-717EE2D7",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to diana",
@@ -181,10 +199,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-CE02D22C",
+        "id": "FINDING-76D33D05",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to eric",
@@ -206,10 +224,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-8DF3C681",
+        "id": "FINDING-C2AFCF8A",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Acme Master Invoice 101 leaked to brian",
@@ -231,10 +249,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-77C55219",
+        "id": "FINDING-9D32AF77",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Beta Enterprise Invoice 202 leaked to alex",
@@ -256,10 +274,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-F7E6EC56",
+        "id": "FINDING-085B177D",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Acme Master Invoice 101 leaked to david",
@@ -281,10 +299,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-E11F195F",
+        "id": "FINDING-E8A7CAF2",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Beta Enterprise Invoice 202 leaked to eric",
@@ -306,10 +324,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-6D73E4B5",
+        "id": "FINDING-836E9410",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Acme Master Invoice 101 leaked to charlie",
@@ -331,10 +349,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-95E996AE",
+        "id": "FINDING-CCCD4303",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Beta Enterprise Invoice 202 leaked to diana",
@@ -356,10 +374,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-467CD5B3",
+        "id": "FINDING-0634E8DD",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to eric",
@@ -381,10 +399,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-417548BB",
+        "id": "FINDING-66C04A51",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to alex",
@@ -406,10 +424,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-842CA4E8",
+        "id": "FINDING-6EC7091E",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to amanda",
@@ -431,10 +449,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-558263E0",
+        "id": "FINDING-F00AC282",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to alex",
@@ -456,10 +474,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-9DEA3B79",
+        "id": "FINDING-8A51EF11",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Alice Private Profile leaked to brian",
@@ -481,10 +499,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-805D8D58",
+        "id": "FINDING-D440ADFC",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Alice Private Profile leaked to bob",
@@ -506,10 +524,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-3CE886B2",
+        "id": "FINDING-00BE5A9B",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Alice Private Profile leaked to charlie",
@@ -531,10 +549,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-0353E359",
+        "id": "FINDING-14C53BBC",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Alice Private Profile leaked to diana",
@@ -556,10 +574,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-1582819F",
+        "id": "FINDING-76CD1D93",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Alice Private Profile leaked to david",
@@ -581,10 +599,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-F6408067",
+        "id": "FINDING-70448168",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to amanda",
@@ -606,10 +624,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-FFC284EF",
+        "id": "FINDING-ED009616",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Acme Root Audit Logs leaked to alex",
@@ -631,10 +649,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-0F8C66A5",
+        "id": "FINDING-B5E7EEEE",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Acme Root Audit Logs leaked to amanda",
@@ -656,10 +674,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-354DC715",
+        "id": "FINDING-D57BC066",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Root Audit Logs leaked to brian",
@@ -681,10 +699,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-35E08593",
+        "id": "FINDING-7CB0DB1F",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Root Audit Logs leaked to charlie",
@@ -706,10 +724,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-5AD93B8B",
+        "id": "FINDING-B117D476",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Root Audit Logs leaked to diana",
@@ -731,10 +749,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-93702132",
+        "id": "FINDING-A0B90D93",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Root Audit Logs leaked to eric",
@@ -756,10 +774,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-F4E92274",
+        "id": "FINDING-26F2C6BE",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Root Audit Logs leaked to eric",
@@ -781,10 +799,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-DE788205",
+        "id": "FINDING-C1443AAD",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Root Audit Logs leaked to eric",
@@ -806,35 +824,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-7C8E6261",
-        "leakage_type": "STALE_REVOCATION_LEAK",
-        "severity": "HIGH",
-        "title": "STALE_REVOCATION_LEAK: Project Alpha Stealth Blueprint leaked to amanda",
-        "description": "Principal tenant_acme::amanda[standard_user] received confidential canary 'TC_CANARY_0c4938c701b5_89C62C4E' belonging to tenant_acme::Project Alpha Stealth Blueprint via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
-        "target_path": "/api/v1/shared/projects/proj-alpha",
-        "resource_id": "res_acme_project_alpha",
-        "resource_owner_tenant": "tenant_acme",
-        "resource_owner_user": "user_alice",
-        "victim_principal": "user_alice",
-        "adversary_principal": "tenant_acme::amanda[standard_user]",
-        "detected_canary": "TC_CANARY_0c4938c701b5_89C62C4E",
-        "response_cache_status": "HIT",
-        "reproducibility": "100% Deterministic",
-        "evidence_headers": {
-          "content-length": "72",
-          "content-type": "application/json",
-          "cache-control": "private, max-age=300",
-          "X-Cache-Status": "HIT",
-          "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
-          "X-Cache-Key": "7a64cc77c3a5"
-        },
-        "timestamp": "2026-11-01 21:39:29"
-      },
-      {
-        "id": "FINDING-729FAF4F",
+        "id": "FINDING-E81598A5",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Acme Executive Dashboard leaked to bob",
@@ -856,10 +849,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-815ABBFC",
+        "id": "FINDING-BAA99F6E",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Acme Executive Dashboard leaked to david",
@@ -881,10 +874,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-92E015B2",
+        "id": "FINDING-25CC0081",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Acme Executive Dashboard leaked to charlie",
@@ -906,10 +899,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-A5A35518",
+        "id": "FINDING-B248D92D",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Acme Master Invoice 101 leaked to eric",
@@ -931,10 +924,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-E75607C5",
+        "id": "FINDING-370287E8",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Beta Enterprise Invoice 202 leaked to diana",
@@ -956,10 +949,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-E75C26A3",
+        "id": "FINDING-824D1940",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to brian",
@@ -981,10 +974,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-CCCC6697",
+        "id": "FINDING-145CB2B7",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to charlie",
@@ -1006,7 +999,7 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       }
     ]
   },
@@ -1014,33 +1007,42 @@
     "framework_name": "TenantCache (Stateful Differential Verification)",
     "mode": "V1_MISSING_TENANT_KEY",
     "total_scenarios": 54,
-    "true_positives": 40,
+    "true_positives": 44,
     "false_positives": 0,
     "true_negatives": 10,
-    "false_negatives": 4,
+    "false_negatives": 0,
     "precision": 1.0,
     "precision_ci_95": [
-      0.9124,
+      0.9197,
       1.0
     ],
-    "recall": 0.9091,
+    "recall": 1.0,
     "recall_ci_95": [
-      0.7884,
-      0.9641
+      0.9197,
+      1.0
     ],
-    "f1_score": 0.9524,
-    "accuracy": 0.9259,
+    "f1_score": 1.0,
+    "specificity": 1.0,
+    "specificity_ci_95": [
+      0.7225,
+      1.0
+    ],
+    "accuracy": 1.0,
     "accuracy_ci_95": [
-      0.8245,
-      0.9708
+      0.9336,
+      1.0
     ],
+    "false_positive_rate": 0.0,
     "total_requests": 108,
-    "duration_seconds": 0.1469,
-    "requests_per_second": 735.07,
-    "findings_count": 40,
+    "cache_resets": 54,
+    "state_transitions": 8,
+    "distinct_principals_covered": 9,
+    "duration_seconds": 0.1481,
+    "requests_per_second": 729.45,
+    "findings_count": 44,
     "findings": [
       {
-        "id": "FINDING-1FB8B54D",
+        "id": "FINDING-3DF89DD9",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to bob",
@@ -1062,10 +1064,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-46DD9321",
+        "id": "FINDING-08304813",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Beta Executive Dashboard leaked to alice",
@@ -1087,10 +1089,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-C81E3CF9",
+        "id": "FINDING-EB02D545",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Gamma Executive Dashboard leaked to david",
@@ -1112,10 +1114,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-0251DE15",
+        "id": "FINDING-41F3B170",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Delta Executive Dashboard leaked to charlie",
@@ -1137,10 +1139,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-86D6284E",
+        "id": "FINDING-6A5680B0",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to charlie",
@@ -1162,10 +1164,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-2192ADBE",
+        "id": "FINDING-F8ED6FFB",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Beta Executive Dashboard leaked to diana",
@@ -1187,10 +1189,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-54C82D58",
+        "id": "FINDING-193CEBE1",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Delta Executive Dashboard leaked to eric",
@@ -1212,10 +1214,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-22B7A6C8",
+        "id": "FINDING-FC1A29BA",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Acme Master Invoice 101 leaked to brian",
@@ -1237,10 +1239,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-1D02A0EA",
+        "id": "FINDING-56FC7E47",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Beta Enterprise Invoice 202 leaked to alex",
@@ -1262,10 +1264,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-F4B432F0",
+        "id": "FINDING-B652A0D1",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Acme Master Invoice 101 leaked to david",
@@ -1287,10 +1289,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-9D65A05F",
+        "id": "FINDING-7C970390",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Beta Enterprise Invoice 202 leaked to eric",
@@ -1312,10 +1314,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-8C2224D9",
+        "id": "FINDING-BC07E40A",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Acme Master Invoice 101 leaked to charlie",
@@ -1337,10 +1339,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-C3F90CB0",
+        "id": "FINDING-A3F1F207",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Beta Enterprise Invoice 202 leaked to diana",
@@ -1362,10 +1364,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-8226365F",
+        "id": "FINDING-E044BB56",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to eric",
@@ -1387,10 +1389,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-56E0B835",
+        "id": "FINDING-AC0A15C2",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to alex",
@@ -1412,10 +1414,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-78E492E1",
+        "id": "FINDING-ADF8D17C",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alex Private Profile leaked to alice",
@@ -1437,10 +1439,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-3B644576",
+        "id": "FINDING-E6511126",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to amanda",
@@ -1462,10 +1464,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-4D6CBE0F",
+        "id": "FINDING-9C787F04",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Amanda Private Profile leaked to alex",
@@ -1487,10 +1489,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-197CFDF0",
+        "id": "FINDING-F7471604",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Bob Private Profile leaked to brian",
@@ -1512,10 +1514,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-CB4BA983",
+        "id": "FINDING-9B92E8F9",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Brian Private Profile leaked to bob",
@@ -1537,10 +1539,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-2C6794C9",
+        "id": "FINDING-6FED9ECE",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: David Private Profile leaked to diana",
@@ -1562,10 +1564,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-5D2C93DF",
+        "id": "FINDING-3F5955D0",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alex Private Profile leaked to amanda",
@@ -1587,10 +1589,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-B292529B",
+        "id": "FINDING-97DABB51",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Acme Root Audit Logs leaked to alex",
@@ -1612,10 +1614,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-4CCAC864",
+        "id": "FINDING-75035521",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Acme Root Audit Logs leaked to amanda",
@@ -1637,10 +1639,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-640973B6",
+        "id": "FINDING-866B07AE",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Beta Root Audit Logs leaked to brian",
@@ -1662,10 +1664,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-1F7E96F7",
+        "id": "FINDING-7FD99B96",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Gamma Root Audit Logs leaked to charlie",
@@ -1687,10 +1689,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-A90D1871",
+        "id": "FINDING-46A0A73E",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Delta Root Audit Logs leaked to diana",
@@ -1712,10 +1714,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-BF3C3DC9",
+        "id": "FINDING-B737D420",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Root Audit Logs leaked to eric",
@@ -1737,10 +1739,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-58B9B927",
+        "id": "FINDING-565E4471",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Beta Root Audit Logs leaked to eric",
@@ -1762,10 +1764,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-516267EB",
+        "id": "FINDING-2ACA5548",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Delta Root Audit Logs leaked to eric",
@@ -1787,110 +1789,210 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-6037AEB3",
+        "id": "FINDING-C415FEC2",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Alpha Stealth Blueprint leaked to alex",
-        "description": "Principal tenant_acme::alex[standard_user] received confidential canary 'TC_CANARY_0c4938c701b5_89C62C4E' belonging to tenant_acme::Project Alpha Stealth Blueprint via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_acme::alex[standard_user] received confidential canary 'TC_CANARY_797b28a19dbc_400A9097' belonging to tenant_acme::Project Alpha Stealth Blueprint via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-alpha",
         "resource_id": "res_acme_project_alpha",
         "resource_owner_tenant": "tenant_acme",
         "resource_owner_user": "user_alice",
         "victim_principal": "user_alice",
         "adversary_principal": "tenant_acme::alex[standard_user]",
-        "detected_canary": "TC_CANARY_0c4938c701b5_89C62C4E",
+        "detected_canary": "TC_CANARY_797b28a19dbc_400A9097",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "72",
+          "content-length": "143",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "7a64cc77c3a5"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-B2927B72",
+        "id": "FINDING-77A2B5A5",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Titan M&A Dossier leaked to brian",
-        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_4cb9de3a56c2_D61FF3F5' belonging to tenant_beta::Project Titan M&A Dossier via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_40fc7aee4e03_606F5379' belonging to tenant_beta::Project Titan M&A Dossier via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-titan",
         "resource_id": "res_beta_project_merger",
         "resource_owner_tenant": "tenant_beta",
         "resource_owner_user": "user_bob",
         "victim_principal": "user_bob",
         "adversary_principal": "tenant_beta::brian[standard_user]",
-        "detected_canary": "TC_CANARY_4cb9de3a56c2_D61FF3F5",
+        "detected_canary": "TC_CANARY_40fc7aee4e03_606F5379",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "70",
+          "content-length": "138",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "466c88817a2a"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-EEB081B3",
+        "id": "FINDING-4B2E84F9",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Neural Weight Matrix leaked to charlie",
-        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_16df738c239d_869BEB3E' belonging to tenant_gamma::Project Neural Weight Matrix via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_e0c79c1bd825_A650E057' belonging to tenant_gamma::Project Neural Weight Matrix via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-neural",
         "resource_id": "res_gamma_project_ai",
         "resource_owner_tenant": "tenant_gamma",
         "resource_owner_user": "user_clara",
         "victim_principal": "user_clara",
         "adversary_principal": "tenant_gamma::charlie[standard_user]",
-        "detected_canary": "TC_CANARY_16df738c239d_869BEB3E",
+        "detected_canary": "TC_CANARY_e0c79c1bd825_A650E057",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "69",
+          "content-length": "138",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "d8d17fc4156d"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-F67DDBE4",
+        "id": "FINDING-85430DCE",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Quantum Cryptography Patent Draft leaked to diana",
-        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_1646ff1942a4_7566C67E' belonging to tenant_delta::Quantum Cryptography Patent Draft via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_21f64ea9807e_E5DF1A4A' belonging to tenant_delta::Quantum Cryptography Patent Draft via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-quantum",
         "resource_id": "res_delta_project_patent",
         "resource_owner_tenant": "tenant_delta",
         "resource_owner_user": "user_david",
         "victim_principal": "user_david",
         "adversary_principal": "tenant_delta::diana[standard_user]",
-        "detected_canary": "TC_CANARY_1646ff1942a4_7566C67E",
+        "detected_canary": "TC_CANARY_21f64ea9807e_E5DF1A4A",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "70",
+          "content-length": "147",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b245cd51d49f"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-D5EEF352",
+        "id": "FINDING-B16CFD08",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Supply Chain Logistics leaked to amanda",
+        "description": "Principal tenant_acme::amanda[standard_user] received confidential canary 'TC_CANARY_b3fef7eeffbd_F516A012' belonging to tenant_acme::Project Supply Chain Logistics via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-supply",
+        "resource_id": "res_acme_project_supply",
+        "resource_owner_tenant": "tenant_acme",
+        "resource_owner_user": "user_alice",
+        "victim_principal": "user_alice",
+        "adversary_principal": "tenant_acme::amanda[standard_user]",
+        "detected_canary": "TC_CANARY_b3fef7eeffbd_F516A012",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "143",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
+          "X-Cache-Key": "b7feb2dab1e1"
+        },
+        "timestamp": "2026-11-01 21:48:49"
+      },
+      {
+        "id": "FINDING-2071427D",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Sovereign Ledger Audit leaked to brian",
+        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_f744d4f710e7_94DDEFD6' belonging to tenant_beta::Project Sovereign Ledger Audit via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-audit",
+        "resource_id": "res_beta_project_audit",
+        "resource_owner_tenant": "tenant_beta",
+        "resource_owner_user": "user_bob",
+        "victim_principal": "user_bob",
+        "adversary_principal": "tenant_beta::brian[standard_user]",
+        "detected_canary": "TC_CANARY_f744d4f710e7_94DDEFD6",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "142",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
+          "X-Cache-Key": "dc578728f119"
+        },
+        "timestamp": "2026-11-01 21:48:49"
+      },
+      {
+        "id": "FINDING-8363D55E",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Orbital Cloud Relay leaked to charlie",
+        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_ae6227eb3ab3_47FEE71' belonging to tenant_gamma::Project Orbital Cloud Relay via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-cloud",
+        "resource_id": "res_gamma_project_cloud",
+        "resource_owner_tenant": "tenant_gamma",
+        "resource_owner_user": "user_clara",
+        "victim_principal": "user_clara",
+        "adversary_principal": "tenant_gamma::charlie[standard_user]",
+        "detected_canary": "TC_CANARY_ae6227eb3ab3_47FEE71",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "139",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
+          "X-Cache-Key": "943aaf1d6395"
+        },
+        "timestamp": "2026-11-01 21:48:49"
+      },
+      {
+        "id": "FINDING-5C53BE4C",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Post-Quantum Lattice Key leaked to diana",
+        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_0435622ce575_7D282ED4' belonging to tenant_delta::Project Post-Quantum Lattice Key via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-crypto",
+        "resource_id": "res_delta_project_crypto",
+        "resource_owner_tenant": "tenant_delta",
+        "resource_owner_user": "user_david",
+        "victim_principal": "user_david",
+        "adversary_principal": "tenant_delta::diana[standard_user]",
+        "detected_canary": "TC_CANARY_0435622ce575_7D282ED4",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "146",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
+          "X-Cache-Key": "b5d6aa70a7b0"
+        },
+        "timestamp": "2026-11-01 21:48:49"
+      },
+      {
+        "id": "FINDING-D07009C6",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Acme Executive Dashboard leaked to bob",
@@ -1912,10 +2014,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-6B403DC3",
+        "id": "FINDING-AE679DB0",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Beta Executive Dashboard leaked to alice",
@@ -1937,10 +2039,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-EDEA4C14",
+        "id": "FINDING-8CD03620",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Gamma Executive Dashboard leaked to david",
@@ -1962,10 +2064,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-77D23EF3",
+        "id": "FINDING-ADEDF81B",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Delta Executive Dashboard leaked to charlie",
@@ -1987,10 +2089,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-D6613B81",
+        "id": "FINDING-B13ADC32",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Acme Master Invoice 101 leaked to eric",
@@ -2012,10 +2114,10 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-5182E042",
+        "id": "FINDING-0774CD3E",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Beta Enterprise Invoice 202 leaked to diana",
@@ -2037,7 +2139,7 @@
           "X-TenantCache-Config": "V1_MISSING_TENANT_KEY",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:29"
+        "timestamp": "2026-11-01 21:48:49"
       }
     ]
   },
@@ -2045,33 +2147,42 @@
     "framework_name": "TenantCache (Stateful Differential Verification)",
     "mode": "V2_MISSING_USER_AUTH",
     "total_scenarios": 54,
-    "true_positives": 23,
+    "true_positives": 27,
     "false_positives": 0,
     "true_negatives": 24,
-    "false_negatives": 7,
+    "false_negatives": 3,
     "precision": 1.0,
     "precision_ci_95": [
-      0.8569,
+      0.8754,
       1.0
     ],
-    "recall": 0.7667,
+    "recall": 0.9,
     "recall_ci_95": [
-      0.5907,
-      0.8821
+      0.7438,
+      0.9654
     ],
-    "f1_score": 0.8679,
-    "accuracy": 0.8704,
+    "f1_score": 0.9474,
+    "specificity": 1.0,
+    "specificity_ci_95": [
+      0.862,
+      1.0
+    ],
+    "accuracy": 0.9444,
     "accuracy_ci_95": [
-      0.7558,
-      0.9358
+      0.8489,
+      0.9809
     ],
+    "false_positive_rate": 0.0,
     "total_requests": 108,
-    "duration_seconds": 0.2076,
-    "requests_per_second": 520.33,
-    "findings_count": 23,
+    "cache_resets": 54,
+    "state_transitions": 8,
+    "distinct_principals_covered": 9,
+    "duration_seconds": 0.1965,
+    "requests_per_second": 549.66,
+    "findings_count": 27,
     "findings": [
       {
-        "id": "FINDING-DF6D0C6F",
+        "id": "FINDING-DFF12C1A",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to alex",
@@ -2093,10 +2204,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "556057b62046"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-C0BC841A",
+        "id": "FINDING-EA3EF56B",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alex Private Profile leaked to alice",
@@ -2118,10 +2229,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "556057b62046"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-7DDA2EC2",
+        "id": "FINDING-003806DA",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to amanda",
@@ -2143,10 +2254,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "556057b62046"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-B0180F27",
+        "id": "FINDING-7146386B",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Amanda Private Profile leaked to alex",
@@ -2168,10 +2279,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "556057b62046"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-AAFA8913",
+        "id": "FINDING-764E0678",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Bob Private Profile leaked to brian",
@@ -2193,10 +2304,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "df40e57c8226"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-89F05AFF",
+        "id": "FINDING-A9226FB0",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Brian Private Profile leaked to bob",
@@ -2218,10 +2329,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "df40e57c8226"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-2940A04A",
+        "id": "FINDING-10A7B16B",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: David Private Profile leaked to diana",
@@ -2243,10 +2354,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "54406dbc5f46"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-B6C0CEA1",
+        "id": "FINDING-2BB883D8",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alex Private Profile leaked to amanda",
@@ -2268,10 +2379,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "556057b62046"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-218F75A1",
+        "id": "FINDING-62D8E9C5",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Acme Root Audit Logs leaked to alex",
@@ -2293,10 +2404,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "88d3281de313"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-6B5AB6B2",
+        "id": "FINDING-4D086037",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Acme Root Audit Logs leaked to amanda",
@@ -2318,10 +2429,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "88d3281de313"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-29A891DD",
+        "id": "FINDING-B0601A32",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Beta Root Audit Logs leaked to brian",
@@ -2343,10 +2454,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "a115a2db528b"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-DC065857",
+        "id": "FINDING-C6ECFD31",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Gamma Root Audit Logs leaked to charlie",
@@ -2368,10 +2479,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "330ffd4d93ae"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-65E15086",
+        "id": "FINDING-EF06065A",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Delta Root Audit Logs leaked to diana",
@@ -2393,110 +2504,210 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "f68ef549425e"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-99C0D7BC",
+        "id": "FINDING-8CB0CE91",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Alpha Stealth Blueprint leaked to alex",
-        "description": "Principal tenant_acme::alex[standard_user] received confidential canary 'TC_CANARY_0c4938c701b5_89C62C4E' belonging to tenant_acme::Project Alpha Stealth Blueprint via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_acme::alex[standard_user] received confidential canary 'TC_CANARY_797b28a19dbc_400A9097' belonging to tenant_acme::Project Alpha Stealth Blueprint via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-alpha",
         "resource_id": "res_acme_project_alpha",
         "resource_owner_tenant": "tenant_acme",
         "resource_owner_user": "user_alice",
         "victim_principal": "user_alice",
         "adversary_principal": "tenant_acme::alex[standard_user]",
-        "detected_canary": "TC_CANARY_0c4938c701b5_89C62C4E",
+        "detected_canary": "TC_CANARY_797b28a19dbc_400A9097",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "72",
+          "content-length": "143",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "15e3616d973b"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-2602E08A",
+        "id": "FINDING-D41BDCFC",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Titan M&A Dossier leaked to brian",
-        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_4cb9de3a56c2_D61FF3F5' belonging to tenant_beta::Project Titan M&A Dossier via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_40fc7aee4e03_606F5379' belonging to tenant_beta::Project Titan M&A Dossier via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-titan",
         "resource_id": "res_beta_project_merger",
         "resource_owner_tenant": "tenant_beta",
         "resource_owner_user": "user_bob",
         "victim_principal": "user_bob",
         "adversary_principal": "tenant_beta::brian[standard_user]",
-        "detected_canary": "TC_CANARY_4cb9de3a56c2_D61FF3F5",
+        "detected_canary": "TC_CANARY_40fc7aee4e03_606F5379",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "70",
+          "content-length": "138",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "97f11b2997f3"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-7C2DF011",
+        "id": "FINDING-EB7173B9",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Neural Weight Matrix leaked to charlie",
-        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_16df738c239d_869BEB3E' belonging to tenant_gamma::Project Neural Weight Matrix via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_e0c79c1bd825_A650E057' belonging to tenant_gamma::Project Neural Weight Matrix via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-neural",
         "resource_id": "res_gamma_project_ai",
         "resource_owner_tenant": "tenant_gamma",
         "resource_owner_user": "user_clara",
         "victim_principal": "user_clara",
         "adversary_principal": "tenant_gamma::charlie[standard_user]",
-        "detected_canary": "TC_CANARY_16df738c239d_869BEB3E",
+        "detected_canary": "TC_CANARY_e0c79c1bd825_A650E057",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "69",
+          "content-length": "138",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "647e1f8f8b72"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-AFC742FC",
+        "id": "FINDING-C5ABE346",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Quantum Cryptography Patent Draft leaked to diana",
-        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_1646ff1942a4_7566C67E' belonging to tenant_delta::Quantum Cryptography Patent Draft via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_21f64ea9807e_E5DF1A4A' belonging to tenant_delta::Quantum Cryptography Patent Draft via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-quantum",
         "resource_id": "res_delta_project_patent",
         "resource_owner_tenant": "tenant_delta",
         "resource_owner_user": "user_david",
         "victim_principal": "user_david",
         "adversary_principal": "tenant_delta::diana[standard_user]",
-        "detected_canary": "TC_CANARY_1646ff1942a4_7566C67E",
+        "detected_canary": "TC_CANARY_21f64ea9807e_E5DF1A4A",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "70",
+          "content-length": "147",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "a20e5b4c1123"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-A10A719A",
+        "id": "FINDING-C52B5102",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Supply Chain Logistics leaked to amanda",
+        "description": "Principal tenant_acme::amanda[standard_user] received confidential canary 'TC_CANARY_b3fef7eeffbd_F516A012' belonging to tenant_acme::Project Supply Chain Logistics via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-supply",
+        "resource_id": "res_acme_project_supply",
+        "resource_owner_tenant": "tenant_acme",
+        "resource_owner_user": "user_alice",
+        "victim_principal": "user_alice",
+        "adversary_principal": "tenant_acme::amanda[standard_user]",
+        "detected_canary": "TC_CANARY_b3fef7eeffbd_F516A012",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "143",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
+          "X-Cache-Key": "ff16f2fc6f7c"
+        },
+        "timestamp": "2026-11-01 21:48:49"
+      },
+      {
+        "id": "FINDING-FCFD815E",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Sovereign Ledger Audit leaked to brian",
+        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_f744d4f710e7_94DDEFD6' belonging to tenant_beta::Project Sovereign Ledger Audit via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-audit",
+        "resource_id": "res_beta_project_audit",
+        "resource_owner_tenant": "tenant_beta",
+        "resource_owner_user": "user_bob",
+        "victim_principal": "user_bob",
+        "adversary_principal": "tenant_beta::brian[standard_user]",
+        "detected_canary": "TC_CANARY_f744d4f710e7_94DDEFD6",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "142",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
+          "X-Cache-Key": "c149e1c41a2c"
+        },
+        "timestamp": "2026-11-01 21:48:49"
+      },
+      {
+        "id": "FINDING-61DDC375",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Orbital Cloud Relay leaked to charlie",
+        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_ae6227eb3ab3_47FEE71' belonging to tenant_gamma::Project Orbital Cloud Relay via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-cloud",
+        "resource_id": "res_gamma_project_cloud",
+        "resource_owner_tenant": "tenant_gamma",
+        "resource_owner_user": "user_clara",
+        "victim_principal": "user_clara",
+        "adversary_principal": "tenant_gamma::charlie[standard_user]",
+        "detected_canary": "TC_CANARY_ae6227eb3ab3_47FEE71",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "139",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
+          "X-Cache-Key": "7cb26e5b877f"
+        },
+        "timestamp": "2026-11-01 21:48:49"
+      },
+      {
+        "id": "FINDING-DB4A7D0B",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Post-Quantum Lattice Key leaked to diana",
+        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_0435622ce575_7D282ED4' belonging to tenant_delta::Project Post-Quantum Lattice Key via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-crypto",
+        "resource_id": "res_delta_project_crypto",
+        "resource_owner_tenant": "tenant_delta",
+        "resource_owner_user": "user_david",
+        "victim_principal": "user_david",
+        "adversary_principal": "tenant_delta::diana[standard_user]",
+        "detected_canary": "TC_CANARY_0435622ce575_7D282ED4",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "146",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
+          "X-Cache-Key": "4a4afeb63e93"
+        },
+        "timestamp": "2026-11-01 21:48:49"
+      },
+      {
+        "id": "FINDING-C65E2EF6",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Acme Executive Dashboard leaked to bob",
@@ -2518,10 +2729,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "7c7c1dc792cf"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-D865005D",
+        "id": "FINDING-39936F14",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Beta Executive Dashboard leaked to alice",
@@ -2543,10 +2754,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "98ada944f8e8"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-0B625608",
+        "id": "FINDING-CC0EA0F3",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Gamma Executive Dashboard leaked to david",
@@ -2568,10 +2779,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "7c16a365126a"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-A941627A",
+        "id": "FINDING-E65A525A",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Delta Executive Dashboard leaked to charlie",
@@ -2593,10 +2804,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "a880e816cde0"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-B2D43905",
+        "id": "FINDING-F4C1295D",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Acme Master Invoice 101 leaked to eric",
@@ -2618,10 +2829,10 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "e1d2ab69fafc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       },
       {
-        "id": "FINDING-7BBF79DC",
+        "id": "FINDING-8483C39B",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Beta Enterprise Invoice 202 leaked to diana",
@@ -2643,7 +2854,7 @@
           "X-TenantCache-Config": "V2_MISSING_USER_AUTH",
           "X-Cache-Key": "56cac6039ad0"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:49"
       }
     ]
   },
@@ -2651,33 +2862,42 @@
     "framework_name": "TenantCache (Stateful Differential Verification)",
     "mode": "V3_UNVALIDATED_HEADER",
     "total_scenarios": 54,
-    "true_positives": 23,
+    "true_positives": 27,
     "false_positives": 0,
     "true_negatives": 24,
-    "false_negatives": 7,
+    "false_negatives": 3,
     "precision": 1.0,
     "precision_ci_95": [
-      0.8569,
+      0.8754,
       1.0
     ],
-    "recall": 0.7667,
+    "recall": 0.9,
     "recall_ci_95": [
-      0.5907,
-      0.8821
+      0.7438,
+      0.9654
     ],
-    "f1_score": 0.8679,
-    "accuracy": 0.8704,
+    "f1_score": 0.9474,
+    "specificity": 1.0,
+    "specificity_ci_95": [
+      0.862,
+      1.0
+    ],
+    "accuracy": 0.9444,
     "accuracy_ci_95": [
-      0.7558,
-      0.9358
+      0.8489,
+      0.9809
     ],
+    "false_positive_rate": 0.0,
     "total_requests": 108,
-    "duration_seconds": 0.2142,
-    "requests_per_second": 504.12,
-    "findings_count": 23,
+    "cache_resets": 54,
+    "state_transitions": 8,
+    "distinct_principals_covered": 9,
+    "duration_seconds": 0.2237,
+    "requests_per_second": 482.89,
+    "findings_count": 27,
     "findings": [
       {
-        "id": "FINDING-ECDE57A3",
+        "id": "FINDING-358F3E81",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to alex",
@@ -2699,10 +2919,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "05e907b2b406"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-27B4BC31",
+        "id": "FINDING-DA6EBF13",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alex Private Profile leaked to alice",
@@ -2724,10 +2944,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "05e907b2b406"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-752E09A2",
+        "id": "FINDING-B921B457",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to amanda",
@@ -2749,10 +2969,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "05e907b2b406"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-11E89EED",
+        "id": "FINDING-3B65FA50",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Amanda Private Profile leaked to alex",
@@ -2774,10 +2994,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "05e907b2b406"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-45A47B53",
+        "id": "FINDING-3A133688",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Bob Private Profile leaked to brian",
@@ -2799,10 +3019,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "86772308220b"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-F47A1206",
+        "id": "FINDING-6DA2A74D",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Brian Private Profile leaked to bob",
@@ -2824,10 +3044,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "86772308220b"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-1C310CAA",
+        "id": "FINDING-57AA221D",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: David Private Profile leaked to diana",
@@ -2849,10 +3069,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "21c5d5545ef2"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-58429BEC",
+        "id": "FINDING-8D8F825E",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alex Private Profile leaked to amanda",
@@ -2874,10 +3094,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "05e907b2b406"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-4846338E",
+        "id": "FINDING-C25C56F9",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Acme Root Audit Logs leaked to alex",
@@ -2899,10 +3119,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "40f4f15073a1"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-3A26F5B2",
+        "id": "FINDING-8213A030",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Acme Root Audit Logs leaked to amanda",
@@ -2924,10 +3144,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "40f4f15073a1"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-F33EDF76",
+        "id": "FINDING-3F87F836",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Beta Root Audit Logs leaked to brian",
@@ -2949,10 +3169,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "9cb9aa04e4ff"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-2E60BC4C",
+        "id": "FINDING-930CEE06",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Gamma Root Audit Logs leaked to charlie",
@@ -2974,10 +3194,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "0b9d327cedf7"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-08383963",
+        "id": "FINDING-2EA1915C",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Delta Root Audit Logs leaked to diana",
@@ -2999,110 +3219,210 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "8a15db170853"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-FD13641A",
+        "id": "FINDING-85889AF1",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Alpha Stealth Blueprint leaked to alex",
-        "description": "Principal tenant_acme::alex[standard_user] received confidential canary 'TC_CANARY_0c4938c701b5_89C62C4E' belonging to tenant_acme::Project Alpha Stealth Blueprint via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_acme::alex[standard_user] received confidential canary 'TC_CANARY_797b28a19dbc_400A9097' belonging to tenant_acme::Project Alpha Stealth Blueprint via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-alpha",
         "resource_id": "res_acme_project_alpha",
         "resource_owner_tenant": "tenant_acme",
         "resource_owner_user": "user_alice",
         "victim_principal": "user_alice",
         "adversary_principal": "tenant_acme::alex[standard_user]",
-        "detected_canary": "TC_CANARY_0c4938c701b5_89C62C4E",
+        "detected_canary": "TC_CANARY_797b28a19dbc_400A9097",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "72",
+          "content-length": "143",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "8e693bd2a129"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-7FCD8048",
+        "id": "FINDING-01D4F67C",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Titan M&A Dossier leaked to brian",
-        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_4cb9de3a56c2_D61FF3F5' belonging to tenant_beta::Project Titan M&A Dossier via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_40fc7aee4e03_606F5379' belonging to tenant_beta::Project Titan M&A Dossier via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-titan",
         "resource_id": "res_beta_project_merger",
         "resource_owner_tenant": "tenant_beta",
         "resource_owner_user": "user_bob",
         "victim_principal": "user_bob",
         "adversary_principal": "tenant_beta::brian[standard_user]",
-        "detected_canary": "TC_CANARY_4cb9de3a56c2_D61FF3F5",
+        "detected_canary": "TC_CANARY_40fc7aee4e03_606F5379",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "70",
+          "content-length": "138",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "7a7583333d74"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-3C37B843",
+        "id": "FINDING-3BE8A544",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Neural Weight Matrix leaked to charlie",
-        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_16df738c239d_869BEB3E' belonging to tenant_gamma::Project Neural Weight Matrix via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_e0c79c1bd825_A650E057' belonging to tenant_gamma::Project Neural Weight Matrix via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-neural",
         "resource_id": "res_gamma_project_ai",
         "resource_owner_tenant": "tenant_gamma",
         "resource_owner_user": "user_clara",
         "victim_principal": "user_clara",
         "adversary_principal": "tenant_gamma::charlie[standard_user]",
-        "detected_canary": "TC_CANARY_16df738c239d_869BEB3E",
+        "detected_canary": "TC_CANARY_e0c79c1bd825_A650E057",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "69",
+          "content-length": "138",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "f73ec58608fc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-31A7AD23",
+        "id": "FINDING-75C096B6",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Quantum Cryptography Patent Draft leaked to diana",
-        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_1646ff1942a4_7566C67E' belonging to tenant_delta::Quantum Cryptography Patent Draft via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_21f64ea9807e_E5DF1A4A' belonging to tenant_delta::Quantum Cryptography Patent Draft via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-quantum",
         "resource_id": "res_delta_project_patent",
         "resource_owner_tenant": "tenant_delta",
         "resource_owner_user": "user_david",
         "victim_principal": "user_david",
         "adversary_principal": "tenant_delta::diana[standard_user]",
-        "detected_canary": "TC_CANARY_1646ff1942a4_7566C67E",
+        "detected_canary": "TC_CANARY_21f64ea9807e_E5DF1A4A",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "70",
+          "content-length": "147",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "58eb564fcd39"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-F2980F88",
+        "id": "FINDING-606D4C8D",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Supply Chain Logistics leaked to amanda",
+        "description": "Principal tenant_acme::amanda[standard_user] received confidential canary 'TC_CANARY_b3fef7eeffbd_F516A012' belonging to tenant_acme::Project Supply Chain Logistics via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-supply",
+        "resource_id": "res_acme_project_supply",
+        "resource_owner_tenant": "tenant_acme",
+        "resource_owner_user": "user_alice",
+        "victim_principal": "user_alice",
+        "adversary_principal": "tenant_acme::amanda[standard_user]",
+        "detected_canary": "TC_CANARY_b3fef7eeffbd_F516A012",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "143",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
+          "X-Cache-Key": "42bd1dff7868"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-A71A50C4",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Sovereign Ledger Audit leaked to brian",
+        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_f744d4f710e7_94DDEFD6' belonging to tenant_beta::Project Sovereign Ledger Audit via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-audit",
+        "resource_id": "res_beta_project_audit",
+        "resource_owner_tenant": "tenant_beta",
+        "resource_owner_user": "user_bob",
+        "victim_principal": "user_bob",
+        "adversary_principal": "tenant_beta::brian[standard_user]",
+        "detected_canary": "TC_CANARY_f744d4f710e7_94DDEFD6",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "142",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
+          "X-Cache-Key": "c5303cb44c88"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-0DD58BA7",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Orbital Cloud Relay leaked to charlie",
+        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_ae6227eb3ab3_47FEE71' belonging to tenant_gamma::Project Orbital Cloud Relay via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-cloud",
+        "resource_id": "res_gamma_project_cloud",
+        "resource_owner_tenant": "tenant_gamma",
+        "resource_owner_user": "user_clara",
+        "victim_principal": "user_clara",
+        "adversary_principal": "tenant_gamma::charlie[standard_user]",
+        "detected_canary": "TC_CANARY_ae6227eb3ab3_47FEE71",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "139",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
+          "X-Cache-Key": "1d05ef5c20a8"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-7B16E420",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Post-Quantum Lattice Key leaked to diana",
+        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_0435622ce575_7D282ED4' belonging to tenant_delta::Project Post-Quantum Lattice Key via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-crypto",
+        "resource_id": "res_delta_project_crypto",
+        "resource_owner_tenant": "tenant_delta",
+        "resource_owner_user": "user_david",
+        "victim_principal": "user_david",
+        "adversary_principal": "tenant_delta::diana[standard_user]",
+        "detected_canary": "TC_CANARY_0435622ce575_7D282ED4",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "146",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
+          "X-Cache-Key": "17f9fd13d06c"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-AD24C942",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Acme Executive Dashboard leaked to bob",
@@ -3124,10 +3444,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "0096276a9b21"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-95DE6F53",
+        "id": "FINDING-2EABC3BB",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Beta Executive Dashboard leaked to alice",
@@ -3149,10 +3469,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "695edc6267c5"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-265494B8",
+        "id": "FINDING-3141790E",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Gamma Executive Dashboard leaked to david",
@@ -3174,10 +3494,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "ee95f689c780"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-0A88CA45",
+        "id": "FINDING-6A3A2585",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Delta Executive Dashboard leaked to charlie",
@@ -3199,10 +3519,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "4b5f8c833afb"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-358DD72A",
+        "id": "FINDING-5330B08C",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Acme Master Invoice 101 leaked to eric",
@@ -3224,10 +3544,10 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "e1c3a9c00630"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-16864369",
+        "id": "FINDING-6131FEF0",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Beta Enterprise Invoice 202 leaked to diana",
@@ -3249,7 +3569,7 @@
           "X-TenantCache-Config": "V3_UNVALIDATED_HEADER",
           "X-Cache-Key": "a33e281e20b1"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       }
     ]
   },
@@ -3257,130 +3577,239 @@
     "framework_name": "TenantCache (Stateful Differential Verification)",
     "mode": "V4_STALE_REVOCATION",
     "total_scenarios": 54,
-    "true_positives": 4,
+    "true_positives": 8,
     "false_positives": 0,
     "true_negatives": 46,
-    "false_negatives": 4,
+    "false_negatives": 0,
     "precision": 1.0,
     "precision_ci_95": [
-      0.5101,
+      0.6756,
       1.0
     ],
-    "recall": 0.5,
+    "recall": 1.0,
     "recall_ci_95": [
-      0.2152,
-      0.7848
+      0.6756,
+      1.0
     ],
-    "f1_score": 0.6667,
-    "accuracy": 0.9259,
+    "f1_score": 1.0,
+    "specificity": 1.0,
+    "specificity_ci_95": [
+      0.9229,
+      1.0
+    ],
+    "accuracy": 1.0,
     "accuracy_ci_95": [
-      0.8245,
-      0.9708
+      0.9336,
+      1.0
     ],
+    "false_positive_rate": 0.0,
     "total_requests": 108,
-    "duration_seconds": 0.2695,
-    "requests_per_second": 400.77,
-    "findings_count": 4,
+    "cache_resets": 54,
+    "state_transitions": 8,
+    "distinct_principals_covered": 9,
+    "duration_seconds": 0.277,
+    "requests_per_second": 389.92,
+    "findings_count": 8,
     "findings": [
       {
-        "id": "FINDING-50F2F1F8",
+        "id": "FINDING-15F88BFC",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Alpha Stealth Blueprint leaked to alex",
-        "description": "Principal tenant_acme::alex[standard_user] received confidential canary 'TC_CANARY_0c4938c701b5_89C62C4E' belonging to tenant_acme::Project Alpha Stealth Blueprint via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_acme::alex[standard_user] received confidential canary 'TC_CANARY_797b28a19dbc_400A9097' belonging to tenant_acme::Project Alpha Stealth Blueprint via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-alpha",
         "resource_id": "res_acme_project_alpha",
         "resource_owner_tenant": "tenant_acme",
         "resource_owner_user": "user_alice",
         "victim_principal": "user_alice",
         "adversary_principal": "tenant_acme::alex[standard_user]",
-        "detected_canary": "TC_CANARY_0c4938c701b5_89C62C4E",
+        "detected_canary": "TC_CANARY_797b28a19dbc_400A9097",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "72",
+          "content-length": "143",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V4_STALE_REVOCATION",
           "X-Cache-Key": "26e71ec667b2"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-1E147E0D",
+        "id": "FINDING-B88FE6C2",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Titan M&A Dossier leaked to brian",
-        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_4cb9de3a56c2_D61FF3F5' belonging to tenant_beta::Project Titan M&A Dossier via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_40fc7aee4e03_606F5379' belonging to tenant_beta::Project Titan M&A Dossier via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-titan",
         "resource_id": "res_beta_project_merger",
         "resource_owner_tenant": "tenant_beta",
         "resource_owner_user": "user_bob",
         "victim_principal": "user_bob",
         "adversary_principal": "tenant_beta::brian[standard_user]",
-        "detected_canary": "TC_CANARY_4cb9de3a56c2_D61FF3F5",
+        "detected_canary": "TC_CANARY_40fc7aee4e03_606F5379",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "70",
+          "content-length": "138",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V4_STALE_REVOCATION",
           "X-Cache-Key": "ce73c154abd4"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-BEBF8933",
+        "id": "FINDING-AEFED9E1",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Neural Weight Matrix leaked to charlie",
-        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_16df738c239d_869BEB3E' belonging to tenant_gamma::Project Neural Weight Matrix via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_e0c79c1bd825_A650E057' belonging to tenant_gamma::Project Neural Weight Matrix via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-neural",
         "resource_id": "res_gamma_project_ai",
         "resource_owner_tenant": "tenant_gamma",
         "resource_owner_user": "user_clara",
         "victim_principal": "user_clara",
         "adversary_principal": "tenant_gamma::charlie[standard_user]",
-        "detected_canary": "TC_CANARY_16df738c239d_869BEB3E",
+        "detected_canary": "TC_CANARY_e0c79c1bd825_A650E057",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "69",
+          "content-length": "138",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V4_STALE_REVOCATION",
           "X-Cache-Key": "e5398746cc5c"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-DBCD50A7",
+        "id": "FINDING-7E8B0188",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Quantum Cryptography Patent Draft leaked to diana",
-        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_1646ff1942a4_7566C67E' belonging to tenant_delta::Quantum Cryptography Patent Draft via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_21f64ea9807e_E5DF1A4A' belonging to tenant_delta::Quantum Cryptography Patent Draft via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-quantum",
         "resource_id": "res_delta_project_patent",
         "resource_owner_tenant": "tenant_delta",
         "resource_owner_user": "user_david",
         "victim_principal": "user_david",
         "adversary_principal": "tenant_delta::diana[standard_user]",
-        "detected_canary": "TC_CANARY_1646ff1942a4_7566C67E",
+        "detected_canary": "TC_CANARY_21f64ea9807e_E5DF1A4A",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "70",
+          "content-length": "147",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V4_STALE_REVOCATION",
           "X-Cache-Key": "228711db56b3"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-3C517967",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Supply Chain Logistics leaked to amanda",
+        "description": "Principal tenant_acme::amanda[standard_user] received confidential canary 'TC_CANARY_b3fef7eeffbd_F516A012' belonging to tenant_acme::Project Supply Chain Logistics via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-supply",
+        "resource_id": "res_acme_project_supply",
+        "resource_owner_tenant": "tenant_acme",
+        "resource_owner_user": "user_alice",
+        "victim_principal": "user_alice",
+        "adversary_principal": "tenant_acme::amanda[standard_user]",
+        "detected_canary": "TC_CANARY_b3fef7eeffbd_F516A012",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "143",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V4_STALE_REVOCATION",
+          "X-Cache-Key": "78d44288219c"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-227EB0F9",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Sovereign Ledger Audit leaked to brian",
+        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_f744d4f710e7_94DDEFD6' belonging to tenant_beta::Project Sovereign Ledger Audit via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-audit",
+        "resource_id": "res_beta_project_audit",
+        "resource_owner_tenant": "tenant_beta",
+        "resource_owner_user": "user_bob",
+        "victim_principal": "user_bob",
+        "adversary_principal": "tenant_beta::brian[standard_user]",
+        "detected_canary": "TC_CANARY_f744d4f710e7_94DDEFD6",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "142",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V4_STALE_REVOCATION",
+          "X-Cache-Key": "95de92945b1f"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-B7EED2F4",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Orbital Cloud Relay leaked to charlie",
+        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_ae6227eb3ab3_47FEE71' belonging to tenant_gamma::Project Orbital Cloud Relay via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-cloud",
+        "resource_id": "res_gamma_project_cloud",
+        "resource_owner_tenant": "tenant_gamma",
+        "resource_owner_user": "user_clara",
+        "victim_principal": "user_clara",
+        "adversary_principal": "tenant_gamma::charlie[standard_user]",
+        "detected_canary": "TC_CANARY_ae6227eb3ab3_47FEE71",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "139",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V4_STALE_REVOCATION",
+          "X-Cache-Key": "ecc113f775d2"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-81D458C8",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Post-Quantum Lattice Key leaked to diana",
+        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_0435622ce575_7D282ED4' belonging to tenant_delta::Project Post-Quantum Lattice Key via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-crypto",
+        "resource_id": "res_delta_project_crypto",
+        "resource_owner_tenant": "tenant_delta",
+        "resource_owner_user": "user_david",
+        "victim_principal": "user_david",
+        "adversary_principal": "tenant_delta::diana[standard_user]",
+        "detected_canary": "TC_CANARY_0435622ce575_7D282ED4",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "146",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V4_STALE_REVOCATION",
+          "X-Cache-Key": "4bf47ab56700"
+        },
+        "timestamp": "2026-11-01 21:48:50"
       }
     ]
   },
@@ -3388,33 +3817,42 @@
     "framework_name": "TenantCache (Stateful Differential Verification)",
     "mode": "V5_ERRONEOUS_PUBLIC",
     "total_scenarios": 54,
-    "true_positives": 40,
+    "true_positives": 44,
     "false_positives": 0,
     "true_negatives": 10,
-    "false_negatives": 4,
+    "false_negatives": 0,
     "precision": 1.0,
     "precision_ci_95": [
-      0.9124,
+      0.9197,
       1.0
     ],
-    "recall": 0.9091,
+    "recall": 1.0,
     "recall_ci_95": [
-      0.7884,
-      0.9641
+      0.9197,
+      1.0
     ],
-    "f1_score": 0.9524,
-    "accuracy": 0.9259,
+    "f1_score": 1.0,
+    "specificity": 1.0,
+    "specificity_ci_95": [
+      0.7225,
+      1.0
+    ],
+    "accuracy": 1.0,
     "accuracy_ci_95": [
-      0.8245,
-      0.9708
+      0.9336,
+      1.0
     ],
+    "false_positive_rate": 0.0,
     "total_requests": 108,
-    "duration_seconds": 0.1723,
-    "requests_per_second": 626.83,
-    "findings_count": 40,
+    "cache_resets": 54,
+    "state_transitions": 8,
+    "distinct_principals_covered": 9,
+    "duration_seconds": 0.1503,
+    "requests_per_second": 718.39,
+    "findings_count": 44,
     "findings": [
       {
-        "id": "FINDING-9B53E55D",
+        "id": "FINDING-05A76AC9",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to bob",
@@ -3436,10 +3874,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-06C151F7",
+        "id": "FINDING-89B1D451",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Beta Executive Dashboard leaked to alice",
@@ -3461,10 +3899,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-DB0F0A35",
+        "id": "FINDING-235B7054",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Gamma Executive Dashboard leaked to david",
@@ -3486,10 +3924,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-2C222386",
+        "id": "FINDING-1779AFCD",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Delta Executive Dashboard leaked to charlie",
@@ -3511,10 +3949,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-D17CBD16",
+        "id": "FINDING-0D20AF7E",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to charlie",
@@ -3536,10 +3974,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-2B415250",
+        "id": "FINDING-8E448B95",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Beta Executive Dashboard leaked to diana",
@@ -3561,10 +3999,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-19294BC1",
+        "id": "FINDING-16227E8B",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Delta Executive Dashboard leaked to eric",
@@ -3586,10 +4024,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-EF64DFF1",
+        "id": "FINDING-B2529C4A",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Acme Master Invoice 101 leaked to brian",
@@ -3611,10 +4049,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-3E7D8840",
+        "id": "FINDING-CDEE6A68",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Beta Enterprise Invoice 202 leaked to alex",
@@ -3636,10 +4074,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-EA522CA9",
+        "id": "FINDING-12B829B1",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Acme Master Invoice 101 leaked to david",
@@ -3661,10 +4099,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-57A64B02",
+        "id": "FINDING-B467A397",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Beta Enterprise Invoice 202 leaked to eric",
@@ -3686,10 +4124,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-2CA44AE2",
+        "id": "FINDING-E6B16A28",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Acme Master Invoice 101 leaked to charlie",
@@ -3711,10 +4149,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-BDACCB42",
+        "id": "FINDING-313B1B30",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Beta Enterprise Invoice 202 leaked to diana",
@@ -3736,10 +4174,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-08D521E7",
+        "id": "FINDING-9B8F9719",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to eric",
@@ -3761,10 +4199,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-2691DB67",
+        "id": "FINDING-4AC82E7D",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to alex",
@@ -3786,10 +4224,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-14190CFB",
+        "id": "FINDING-ADD8F0D7",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alex Private Profile leaked to alice",
@@ -3811,10 +4249,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-B988503B",
+        "id": "FINDING-AB3BB7AB",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to amanda",
@@ -3836,10 +4274,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-1EA60391",
+        "id": "FINDING-4391E84C",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Amanda Private Profile leaked to alex",
@@ -3861,10 +4299,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-E52D1439",
+        "id": "FINDING-04E8FB8C",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Bob Private Profile leaked to brian",
@@ -3886,10 +4324,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-40F7F8BC",
+        "id": "FINDING-5B9D472C",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Brian Private Profile leaked to bob",
@@ -3911,10 +4349,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-BFC3FD5E",
+        "id": "FINDING-85D84223",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: David Private Profile leaked to diana",
@@ -3936,10 +4374,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-2A4B6C60",
+        "id": "FINDING-6EF4A4AA",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alex Private Profile leaked to amanda",
@@ -3961,10 +4399,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-BD95E97C",
+        "id": "FINDING-1B934C4D",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Acme Root Audit Logs leaked to alex",
@@ -3986,10 +4424,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-9EEBC3BE",
+        "id": "FINDING-F81A0B53",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Acme Root Audit Logs leaked to amanda",
@@ -4011,10 +4449,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-62B8D402",
+        "id": "FINDING-19215D2C",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Beta Root Audit Logs leaked to brian",
@@ -4036,10 +4474,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-5FB45F64",
+        "id": "FINDING-AFF8FF91",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Gamma Root Audit Logs leaked to charlie",
@@ -4061,10 +4499,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-F0F98486",
+        "id": "FINDING-30196EB9",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Delta Root Audit Logs leaked to diana",
@@ -4086,10 +4524,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-CEC6D7D9",
+        "id": "FINDING-7E1198C9",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Root Audit Logs leaked to eric",
@@ -4111,10 +4549,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-16769EFC",
+        "id": "FINDING-891969C6",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Beta Root Audit Logs leaked to eric",
@@ -4136,10 +4574,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-DE6E956B",
+        "id": "FINDING-5B2D055B",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Delta Root Audit Logs leaked to eric",
@@ -4161,110 +4599,210 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-DE45FB43",
+        "id": "FINDING-676B7420",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Alpha Stealth Blueprint leaked to alex",
-        "description": "Principal tenant_acme::alex[standard_user] received confidential canary 'TC_CANARY_0c4938c701b5_89C62C4E' belonging to tenant_acme::Project Alpha Stealth Blueprint via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_acme::alex[standard_user] received confidential canary 'TC_CANARY_797b28a19dbc_400A9097' belonging to tenant_acme::Project Alpha Stealth Blueprint via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-alpha",
         "resource_id": "res_acme_project_alpha",
         "resource_owner_tenant": "tenant_acme",
         "resource_owner_user": "user_alice",
         "victim_principal": "user_alice",
         "adversary_principal": "tenant_acme::alex[standard_user]",
-        "detected_canary": "TC_CANARY_0c4938c701b5_89C62C4E",
+        "detected_canary": "TC_CANARY_797b28a19dbc_400A9097",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "72",
+          "content-length": "143",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "7a64cc77c3a5"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-ADBB0BFB",
+        "id": "FINDING-1033D7E4",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Titan M&A Dossier leaked to brian",
-        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_4cb9de3a56c2_D61FF3F5' belonging to tenant_beta::Project Titan M&A Dossier via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_40fc7aee4e03_606F5379' belonging to tenant_beta::Project Titan M&A Dossier via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-titan",
         "resource_id": "res_beta_project_merger",
         "resource_owner_tenant": "tenant_beta",
         "resource_owner_user": "user_bob",
         "victim_principal": "user_bob",
         "adversary_principal": "tenant_beta::brian[standard_user]",
-        "detected_canary": "TC_CANARY_4cb9de3a56c2_D61FF3F5",
+        "detected_canary": "TC_CANARY_40fc7aee4e03_606F5379",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "70",
+          "content-length": "138",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "466c88817a2a"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-C4FA738D",
+        "id": "FINDING-77B10152",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Neural Weight Matrix leaked to charlie",
-        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_16df738c239d_869BEB3E' belonging to tenant_gamma::Project Neural Weight Matrix via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_e0c79c1bd825_A650E057' belonging to tenant_gamma::Project Neural Weight Matrix via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-neural",
         "resource_id": "res_gamma_project_ai",
         "resource_owner_tenant": "tenant_gamma",
         "resource_owner_user": "user_clara",
         "victim_principal": "user_clara",
         "adversary_principal": "tenant_gamma::charlie[standard_user]",
-        "detected_canary": "TC_CANARY_16df738c239d_869BEB3E",
+        "detected_canary": "TC_CANARY_e0c79c1bd825_A650E057",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "69",
+          "content-length": "138",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "d8d17fc4156d"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-8D34E3DB",
+        "id": "FINDING-61D4A782",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Quantum Cryptography Patent Draft leaked to diana",
-        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_1646ff1942a4_7566C67E' belonging to tenant_delta::Quantum Cryptography Patent Draft via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_21f64ea9807e_E5DF1A4A' belonging to tenant_delta::Quantum Cryptography Patent Draft via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-quantum",
         "resource_id": "res_delta_project_patent",
         "resource_owner_tenant": "tenant_delta",
         "resource_owner_user": "user_david",
         "victim_principal": "user_david",
         "adversary_principal": "tenant_delta::diana[standard_user]",
-        "detected_canary": "TC_CANARY_1646ff1942a4_7566C67E",
+        "detected_canary": "TC_CANARY_21f64ea9807e_E5DF1A4A",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "70",
+          "content-length": "147",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "b245cd51d49f"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-008FFB42",
+        "id": "FINDING-A4512102",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Supply Chain Logistics leaked to amanda",
+        "description": "Principal tenant_acme::amanda[standard_user] received confidential canary 'TC_CANARY_b3fef7eeffbd_F516A012' belonging to tenant_acme::Project Supply Chain Logistics via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-supply",
+        "resource_id": "res_acme_project_supply",
+        "resource_owner_tenant": "tenant_acme",
+        "resource_owner_user": "user_alice",
+        "victim_principal": "user_alice",
+        "adversary_principal": "tenant_acme::amanda[standard_user]",
+        "detected_canary": "TC_CANARY_b3fef7eeffbd_F516A012",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "143",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
+          "X-Cache-Key": "b7feb2dab1e1"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-77D594D3",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Sovereign Ledger Audit leaked to brian",
+        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_f744d4f710e7_94DDEFD6' belonging to tenant_beta::Project Sovereign Ledger Audit via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-audit",
+        "resource_id": "res_beta_project_audit",
+        "resource_owner_tenant": "tenant_beta",
+        "resource_owner_user": "user_bob",
+        "victim_principal": "user_bob",
+        "adversary_principal": "tenant_beta::brian[standard_user]",
+        "detected_canary": "TC_CANARY_f744d4f710e7_94DDEFD6",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "142",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
+          "X-Cache-Key": "dc578728f119"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-042932E3",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Orbital Cloud Relay leaked to charlie",
+        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_ae6227eb3ab3_47FEE71' belonging to tenant_gamma::Project Orbital Cloud Relay via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-cloud",
+        "resource_id": "res_gamma_project_cloud",
+        "resource_owner_tenant": "tenant_gamma",
+        "resource_owner_user": "user_clara",
+        "victim_principal": "user_clara",
+        "adversary_principal": "tenant_gamma::charlie[standard_user]",
+        "detected_canary": "TC_CANARY_ae6227eb3ab3_47FEE71",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "139",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
+          "X-Cache-Key": "943aaf1d6395"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-77B17596",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Post-Quantum Lattice Key leaked to diana",
+        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_0435622ce575_7D282ED4' belonging to tenant_delta::Project Post-Quantum Lattice Key via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-crypto",
+        "resource_id": "res_delta_project_crypto",
+        "resource_owner_tenant": "tenant_delta",
+        "resource_owner_user": "user_david",
+        "victim_principal": "user_david",
+        "adversary_principal": "tenant_delta::diana[standard_user]",
+        "detected_canary": "TC_CANARY_0435622ce575_7D282ED4",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "146",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
+          "X-Cache-Key": "b5d6aa70a7b0"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-CEA8D765",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Acme Executive Dashboard leaked to bob",
@@ -4286,10 +4824,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-1BF78DD5",
+        "id": "FINDING-3F826C02",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Beta Executive Dashboard leaked to alice",
@@ -4311,10 +4849,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-AC673D0F",
+        "id": "FINDING-6AD10E99",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Gamma Executive Dashboard leaked to david",
@@ -4336,10 +4874,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-BADE62A8",
+        "id": "FINDING-5FC4AC4F",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Delta Executive Dashboard leaked to charlie",
@@ -4361,10 +4899,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-6545AF6D",
+        "id": "FINDING-F2F82F22",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Acme Master Invoice 101 leaked to eric",
@@ -4386,10 +4924,10 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-951FD6E2",
+        "id": "FINDING-21C60F4B",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Beta Enterprise Invoice 202 leaked to diana",
@@ -4411,7 +4949,7 @@
           "X-TenantCache-Config": "V5_ERRONEOUS_PUBLIC",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       }
     ]
   },
@@ -4419,33 +4957,42 @@
     "framework_name": "TenantCache (Stateful Differential Verification)",
     "mode": "V6_NORMALIZATION",
     "total_scenarios": 54,
-    "true_positives": 40,
+    "true_positives": 44,
     "false_positives": 0,
     "true_negatives": 10,
-    "false_negatives": 4,
+    "false_negatives": 0,
     "precision": 1.0,
     "precision_ci_95": [
-      0.9124,
+      0.9197,
       1.0
     ],
-    "recall": 0.9091,
+    "recall": 1.0,
     "recall_ci_95": [
-      0.7884,
-      0.9641
+      0.9197,
+      1.0
     ],
-    "f1_score": 0.9524,
-    "accuracy": 0.9259,
+    "f1_score": 1.0,
+    "specificity": 1.0,
+    "specificity_ci_95": [
+      0.7225,
+      1.0
+    ],
+    "accuracy": 1.0,
     "accuracy_ci_95": [
-      0.8245,
-      0.9708
+      0.9336,
+      1.0
     ],
+    "false_positive_rate": 0.0,
     "total_requests": 108,
-    "duration_seconds": 0.1519,
-    "requests_per_second": 711.16,
-    "findings_count": 40,
+    "cache_resets": 54,
+    "state_transitions": 8,
+    "distinct_principals_covered": 9,
+    "duration_seconds": 0.1435,
+    "requests_per_second": 752.77,
+    "findings_count": 44,
     "findings": [
       {
-        "id": "FINDING-79D3C04E",
+        "id": "FINDING-994969AE",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to bob",
@@ -4467,10 +5014,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-F0A79B37",
+        "id": "FINDING-0009837F",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Beta Executive Dashboard leaked to alice",
@@ -4492,10 +5039,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-FF1BE05B",
+        "id": "FINDING-813A35F2",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Gamma Executive Dashboard leaked to david",
@@ -4517,10 +5064,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-747A8F11",
+        "id": "FINDING-B677855F",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Delta Executive Dashboard leaked to charlie",
@@ -4542,10 +5089,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-BA3625FF",
+        "id": "FINDING-9A065ED6",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to charlie",
@@ -4567,10 +5114,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-83962FF7",
+        "id": "FINDING-8033293E",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Beta Executive Dashboard leaked to diana",
@@ -4592,10 +5139,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-8959FF11",
+        "id": "FINDING-6C87BE7B",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Delta Executive Dashboard leaked to eric",
@@ -4617,10 +5164,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-F73BDCC2",
+        "id": "FINDING-DFDD7808",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Acme Master Invoice 101 leaked to brian",
@@ -4642,10 +5189,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-0CC22F23",
+        "id": "FINDING-E66EC370",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Beta Enterprise Invoice 202 leaked to alex",
@@ -4667,10 +5214,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-495CD816",
+        "id": "FINDING-E6092D74",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Acme Master Invoice 101 leaked to david",
@@ -4692,10 +5239,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-A1FD26C5",
+        "id": "FINDING-988AB45E",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Beta Enterprise Invoice 202 leaked to eric",
@@ -4717,10 +5264,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-7F769AF0",
+        "id": "FINDING-313B4980",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Acme Master Invoice 101 leaked to charlie",
@@ -4742,10 +5289,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-F97DD856",
+        "id": "FINDING-E8E3FBD0",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Beta Enterprise Invoice 202 leaked to diana",
@@ -4767,10 +5314,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-BD230A7F",
+        "id": "FINDING-F82C4A52",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Executive Dashboard leaked to eric",
@@ -4792,10 +5339,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-6FB2A22D",
+        "id": "FINDING-091A3D27",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to alex",
@@ -4817,10 +5364,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-06601322",
+        "id": "FINDING-8065504C",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alex Private Profile leaked to alice",
@@ -4842,10 +5389,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-46EA2055",
+        "id": "FINDING-1007906F",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alice Private Profile leaked to amanda",
@@ -4867,10 +5414,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-AD22CBFC",
+        "id": "FINDING-D7F6D71D",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Amanda Private Profile leaked to alex",
@@ -4892,10 +5439,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-03D9DDAE",
+        "id": "FINDING-8538A259",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Bob Private Profile leaked to brian",
@@ -4917,10 +5464,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-3F7F67A2",
+        "id": "FINDING-D35143CB",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Brian Private Profile leaked to bob",
@@ -4942,10 +5489,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-D4C7014F",
+        "id": "FINDING-4EFBE0A9",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: David Private Profile leaked to diana",
@@ -4967,10 +5514,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-081F35B3",
+        "id": "FINDING-10B2A6AA",
         "leakage_type": "CROSS_USER_LEAK",
         "severity": "HIGH",
         "title": "CROSS_USER_LEAK: Alex Private Profile leaked to amanda",
@@ -4992,10 +5539,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "7102a0cf1ccc"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-D114E816",
+        "id": "FINDING-D1186A90",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Acme Root Audit Logs leaked to alex",
@@ -5017,10 +5564,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-A9190B84",
+        "id": "FINDING-70ED5E81",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Acme Root Audit Logs leaked to amanda",
@@ -5042,10 +5589,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-240FE96E",
+        "id": "FINDING-30EDB640",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Beta Root Audit Logs leaked to brian",
@@ -5067,10 +5614,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-35F9D957",
+        "id": "FINDING-442C335B",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Gamma Root Audit Logs leaked to charlie",
@@ -5092,10 +5639,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-AD2D67B5",
+        "id": "FINDING-AE4C69A8",
         "leakage_type": "PRIVILEGE_ESCALATION_LEAK",
         "severity": "HIGH",
         "title": "PRIVILEGE_ESCALATION_LEAK: Tenant_Delta Root Audit Logs leaked to diana",
@@ -5117,10 +5664,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-C0C55168",
+        "id": "FINDING-965D67E5",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Acme Root Audit Logs leaked to eric",
@@ -5142,10 +5689,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-BD5CF0F2",
+        "id": "FINDING-AC379549",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Beta Root Audit Logs leaked to eric",
@@ -5167,10 +5714,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-9D914A16",
+        "id": "FINDING-66D4348B",
         "leakage_type": "CROSS_TENANT_LEAK",
         "severity": "CRITICAL",
         "title": "CROSS_TENANT_LEAK: Tenant_Delta Root Audit Logs leaked to eric",
@@ -5192,110 +5739,210 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "01bf417b7440"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-3704268F",
+        "id": "FINDING-141DE537",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Alpha Stealth Blueprint leaked to alex",
-        "description": "Principal tenant_acme::alex[standard_user] received confidential canary 'TC_CANARY_0c4938c701b5_89C62C4E' belonging to tenant_acme::Project Alpha Stealth Blueprint via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_acme::alex[standard_user] received confidential canary 'TC_CANARY_797b28a19dbc_400A9097' belonging to tenant_acme::Project Alpha Stealth Blueprint via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-alpha",
         "resource_id": "res_acme_project_alpha",
         "resource_owner_tenant": "tenant_acme",
         "resource_owner_user": "user_alice",
         "victim_principal": "user_alice",
         "adversary_principal": "tenant_acme::alex[standard_user]",
-        "detected_canary": "TC_CANARY_0c4938c701b5_89C62C4E",
+        "detected_canary": "TC_CANARY_797b28a19dbc_400A9097",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "72",
+          "content-length": "143",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "7a64cc77c3a5"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-EA234EAC",
+        "id": "FINDING-3F8BFB79",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Titan M&A Dossier leaked to brian",
-        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_4cb9de3a56c2_D61FF3F5' belonging to tenant_beta::Project Titan M&A Dossier via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_40fc7aee4e03_606F5379' belonging to tenant_beta::Project Titan M&A Dossier via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-titan",
         "resource_id": "res_beta_project_merger",
         "resource_owner_tenant": "tenant_beta",
         "resource_owner_user": "user_bob",
         "victim_principal": "user_bob",
         "adversary_principal": "tenant_beta::brian[standard_user]",
-        "detected_canary": "TC_CANARY_4cb9de3a56c2_D61FF3F5",
+        "detected_canary": "TC_CANARY_40fc7aee4e03_606F5379",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "70",
+          "content-length": "138",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "466c88817a2a"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-87609613",
+        "id": "FINDING-9368F292",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Project Neural Weight Matrix leaked to charlie",
-        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_16df738c239d_869BEB3E' belonging to tenant_gamma::Project Neural Weight Matrix via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_e0c79c1bd825_A650E057' belonging to tenant_gamma::Project Neural Weight Matrix via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-neural",
         "resource_id": "res_gamma_project_ai",
         "resource_owner_tenant": "tenant_gamma",
         "resource_owner_user": "user_clara",
         "victim_principal": "user_clara",
         "adversary_principal": "tenant_gamma::charlie[standard_user]",
-        "detected_canary": "TC_CANARY_16df738c239d_869BEB3E",
+        "detected_canary": "TC_CANARY_e0c79c1bd825_A650E057",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "69",
+          "content-length": "138",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "d8d17fc4156d"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-6EE84FA3",
+        "id": "FINDING-416D7202",
         "leakage_type": "STALE_REVOCATION_LEAK",
         "severity": "HIGH",
         "title": "STALE_REVOCATION_LEAK: Quantum Cryptography Patent Draft leaked to diana",
-        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_1646ff1942a4_7566C67E' belonging to tenant_delta::Quantum Cryptography Patent Draft via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_21f64ea9807e_E5DF1A4A' belonging to tenant_delta::Quantum Cryptography Patent Draft via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
         "target_path": "/api/v1/shared/projects/proj-quantum",
         "resource_id": "res_delta_project_patent",
         "resource_owner_tenant": "tenant_delta",
         "resource_owner_user": "user_david",
         "victim_principal": "user_david",
         "adversary_principal": "tenant_delta::diana[standard_user]",
-        "detected_canary": "TC_CANARY_1646ff1942a4_7566C67E",
+        "detected_canary": "TC_CANARY_21f64ea9807e_E5DF1A4A",
         "response_cache_status": "HIT",
         "reproducibility": "100% Deterministic",
         "evidence_headers": {
-          "content-length": "70",
+          "content-length": "147",
           "content-type": "application/json",
           "cache-control": "private, max-age=300",
           "X-Cache-Status": "HIT",
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "b245cd51d49f"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-83A86778",
+        "id": "FINDING-C9A2A26A",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Supply Chain Logistics leaked to amanda",
+        "description": "Principal tenant_acme::amanda[standard_user] received confidential canary 'TC_CANARY_b3fef7eeffbd_F516A012' belonging to tenant_acme::Project Supply Chain Logistics via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-supply",
+        "resource_id": "res_acme_project_supply",
+        "resource_owner_tenant": "tenant_acme",
+        "resource_owner_user": "user_alice",
+        "victim_principal": "user_alice",
+        "adversary_principal": "tenant_acme::amanda[standard_user]",
+        "detected_canary": "TC_CANARY_b3fef7eeffbd_F516A012",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "143",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V6_NORMALIZATION",
+          "X-Cache-Key": "b7feb2dab1e1"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-EE5C03DD",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Sovereign Ledger Audit leaked to brian",
+        "description": "Principal tenant_beta::brian[standard_user] received confidential canary 'TC_CANARY_f744d4f710e7_94DDEFD6' belonging to tenant_beta::Project Sovereign Ledger Audit via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-audit",
+        "resource_id": "res_beta_project_audit",
+        "resource_owner_tenant": "tenant_beta",
+        "resource_owner_user": "user_bob",
+        "victim_principal": "user_bob",
+        "adversary_principal": "tenant_beta::brian[standard_user]",
+        "detected_canary": "TC_CANARY_f744d4f710e7_94DDEFD6",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "142",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V6_NORMALIZATION",
+          "X-Cache-Key": "dc578728f119"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-26E3ACE2",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Orbital Cloud Relay leaked to charlie",
+        "description": "Principal tenant_gamma::charlie[standard_user] received confidential canary 'TC_CANARY_ae6227eb3ab3_47FEE71' belonging to tenant_gamma::Project Orbital Cloud Relay via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-cloud",
+        "resource_id": "res_gamma_project_cloud",
+        "resource_owner_tenant": "tenant_gamma",
+        "resource_owner_user": "user_clara",
+        "victim_principal": "user_clara",
+        "adversary_principal": "tenant_gamma::charlie[standard_user]",
+        "detected_canary": "TC_CANARY_ae6227eb3ab3_47FEE71",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "139",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V6_NORMALIZATION",
+          "X-Cache-Key": "943aaf1d6395"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-12552E82",
+        "leakage_type": "STALE_REVOCATION_LEAK",
+        "severity": "HIGH",
+        "title": "STALE_REVOCATION_LEAK: Project Post-Quantum Lattice Key leaked to diana",
+        "description": "Principal tenant_delta::diana[standard_user] received confidential canary 'TC_CANARY_0435622ce575_7D282ED4' belonging to tenant_delta::Project Post-Quantum Lattice Key via HTTP response. Ground-Truth Oracle decision: DENY. Response Cache-Status: HIT.",
+        "target_path": "/api/v1/shared/projects/proj-crypto",
+        "resource_id": "res_delta_project_crypto",
+        "resource_owner_tenant": "tenant_delta",
+        "resource_owner_user": "user_david",
+        "victim_principal": "user_david",
+        "adversary_principal": "tenant_delta::diana[standard_user]",
+        "detected_canary": "TC_CANARY_0435622ce575_7D282ED4",
+        "response_cache_status": "HIT",
+        "reproducibility": "100% Deterministic",
+        "evidence_headers": {
+          "content-length": "146",
+          "content-type": "application/json",
+          "cache-control": "private, max-age=300",
+          "X-Cache-Status": "HIT",
+          "X-TenantCache-Config": "V6_NORMALIZATION",
+          "X-Cache-Key": "b5d6aa70a7b0"
+        },
+        "timestamp": "2026-11-01 21:48:50"
+      },
+      {
+        "id": "FINDING-6908B90C",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Acme Executive Dashboard leaked to bob",
@@ -5317,10 +5964,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-D54BEF06",
+        "id": "FINDING-663A3C5C",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Beta Executive Dashboard leaked to alice",
@@ -5342,10 +5989,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-FAC866CB",
+        "id": "FINDING-F335990A",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Gamma Executive Dashboard leaked to david",
@@ -5367,10 +6014,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-FB52104E",
+        "id": "FINDING-F0A3EBFC",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Tenant_Delta Executive Dashboard leaked to charlie",
@@ -5392,10 +6039,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "b8ec993d9544"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-0861A745",
+        "id": "FINDING-99B5F5D6",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Acme Master Invoice 101 leaked to eric",
@@ -5417,10 +6064,10 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "fdfbc6285f20"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       },
       {
-        "id": "FINDING-06E0F468",
+        "id": "FINDING-B3DBEACF",
         "leakage_type": "CACHE_KEY_SPOOFING_LEAK",
         "severity": "HIGH",
         "title": "CACHE_KEY_SPOOFING_LEAK: Beta Enterprise Invoice 202 leaked to diana",
@@ -5442,7 +6089,7 @@
           "X-TenantCache-Config": "V6_NORMALIZATION",
           "X-Cache-Key": "732be4ef773c"
         },
-        "timestamp": "2026-11-01 21:39:30"
+        "timestamp": "2026-11-01 21:48:50"
       }
     ]
   },
@@ -5454,25 +6101,34 @@
     "false_positives": 0,
     "true_negatives": 54,
     "false_negatives": 0,
-    "precision": 1.0,
+    "precision": null,
     "precision_ci_95": [
       0.0,
       0.0
     ],
-    "recall": 1.0,
+    "recall": null,
     "recall_ci_95": [
       0.0,
       0.0
     ],
-    "f1_score": 1.0,
+    "f1_score": null,
+    "specificity": 1.0,
+    "specificity_ci_95": [
+      0.9336,
+      1.0
+    ],
     "accuracy": 1.0,
     "accuracy_ci_95": [
       0.9336,
       1.0
     ],
+    "false_positive_rate": 0.0,
     "total_requests": 108,
-    "duration_seconds": 0.2533,
-    "requests_per_second": 426.37,
+    "cache_resets": 54,
+    "state_transitions": 8,
+    "distinct_principals_covered": 9,
+    "duration_seconds": 0.2615,
+    "requests_per_second": 413.08,
     "findings_count": 0,
     "findings": []
   },
@@ -5484,25 +6140,34 @@
     "false_positives": 0,
     "true_negatives": 54,
     "false_negatives": 0,
-    "precision": 1.0,
+    "precision": null,
     "precision_ci_95": [
       0.0,
       0.0
     ],
-    "recall": 1.0,
+    "recall": null,
     "recall_ci_95": [
       0.0,
       0.0
     ],
-    "f1_score": 1.0,
+    "f1_score": null,
+    "specificity": 1.0,
+    "specificity_ci_95": [
+      0.9336,
+      1.0
+    ],
     "accuracy": 1.0,
     "accuracy_ci_95": [
       0.9336,
       1.0
     ],
+    "false_positive_rate": 0.0,
     "total_requests": 108,
-    "duration_seconds": 0.2549,
-    "requests_per_second": 423.72,
+    "cache_resets": 54,
+    "state_transitions": 8,
+    "distinct_principals_covered": 9,
+    "duration_seconds": 0.2677,
+    "requests_per_second": 403.4,
     "findings_count": 0,
     "findings": []
   }
