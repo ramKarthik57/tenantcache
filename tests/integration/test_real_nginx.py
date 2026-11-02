@@ -87,7 +87,8 @@ def _stop_process_safe(proc):
         if IS_WINDOWS:
             subprocess.run(["taskkill.exe", "/F", "/T", "/PID", str(proc.pid)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         else:
-            proc.terminate()
+            subprocess.run(["pkill", "-9", "-P", str(proc.pid)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            proc.kill()
             proc.wait(timeout=2.0)
     except Exception:
         try:
@@ -102,6 +103,10 @@ def _start_nginx(conf_rel_path: str, cache_folder: str, ctx: LiveLabContext = No
     logs_root = os.path.join(NGINX_CWD, "logs")
     os.makedirs(temp_root, exist_ok=True)
     os.makedirs(logs_root, exist_ok=True)
+
+    # Ensure unprivileged temp paths exist for non-root Linux runners
+    for d in ["client_body", "proxy", "fastcgi", "uwsgi", "scgi"]:
+        os.makedirs(os.path.join(temp_root, d), exist_ok=True)
 
     cache_dir = os.path.join(temp_root, cache_folder)
     if os.path.exists(cache_dir):
@@ -118,9 +123,21 @@ def _start_nginx(conf_rel_path: str, cache_folder: str, ctx: LiveLabContext = No
     conf_content = re.sub(r"listen\s+\d+;", f"listen {nginx_port};", conf_content)
     conf_content = conf_content.replace(":8000", f":{backend_port}")
 
+    # Inject relative temp paths into http block to ensure unprivileged execution on Linux
+    temp_dirs_conf = (
+        "    client_body_temp_path temp/client_body;\n"
+        "    proxy_temp_path temp/proxy;\n"
+        "    fastcgi_temp_path temp/fastcgi;\n"
+        "    uwsgi_temp_path temp/uwsgi;\n"
+        "    scgi_temp_path temp/scgi;\n"
+    )
+    conf_content = conf_content.replace("http {", f"http {{\n{temp_dirs_conf}")
+
     # Explicitly rewrite proxy_cache_path to isolated per-test cache directory (using forward slashes)
-    cache_dir_fwd = cache_dir.replace("\\", "/")
     conf_content = re.sub(r"proxy_cache_path\s+[^\s]+", f"proxy_cache_path temp/{cache_folder}", conf_content)
+
+    # Explicit top-level pid and error_log directives for unprivileged execution (relative to -p NGINX_CWD)
+    conf_content = f"pid temp/nginx_{cache_folder}.pid;\nerror_log logs/error_{cache_folder}.log info;\n" + conf_content
 
     runtime_conf = os.path.join(temp_root, f"runtime_{cache_folder}.conf")
     with open(runtime_conf, "w", encoding="utf-8") as f:
@@ -130,10 +147,26 @@ def _start_nginx(conf_rel_path: str, cache_folder: str, ctx: LiveLabContext = No
         NGINX_EXE,
         "-p", NGINX_CWD,
         "-c", runtime_conf,
-        "-g", f"daemon off; pid temp/nginx_{cache_folder}.pid; error_log logs/error_{cache_folder}.log info;"
+        "-g", "daemon off;"
     ]
     proc = subprocess.Popen(cmd, cwd=NGINX_CWD, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    time.sleep(1.2)
+
+    # Socket polling loop to ensure Nginx is accepting connections before test proceeds
+    deadline = time.time() + 5.0
+    while time.time() < deadline:
+        if proc.poll() is not None:
+            err_log_path = os.path.join(logs_root, f"error_{cache_folder}.log")
+            err_content = ""
+            if os.path.exists(err_log_path):
+                with open(err_log_path, "r", encoding="utf-8", errors="ignore") as f:
+                    err_content = f.read()
+            raise RuntimeError(f"Nginx terminated unexpectedly (code {proc.returncode}). Error log:\n{err_content}")
+        try:
+            with socket.create_connection(("127.0.0.1", nginx_port), timeout=0.1):
+                break
+        except (OSError, ConnectionRefusedError):
+            time.sleep(0.05)
+
     return proc
 
 
@@ -151,7 +184,17 @@ def live_lab_server():
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
-    time.sleep(1.5)
+    # Socket polling readiness check for FastAPI backend
+    deadline = time.time() + 5.0
+    while time.time() < deadline:
+        if app_proc.poll() is not None:
+            raise RuntimeError(f"Backend app exited unexpectedly with code {app_proc.returncode}")
+        try:
+            with socket.create_connection(("127.0.0.1", backend_port), timeout=0.1):
+                break
+        except (OSError, ConnectionRefusedError):
+            time.sleep(0.05)
+
     yield ctx
     _stop_process_safe(app_proc)
 

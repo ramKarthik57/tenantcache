@@ -26,6 +26,7 @@ MANIFEST
 
 # Release artifacts (built dynamically via scripts/build_release_zip.py)
 *.zip
+scratch/
 
 # PyInstaller / Nginx runtime
 lab/nginx_runtime/
