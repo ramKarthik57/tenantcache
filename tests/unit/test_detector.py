@@ -1,14 +1,14 @@
 """Unit tests for LeakageDetector."""
 
-from src.tenantcache.simulator import TenantSimulator
-from src.tenantcache.oracle import SecurityOracle
-from src.tenantcache.detection import LeakageDetector
-from src.tenantcache.models import ResponseRecord, CacheStatus, LeakageType, Severity
+from tenantcache.simulator import TenantSimulator
+from tenantcache.oracle import SecurityOracle
+from tenantcache.detection import LeakageDetector
+from tenantcache.models import ResponseRecord, CacheStatus, LeakageType, Severity
 
 
 def test_leakage_detector_identifies_cross_tenant_leak():
     sim = TenantSimulator(seed=42)
-    oracle = SecurityOracle(sim.resources)
+    oracle = SecurityOracle(sim.resources, sim.principals)
     detector = LeakageDetector(oracle, sim.canary_registry, sim.resources)
 
     acme_dash = sim.get_resource("res_acme_dashboard")
@@ -28,7 +28,7 @@ def test_leakage_detector_identifies_cross_tenant_leak():
 
 def test_leakage_detector_allows_public_resource():
     sim = TenantSimulator(seed=42)
-    oracle = SecurityOracle(sim.resources)
+    oracle = SecurityOracle(sim.resources, sim.principals)
     detector = LeakageDetector(oracle, sim.canary_registry, sim.resources)
 
     public_doc = sim.get_resource("res_pub_guideline")

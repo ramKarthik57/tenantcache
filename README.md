@@ -2,9 +2,9 @@
 
 > **Automated Differential Verification of Cache Isolation in Multi-Tenant Web Applications**
 
-[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-19%20passed-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/tests-39%20passed%20(37%20core)-brightgreen.svg)]()
 [![Precision](https://img.shields.io/badge/precision-1.0000-success.svg)]()
 [![Recall](https://img.shields.io/badge/recall-1.0000-success.svg)]()
 
@@ -21,9 +21,9 @@ However, an acute, systemic architectural friction exists:
 
 When an authenticated endpoint returns confidential tenant or user data without strictly isolating cache keys by verified identity context, or without forbidding shared caching (`Cache-Control: private, no-store`), **Tenant B receives Tenant A's private response directly from the proxy cache without the application server ever being consulted**.
 
-Conventional Dynamic Application Security Testing (DAST) tools and authorization scanners (such as OWASP ZAP, Burp Suite, and Autorize) evaluate endpoints statelessly or explicitly instruct proxies to bypass caching, remaining completely blind to proxy-mediated isolation failures.
+Conventional stateless testing methodologies and standard authorization scanners typically evaluate endpoints without coordinating cache states or explicitly instruct proxies to bypass caching, leaving stateful proxy-mediated isolation failures unverified. In our controlled empirical benchmark, we evaluate custom reference implementations of these paradigms (Baseline A: Stateless DAST, Baseline B: Matched-Budget Naive Diffing) against TenantCache's stateful differential approach.
 
-**TenantCache** is the first automated, identity-aware differential security testing framework designed to systematically identify, reproduce, and mathematically verify cross-tenant and cross-user HTTP cache isolation failures.
+**TenantCache** is an automated, identity-aware differential security testing framework designed to systematically identify, reproduce, and mathematically verify cross-tenant and cross-user HTTP cache isolation failures across reverse-proxy layers.
 
 ---
 
@@ -56,10 +56,10 @@ flowchart TD
 ### Component Breakdown
 1. **Tenant Simulator (`src/tenantcache/simulator/`):** Generates synthetic tenants, users, roles, resources, and cryptographically unique canaries (`TC_CANARY_<uuid>_<crc>`).
 2. **Request Generation Engine (`src/tenantcache/generator/`):** Constructs stateful request sequences across multi-tenant principal matrices ($T_A \leftrightarrow T_B$, Admin $\leftrightarrow$ Std User, Authorized $\to$ Revoked).
-3. **Cache State Controller (`src/tenantcache/cache/`):** Observes and controls proxy cache lifecycles ($S_{\text{cold}}, S_{\text{warm}}, S_{\text{purge}}$) across both native in-process ASGI simulation and containerized Nginx environments.
-4. **Security Oracle (`src/tenantcache/oracle/`):** Encapsulates ground-truth authorization $\mathcal{A}(P, R, Q) \in \{\text{ALLOW}, \text{DENY}\}$ decoupled from HTTP status codes.
-5. **Leakage Detection Engine (`src/tenantcache/detection/`):** Scans response bodies for canary tokens, proving unauthorized disclosure with mathematical certainty.
-6. **Research Evaluation Engine (`src/tenantcache/evaluation/`):** Executes controlled benchmarks comparing Baselines A and B against TenantCache.
+3. **Cache State Controller (`src/tenantcache/cache/`):** Observes and controls proxy cache lifecycles ($S_{\text{cold}}, S_{\text{warm}}, S_{\text{purge}}$) across both native in-process ASGI simulation and real Nginx reverse-proxy instances.
+4. **Security Oracle (`src/tenantcache/oracle/`):** Encapsulates ground-truth authorization $\mathcal{A}(P, R, Q) \in \{\text{ALLOW}, \text{DENY}\}$ using an isolated reference policy ledger decoupled from target application state.
+5. **Leakage Detection Engine (`src/tenantcache/detection/`):** Correlates observable HTTP evidence, canary reflection tokens, and oracle authorization decisions. Also provides `OracleFreeDifferentialDetector` for comparative baseline ablation.
+6. **Research Evaluation Engine (`src/tenantcache/evaluation/`):** Executes controlled benchmarks comparing Baselines A and B against TenantCache on versioned benchmark manifests (v1.0: 54 scenarios, v1.1: 66 scenarios).
 
 ---
 
@@ -84,78 +84,104 @@ TenantCache includes 6 vulnerable and 2 secure reverse-proxy configuration arche
 | **$V_3$** | `V3_UNVALIDATED_HEADER` | Proxy keys on untrusted client header (`X-Tenant-ID`); attacker spoofs header to extract victim cache. | **HIGH** |
 | **$V_4$** | `V4_STALE_REVOCATION` | Origin revokes user permission in DB, but proxy caches 200 OK without dynamic invalidation hooks. | **HIGH** |
 | **$V_5$** | `V5_ERRONEOUS_PUBLIC` | Proxy or origin emits `Cache-Control: public` on authenticated private endpoints. | **CRITICAL** |
-| **$V_6$** | `V6_NORMALIZATION` | Proxy normalization discrepancies (trailing slashes, case folding) bypass cache partitioning. | **HIGH** |
+| **$V_6$** | `V6_NORMALIZATION` | Path-normalization aliasing (`$uri` collapses duplicate delimiters like `//` to `/`, causing aliased paths to collide). | **HIGH** |
 | **$S_1$** | `SECURE_S1_STRICT_PRIVATE` | Authenticated requests unconditionally bypass cache (`proxy_cache_bypass $http_authorization`). | **SECURE** |
-| **$S_2$** | `SECURE_S2_IDENTITY_KEYED` | Server-validated cryptographic identity keys combined with active surrogate-key cache purging. | **SECURE** |
+| **$S_2$** | `SECURE_S2_IDENTITY_KEYED` | Server-validated identity keying (`$auth_tenant|$auth_user`) with per-request authorization verification (`auth_request`) and client header stripping. | **SECURE** |
 
 ---
 
 ## 5. Quantitative Experimental Evaluation
 
-Empirical benchmark comparing conventional scanners against TenantCache across an expanded **54-scenario benchmark corpus** spanning 5 enterprise tenants (with 95% Wilson confidence intervals):
+> [!NOTE] Baseline Testing Scope & Evaluation Calibration
+> Baselines A and B represent custom reference implementations designed to evaluate specific algorithmic properties: stateless active endpoint testing (without cache-state sequencing) and naive length/token differential testing (without an independent authorization oracle). These baselines rigorously isolate the necessity of cache sequencing and oracle-based semantic verification under equal request budgets (198 requests). They do not evaluate commercial enterprise DAST suites operating under custom multi-user automation scripts.
 
-| Framework / Methodology | Cache Archetype | TP | FP | TN | FN | Precision (95% CI) | Recall (95% CI) | F1 Score | Accuracy (95% CI) | Duration |
+Empirical benchmark comparing conventional scanners against TenantCache across the canonical **Dataset v1.1 corpus** (66 scenarios: 46 vulnerable, 20 balanced benign controls; with 95% Wilson confidence intervals):
+
+| Framework / Methodology | Cache Archetype | TP | FP | TN | FN | Precision (95% CI) | Recall (95% CI) | Specificity (95% CI) | Accuracy (95% CI) | Req / Budget |
 |---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Baseline A** (Stateless DAST) | `V1_MISSING_TENANT_KEY` | 0 | 0 | 10 | 44 | *Undefined (N/A)* | 0.0000 `[0.00, 0.08]` | 0.0000 | 0.1852 `[0.10, 0.31]` | 0.237s |
-| **Baseline B** (Simple Token Swap) | `V1_MISSING_TENANT_KEY` | 34 | 4 | 6 | 10 | 0.8947 `[0.76, 0.96]` | 0.7727 `[0.63, 0.87]` | 0.8293 | 0.7407 `[0.61, 0.84]` | 0.030s |
-| **TenantCache** | `V1_MISSING_TENANT_KEY` | 40 | 0 | 10 | 4 | **1.0000** `[0.91, 1.00]` | **0.9091** `[0.79, 0.96]` | **0.9524** | **0.9259** `[0.82, 0.97]` | 0.147s |
-| **TenantCache** | `V2_MISSING_USER_AUTH` | 23 | 0 | 24 | 7 | **1.0000** `[0.86, 1.00]` | **0.7667** `[0.59, 0.88]` | **0.8679** | **0.8704** `[0.76, 0.94]` | 0.208s |
-| **TenantCache** | `V3_UNVALIDATED_HEADER` | 23 | 0 | 24 | 7 | **1.0000** `[0.86, 1.00]` | **0.7667** `[0.59, 0.88]` | **0.8679** | **0.8704** `[0.76, 0.94]` | 0.214s |
-| **TenantCache** | `V4_STALE_REVOCATION` | 4 | 0 | 46 | 4 | **1.0000** `[0.51, 1.00]` | **0.5000** `[0.22, 0.78]` | **0.6667** | **0.9259** `[0.82, 0.97]` | 0.270s |
-| **TenantCache** | `V5_ERRONEOUS_PUBLIC` | 40 | 0 | 10 | 4 | **1.0000** `[0.91, 1.00]` | **0.9091** `[0.79, 0.96]` | **0.9524** | **0.9259** `[0.82, 0.97]` | 0.172s |
-| **TenantCache** | `V6_NORMALIZATION` | 40 | 0 | 10 | 4 | **1.0000** `[0.91, 1.00]` | **0.9091** `[0.79, 0.96]` | **0.9524** | **0.9259** `[0.82, 0.97]` | 0.152s |
-| **TenantCache** | `SECURE_S1_STRICT_PRIVATE` | 0 | 0 | 54 | 0 | **1.0000** `[0.00, 0.00]` | **1.0000** `[0.00, 0.00]` | **1.0000** | **1.0000** `[0.93, 1.00]` | 0.253s |
-| **TenantCache** | `SECURE_S2_IDENTITY_KEYED` | 0 | 0 | 54 | 0 | **1.0000** `[0.00, 0.00]` | **1.0000** `[0.00, 0.00]` | **1.0000** | **1.0000** `[0.93, 1.00]` | 0.255s |
+| **Baseline A** (Matched-Budget DAST) | `V1_MISSING_TENANT_KEY` | 0 | 0 | 20 | 46 | *N/A (Undefined)* | 0.0000 `[0.00, 0.08]` | 1.0000 `[0.84, 1.00]` | 0.3030 `[0.21, 0.42]` | 198 / 198 |
+| **Baseline B** (Matched-Budget Naive Diffing) | `V1_MISSING_TENANT_KEY` | 38 | 12 | 8 | 8 | 0.7600 `[0.63, 0.86]` | 0.8261 `[0.69, 0.91]` | 0.4000 `[0.22, 0.61]` | 0.6970 `[0.58, 0.79]` | 198 / 198 |
+| **Baseline A** (Stateless DAST) | `V1_MISSING_TENANT_KEY` | 0 | 0 | 20 | 46 | *N/A (Undefined)* | 0.0000 `[0.00, 0.08]` | 1.0000 `[0.84, 1.00]` | 0.3030 `[0.21, 0.42]` | 66 / 66 |
+| **Baseline B** (Naive Token Diffing) | `V1_MISSING_TENANT_KEY` | 38 | 12 | 8 | 8 | 0.7600 `[0.63, 0.86]` | 0.8261 `[0.69, 0.91]` | 0.4000 `[0.22, 0.61]` | 0.6970 `[0.58, 0.79]` | 132 / 132 |
+| **TenantCache** | `V1_MISSING_TENANT_KEY` | 46 | 0 | 20 | 0 | **1.0000** `[0.92, 1.00]` | **1.0000** `[0.92, 1.00]` | **1.0000** `[0.84, 1.00]` | **1.0000** `[0.94, 1.00]` | 132 / 132 |
+| **TenantCache** | `V2_MISSING_USER_AUTH` | 29 | 0 | 34 | 3 | **1.0000** `[0.88, 1.00]` | **0.9062** `[0.76, 0.97]` | **1.0000** `[0.90, 1.00]` | **0.9545** `[0.87, 0.98]` | 132 / 132 |
+| **TenantCache** | `V3_UNVALIDATED_HEADER` | 29 | 0 | 34 | 3 | **1.0000** `[0.88, 1.00]` | **0.9062** `[0.76, 0.97]` | **1.0000** `[0.90, 1.00]` | **0.9545** `[0.87, 0.98]` | 132 / 132 |
+| **TenantCache** | `V4_STALE_REVOCATION` | 8 | 0 | 58 | 0 | **1.0000** `[0.68, 1.00]` | **1.0000** `[0.68, 1.00]` | **1.0000** `[0.94, 1.00]` | **1.0000** `[0.94, 1.00]` | 132 / 132 |
+| **TenantCache** | `V5_ERRONEOUS_PUBLIC` | 46 | 0 | 20 | 0 | **1.0000** `[0.92, 1.00]` | **1.0000** `[0.92, 1.00]` | **1.0000** `[0.84, 1.00]` | **1.0000** `[0.94, 1.00]` | 132 / 132 |
+| **TenantCache** | `V6_NORMALIZATION` | 46 | 0 | 20 | 0 | **1.0000** `[0.92, 1.00]` | **1.0000** `[0.92, 1.00]` | **1.0000** `[0.84, 1.00]` | **1.0000** `[0.94, 1.00]` | 132 / 132 |
+| **TenantCache** | `SECURE_S1_STRICT_PRIVATE` | 0 | 0 | 66 | 0 | *N/A (Undefined)* | *N/A (Undefined)* | **1.0000** `[0.94, 1.00]` | **1.0000** `[0.94, 1.00]` | 132 / 132 |
+| **TenantCache** | `SECURE_S2_IDENTITY_KEYED` | 0 | 0 | 66 | 0 | *N/A (Undefined)* | *N/A (Undefined)* | **1.0000** `[0.94, 1.00]` | **1.0000** `[0.94, 1.00]` | 132 / 132 |
 
-### Real Nginx Validation
-All six vulnerability archetypes were furthermore validated against **actual Nginx binary execution (v1.26.2)** on Windows localhost (`tests/integration/test_real_nginx.py`), confirming that real Nginx returns `X-Cache-Status: HIT` and reproduces the isolation failures observed in the differential runner.
+### Component Ablation Study (V1 Archetype, v1.1 Corpus)
 
-### Key Experimental Discoveries:
-1. **Stateless Scanners Suffer 100% False Negatives:** Baseline A tests individual endpoints in isolation without cross-identity cache warming, achieving Recall = 0.0000.
-2. **Stateless Testing Misses Revocation Lag:** Baseline B swaps tokens but fails to model temporal origin permission mutations, missing 100% of authorization revocation lag vulnerabilities.
-3. **Zero False Positives on Public Content:** Unlike naive byte-diffing tools that flag dynamic tokens or public documents as breaches, TenantCache's canary oracle achieved FPR = 0.0000 across all configurations.
+| System Variant | Identity-Aware | Cache-Sequenced | Oracle-Guided | Precision | Recall | F1 Score | FPR | TP / FN |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Full TenantCache** | **YES** | **YES** | **YES** | **1.0000** | **1.0000** | **1.0000** | **0.0000** | **46 / 0** |
+| **Ablation 1: No Cache Sequencing** | YES | NO | YES | *N/A* | 0.0000 | *N/A* | 0.0000 | 0 / 46 |
+| **Ablation 2: No Ground-Truth Oracle** | YES | YES | NO | 0.7600 | 0.8261 | 0.7917 | 0.6000 | 38 / 8 |
+| **Control: Single-User Reachability Control** | NO | YES | YES | *N/A* | 0.0000 | *N/A* | 0.0000 | 0 / 46 |
+
+> [!NOTE] Reachability Control Invariant
+> The single-user experiment ($TP=0, FN=46$) functions as a reachability control experiment rather than a general causal ablation: by construction, executing both priming and probing under a single principal makes multi-tenant/multi-user cache collisions structurally unobservable.
+
+### Real Nginx Validation (Dual Validated: Windows 1.26.2 & Linux 1.26.3)
+All eight proxy configurations (V1–V6, S1, S2) are validated against **actual Nginx binaries** (`tests/integration/test_real_nginx.py`):
+1. **V1–V5:** Alice primes cache; Bob/prober requests same resource; Nginx returns `X-Cache-Status: HIT` with Alice's confidential canary reflected.
+2. **V6 (Path-Normalization Aliasing):** Canonical path `/api/v1/tenant/dashboard` primed by Alice; Bob requests duplicate-slash alias `/api/v1/tenant//dashboard`; Nginx collapses `//` to `/` via `$uri`, returning Alice's cached dashboard.
+3. **S1 (Strict Private):** Authenticated requests unconditionally return `X-Cache-Status: BYPASS` (0 leaks).
+4. **S2 (Identity-Keyed Caching with Auth Verification):** Nginx validates access via `auth_request /_auth_verify` subrequest to origin and keys cache with `$uri|$auth_tenant|$auth_user`, stripping unauthenticated client headers. Alice repeat returns `HIT`; Bob request returns `MISS` with his own data (0 leaks); post-revocation requests and unmapped routes return `403 Forbidden` without serving cached data.
 
 ---
 
 ## 6. Installation & Quickstart
 
 ### Prerequisites
-- Python 3.9+ (Zero external database or cloud dependencies required).
+- Python 3.11+ (Zero external database or cloud dependencies required).
 - Windows PowerShell or POSIX Bash.
+- Optional: Local Nginx binary for native integration tests (`nginx` in PATH or bundled in `lab/nginx_runtime/`).
 
 ### Setup
 ```bash
-# 1. Clone repository
-git clone https://github.com/tenantcache/tenantcache.git
-cd tenantcache
+# 1. Install dependencies with exact tested constraints
+pip install -r requirements.txt -c constraints.txt
 
-# 2. Install dependencies
-pip install -r requirements.txt
+# 2. Install TenantCache package in editable mode
+pip install -e .
 
 # 3. Verify environment
-python -m src.tenantcache.cli doctor
+tenantcache doctor
 ```
 
 ### Running Scans and Benchmarks
 ```bash
 # Execute differential scan on Vulnerable Archetype V1
-python -m src.tenantcache.cli scan --archetype V1_MISSING_TENANT_KEY
+tenantcache scan --archetype V1_MISSING_TENANT_KEY
 
-# Execute differential scan on Secure Archetype S1
-python -m src.tenantcache.cli scan --archetype SECURE_S1_STRICT_PRIVATE
+# Execute differential scan on Secure Archetype S2
+tenantcache scan --archetype SECURE_S2_IDENTITY_KEYED
+
+# Export scenario manifests (v1.0 and v1.1)
+tenantcache manifest --version v1.1
 
 # Execute full comprehensive research benchmark
-python -m src.tenantcache.cli benchmark --profile comprehensive
+tenantcache benchmark --profile comprehensive --version v1.1
 
-# View benchmark report
-python -m src.tenantcache.cli report
+# Execute component ablation study
+tenantcache ablation --version v1.1
+
+# Execute multi-seed reproducibility study
+tenantcache reproducibility --version v1.1
 ```
 
 ### Running Automated Test Suite
 ```bash
-pytest -v
+# Full test suite (all 39 tests including Hypothesis property-based tests):
+pytest tests/ -v
+
+# Core test suite (37 tests, executable in network-isolated environments without Hypothesis):
+pytest tests/ -v --ignore=tests/unit/test_property_hypothesis.py
 ```
-All 19 tests (unit, integration, hypothesis property, end-to-end) run in under 3 seconds.
+All 39 tests (unit, integration, real Nginx, hypothesis property, end-to-end) run and pass reliably (37 passed when ignoring Hypothesis).
 
 ---
 

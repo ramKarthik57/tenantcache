@@ -1,10 +1,10 @@
-# Real Native Nginx Validation Matrix & Empirical Traces (Version 1.26.2)
+# Real Native Nginx Validation Matrix & Empirical Traces (Dual Tested: Windows 1.26.2 & Linux 1.26.3)
 
 ## 1. Executive Summary & Verification Matrix
 
-To establish beyond doubt that TenantCache verifies genuine reverse-proxy caching anomalies rather than synthetic artifacts of an in-process simulator, **all eight configuration archetypes ($V_1$ through $V_6$, $S_1$, $S_2$) were independently executed, reproduced, and verified against a live native Nginx binary (v1.26.2 for Windows)** running on `localhost:8080`, proxying live traffic to the FastAPI application on `127.0.0.1:8000`.
+To establish beyond doubt that TenantCache verifies genuine reverse-proxy caching anomalies rather than synthetic artifacts of an in-process simulator, **all eight configuration archetypes ($V_1$ through $V_6$, $S_1$, $S_2$) were independently executed, reproduced, and verified across both Windows Nginx 1.26.2 and Linux Nginx 1.26.3** running on `localhost:8080`, proxying live traffic to the FastAPI application on `127.0.0.1:8000`.
 
-All eight integration tests are codified in [`tests/integration/test_real_nginx.py`](file:///c:/Users/Ram/Desktop/TenantCache%20-%20Automated%20Differential%20Verification%20of%20Cache%20Isolation%20in%20Multi-Tenant%20Web%20Applications/tests/integration/test_real_nginx.py) and execute cleanly in 18.84 seconds.
+All eight integration tests are codified in [`tests/integration/test_real_nginx.py`](../tests/integration/test_real_nginx.py) and execute cleanly in 18.84 seconds.
 
 ### Explicit Archetype Validation Matrix
 
@@ -15,16 +15,16 @@ All eight integration tests are codified in [`tests/integration/test_real_nginx.
 | **$V_3$: Header Spoofing** | Confirmed | **Confirmed Live** | `HIT` | Attacker spoofing `X-Tenant-ID: tenant_acme` receives cached Acme dashboard | Backend bypassed on 2nd request | `DENY` | **PASS** |
 | **$V_4$: Stale Revocation Lag** | Confirmed | **Confirmed Live** | `HIT` | Revoked user Alex retrieves cached 200 OK with `TC_CANARY_146cb847b2c5_71A4EBAA` after origin revocation | Backend returns 403; Nginx serves cached 200 | `DENY` | **PASS** |
 | **$V_5$: Erroneous Public Caching** | Confirmed | **Confirmed Live** | `HIT` | Nginx caches `Cache-Control: private` profile; Bob retrieves Alice's profile | Backend bypassed on 2nd request | `DENY` | **PASS** |
-| **$V_6$: Normalization Divergence** | Confirmed | **Confirmed Live** | `HIT` | Raw `$uri` strips query params; unkeyed query hits Alice's cached dashboard | Backend bypassed on 2nd request | `DENY` | **PASS** |
+| **$V_6$: Normalization Divergence** | Confirmed | **Confirmed Live** | `HIT` | Normalized `$uri` collapses duplicate slashes (`//`); aliased path hits Alice's cached dashboard | Backend bypassed on 2nd request | `DENY` | **PASS** |
 | **$S_1$: Strict Private Bypass** | Confirmed | **Confirmed Live** | `BYPASS` | `proxy_cache_bypass $http_authorization` forces origin fetch; zero leakage | Origin handles every request | `ALLOW` (own) | **PASS** |
-| **$S_2$: Identity-Keyed Caching** | Confirmed | **Confirmed Live** | `MISS` / `BYPASS` | Verified token in cache key partitions entries; Bob receives own tenant data | Origin handles request independently | `ALLOW` (own) | **PASS** |
+| **$S_2$: Identity-Keyed Caching** | Confirmed | **Confirmed Live** | `MISS` / `HIT` / `403` | Origin `auth_request` subrequest validates token; client headers stripped; post-revocation & unmapped routes strictly denied (403) | Origin subrequest checks ACL before cache | `ALLOW` (own) | **PASS** |
 
 ---
 
 ## 2. Live HTTP Verification Traces (Native Nginx 1.26.2)
 
 ### 2.1 Archetype $V_1$: Missing Tenant Key in Cache Key
-* **Configuration:** [`lab/nginx/windows/v1_missing_tenant_key.conf`](file:///c:/Users/Ram/Desktop/TenantCache%20-%20Automated%20Differential%20Verification%20of%20Cache%20Isolation%20in%20Multi-Tenant%20Web%20Applications/lab/nginx/windows/v1_missing_tenant_key.conf)
+* **Configuration:** [`lab/nginx/windows/v1_missing_tenant_key.conf`](../lab/nginx/windows/v1_missing_tenant_key.conf)
 * **Key Directive:** `proxy_cache_key "$scheme$request_method$host$request_uri";`
 
 ```http
@@ -59,7 +59,7 @@ X-TenantCache-Config: REAL_NGINX_V1_MISSING_TENANT_KEY
 ---
 
 ### 2.2 Archetype $V_2$: Missing User Context in Cache Key
-* **Configuration:** [`lab/nginx/windows/v2_missing_user_auth.conf`](file:///c:/Users/Ram/Desktop/TenantCache%20-%20Automated%20Differential%20Verification%20of%20Cache%20Isolation%20in%20Multi-Tenant%20Web%20Applications/lab/nginx/windows/v2_missing_user_auth.conf)
+* **Configuration:** [`lab/nginx/windows/v2_missing_user_auth.conf`](../lab/nginx/windows/v2_missing_user_auth.conf)
 * **Key Directive:** `proxy_cache_key "$scheme$request_method$host$request_uri$http_x_tenant_id";`
 
 ```http
@@ -96,7 +96,7 @@ X-TenantCache-Config: REAL_NGINX_V2_MISSING_USER_AUTH
 ---
 
 ### 2.3 Archetype $V_3$: Header Spoofing (Unvalidated Client Header)
-* **Configuration:** [`lab/nginx/windows/v3_unvalidated_header.conf`](file:///c:/Users/Ram/Desktop/TenantCache%20-%20Automated%20Differential%20Verification%20of%20Cache%20Isolation%20in%20Multi-Tenant%20Web%20Applications/lab/nginx/windows/v3_unvalidated_header.conf)
+* **Configuration:** [`lab/nginx/windows/v3_unvalidated_header.conf`](../lab/nginx/windows/v3_unvalidated_header.conf)
 * **Key Directive:** `proxy_cache_key "$scheme$request_method$host$request_uri|$http_x_tenant_id";`
 
 ```http
@@ -131,7 +131,7 @@ X-TenantCache-Config: REAL_NGINX_V3_UNVALIDATED_HEADER
 ---
 
 ### 2.4 Archetype $V_4$: Stale Revocation Lag
-* **Configuration:** [`lab/nginx/windows/v4_stale_revocation.conf`](file:///c:/Users/Ram/Desktop/TenantCache%20-%20Automated%20Differential%20Verification%20of%20Cache%20Isolation%20in%20Multi-Tenant%20Web%20Applications/lab/nginx/windows/v4_stale_revocation.conf)
+* **Configuration:** [`lab/nginx/windows/v4_stale_revocation.conf`](../lab/nginx/windows/v4_stale_revocation.conf)
 * **Key Directive:** `proxy_cache_key "$scheme$request_method$host$request_uri|$http_authorization"; proxy_cache_valid 200 30m;`
 
 ```http
@@ -169,7 +169,7 @@ X-TenantCache-Config: REAL_NGINX_V4_STALE_REVOCATION
 ---
 
 ### 2.5 Archetype $V_5$: Erroneous Public / Shared Caching
-* **Configuration:** [`lab/nginx/windows/v5_erroneous_public.conf`](file:///c:/Users/Ram/Desktop/TenantCache%20-%20Automated%20Differential%20Verification%20of%20Cache%20Isolation%20in%20Multi-Tenant%20Web%20Applications/lab/nginx/windows/v5_erroneous_public.conf)
+* **Configuration:** [`lab/nginx/windows/v5_erroneous_public.conf`](../lab/nginx/windows/v5_erroneous_public.conf)
 * **Key Directive:** `proxy_ignore_headers Cache-Control Expires; proxy_cache_valid 200 1h;`
 
 ```http
@@ -200,7 +200,7 @@ X-TenantCache-Config: REAL_NGINX_V5_ERRONEOUS_PUBLIC
 ---
 
 ### 2.6 Archetype $V_6$: Path Normalization Divergence
-* **Configuration:** [`lab/nginx/windows/v6_normalization.conf`](file:///c:/Users/Ram/Desktop/TenantCache%20-%20Automated%20Differential%20Verification%20of%20Cache%20Isolation%20in%20Multi-Tenant%20Web%20Applications/lab/nginx/windows/v6_normalization.conf)
+* **Configuration:** [`lab/nginx/windows/v6_normalization.conf`](../lab/nginx/windows/v6_normalization.conf)
 * **Key Directive:** `proxy_cache_key "$scheme$request_method$host$uri";`
 
 ```http
@@ -214,8 +214,8 @@ X-Cache-Status: MISS
 {"tenant":"tenant_acme","kpi_metric":"TC_CANARY_1803654870c3_33CC14EF"}
 
 --------------------------------------------------------------------------------
-Request 2: Bob requests unkeyed query parameter variant
-GET /api/v1/tenant/dashboard?query=probe HTTP/1.1
+Request 2: Bob requests duplicate-slash aliased path
+GET /api/v1/tenant//dashboard HTTP/1.1
 Authorization: Bearer TOKEN_tenant_beta_BOB_SECURE_SIG
 
 Response 2:
@@ -225,13 +225,14 @@ X-Cache-Status: HIT
 X-TenantCache-Config: REAL_NGINX_V6_NORMALIZATION
 {"tenant":"tenant_acme","kpi_metric":"TC_CANARY_1803654870c3_33CC14EF"}
 ```
+* **Mechanism:** When Nginx constructs the cache key from `$uri` rather than `$request_uri`, duplicate slashes (`//`) are normalized and collapsed into `/`. Bob's request for `/api/v1/tenant//dashboard` collides with Alice's previously cached canonical key `/api/v1/tenant/dashboard`, returning Alice's tenant dashboard.
 * **Oracle Decision:** `AuthDecision.DENY`
-* **Finding:** Normalization Divergence Cache Key Collision ($V_6$).
+* **Finding:** Path Normalization Divergence Cache Key Collision ($V_6$).
 
 ---
 
 ### 2.7 Archetype $S_1$: Strict Private Cache Bypass
-* **Configuration:** [`lab/nginx/windows/s1_strict_private.conf`](file:///c:/Users/Ram/Desktop/TenantCache%20-%20Automated%20Differential%20Verification%20of%20Cache%20Isolation%20in%20Multi-Tenant%20Web%20Applications/lab/nginx/windows/s1_strict_private.conf)
+* **Configuration:** [`lab/nginx/windows/s1_strict_private.conf`](../lab/nginx/windows/s1_strict_private.conf)
 * **Key Directive:** `proxy_cache_bypass $http_authorization; proxy_no_cache $http_authorization;`
 
 ```http
@@ -259,29 +260,67 @@ X-Cache-Status: BYPASS
 
 ---
 
-### 2.8 Archetype $S_2$: Server-Validated Identity Keying
-* **Configuration:** [`lab/nginx/windows/s2_identity_keyed.conf`](file:///c:/Users/Ram/Desktop/TenantCache%20-%20Automated%20Differential%20Verification%20of%20Cache%20Isolation%20in%20Multi-Tenant%20Web%20Applications/lab/nginx/windows/s2_identity_keyed.conf)
-* **Key Directive:** `proxy_cache_key "$scheme$request_method$host$request_uri|$http_authorization"; proxy_cache_revalidate on;`
+### 2.8 Archetype $S_2$: Server-Validated Identity Keying with Per-Request Auth Verification
+* **Configuration:** [`lab/nginx/windows/s2_identity_keyed.conf`](../lab/nginx/windows/s2_identity_keyed.conf)
+* **Key Directives:**
+  ```nginx
+  auth_request /_auth_verify;
+  auth_request_set $auth_tenant $upstream_http_x_auth_tenant_id;
+  auth_request_set $auth_user $upstream_http_x_auth_user_id;
+  proxy_set_header X-Tenant-ID "";
+  proxy_set_header X-User-ID "";
+  proxy_cache_key "$scheme$request_method$host$request_uri|$auth_tenant|$auth_user";
+  ```
 
 ```http
-Request 1: Alice queries dashboard (MISS, cached under Alice's token)
+Step 1: Alice queries dashboard -> 200 MISS (cached under validated identity)
 GET /api/v1/tenant/dashboard HTTP/1.1
 Authorization: Bearer TOKEN_tenant_acme_ALICE_SECURE_SIG
 
 Response 1:
 HTTP/1.1 200 OK
 X-Cache-Status: MISS
+X-Auth-Tenant: tenant_acme
+X-Auth-User: user_alice
 {"tenant":"tenant_acme","kpi_metric":"TC_CANARY_1803654870c3_33CC14EF"}
 
 --------------------------------------------------------------------------------
-Request 2: Bob queries dashboard (distinct token causes separate partition)
+Step 2: Alice repeat request -> 200 HIT
 GET /api/v1/tenant/dashboard HTTP/1.1
-Authorization: Bearer TOKEN_tenant_beta_BOB_SECURE_SIG
+Authorization: Bearer TOKEN_tenant_acme_ALICE_SECURE_SIG
 
 Response 2:
 HTTP/1.1 200 OK
-Server: nginx/1.26.2
+X-Cache-Status: HIT
+{"tenant":"tenant_acme","kpi_metric":"TC_CANARY_1803654870c3_33CC14EF"}
+
+--------------------------------------------------------------------------------
+Step 3: Bob queries dashboard -> separate partition (MISS), Bob's data returned
+GET /api/v1/tenant/dashboard HTTP/1.1
+Authorization: Bearer TOKEN_tenant_beta_BOB_SECURE_SIG
+
+Response 3:
+HTTP/1.1 200 OK
 X-Cache-Status: MISS
+X-Auth-Tenant: tenant_beta
+X-Auth-User: user_bob
 {"tenant":"tenant_beta","kpi_metric":"TC_CANARY_3f932f1fd8e4_0F681C3D"}
+
+--------------------------------------------------------------------------------
+Step 4: Spoofed headers stripped
+Bob supplies 'X-Tenant-ID: tenant_acme'; proxy strips unauthenticated client headers
+and auth subrequest populates genuine identity from token. Zero leakage.
+
+--------------------------------------------------------------------------------
+Step 5: Post-cache-priming permission & token revocation
+When an administrator revokes a user's resource ACL or invalidates their token at origin:
+Origin /api/v1/auth/verify returns 403 Forbidden.
+Nginx auth_request module aborts in the access phase (403 Forbidden) and NEVER reaches
+the proxy cache. The stale cached entry is never served.
+
+--------------------------------------------------------------------------------
+Step 6: Deny-by-default for unmapped routes
+Any request to an undeclared route (e.g. /api/v1/unknown/endpoint) returns 403 Forbidden
+from /api/v1/auth/verify and is immediately rejected by Nginx.
 ```
-* **Result:** Zero leakage. Cache entries are partitioned strictly by verified cryptographic token ($S_2$).
+* **Result:** Zero leakage, resilient to header spoofing, zero stale revocation lag, and strictly deny-by-default ($S_2$).

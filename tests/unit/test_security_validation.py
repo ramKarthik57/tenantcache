@@ -1,11 +1,11 @@
 """Unit tests for TargetSecurityGuard and Framework self-defense."""
 
 import pytest
-from src.tenantcache.config import TargetSecurityGuard, TenantCacheConfig
-from src.tenantcache.differential import DifferentialRunner
-from src.tenantcache.simulator import TenantSimulator
-from src.tenantcache.oracle import SecurityOracle
-from src.tenantcache.detection import LeakageDetector
+from tenantcache.config import TargetSecurityGuard, TenantCacheConfig
+from tenantcache.differential import DifferentialRunner
+from tenantcache.simulator import TenantSimulator
+from tenantcache.oracle import SecurityOracle
+from tenantcache.detection import LeakageDetector
 
 
 def test_target_security_guard_blocks_external_domains():
@@ -36,7 +36,7 @@ def test_target_security_guard_allows_local_lab():
 
 def test_differential_runner_enforces_security_guard():
     sim = TenantSimulator(seed=42)
-    oracle = SecurityOracle(sim.resources)
+    oracle = SecurityOracle(sim.resources, sim.principals)
     detector = LeakageDetector(oracle, sim.canary_registry, sim.resources)
 
     with pytest.raises(ValueError, match="Security Safeguard Violation"):

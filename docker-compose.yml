@@ -1,3 +1,8 @@
+# TenantCache Multi-Tenant Web Application Lab
+# SECURITY WARNING: This compose environment packages an intentionally vulnerable
+# reverse-proxy cache configuration for local testing and differential verification.
+# All ports are strictly bound to loopback (127.0.0.1) to prevent accidental LAN/WAN exposure.
+
 services:
   app:
     build:
@@ -5,7 +10,8 @@ services:
       dockerfile: lab/application/Dockerfile
     container_name: tenantcache_app
     ports:
-      - "8000:8000"
+      # Bound strictly to 127.0.0.1 to prevent external exposure
+      - "127.0.0.1:8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
     networks:
@@ -17,7 +23,8 @@ services:
       dockerfile: lab/nginx/Dockerfile
     container_name: tenantcache_proxy
     ports:
-      - "8080:80"
+      # Bound strictly to 127.0.0.1 to prevent external exposure of vulnerable proxy
+      - "127.0.0.1:8080:80"
     depends_on:
       - app
     networks:

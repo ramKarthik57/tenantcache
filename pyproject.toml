@@ -4,12 +4,22 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tenantcache"
-version = "1.0.0"
+version = "1.1.0"
 description = "Automated Differential Verification of Cache Isolation in Multi-Tenant Web Applications"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
+license = "MIT"
 authors = [
-    { name = "TenantCache Research & Engineering Team" }
+    { name = "Ramkumar V.", email = "ramkumar.v@research.tenantcache.org" },
+    { name = "Advanced Systems & Cybersecurity Research Group" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Security"
 ]
 dependencies = [
     "fastapi>=0.110.0",
@@ -26,8 +36,13 @@ dependencies = [
 ]
 
 [project.scripts]
-tenantcache = "src.tenantcache.cli:app"
+tenantcache = "tenantcache.cli:app"
+
+[tool.setuptools]
+packages = ["tenantcache", "tenantcache.cache", "tenantcache.detection", "tenantcache.differential", "tenantcache.evaluation", "tenantcache.generator", "tenantcache.models", "tenantcache.oracle", "tenantcache.reporting", "tenantcache.simulator", "lab", "lab.application"]
+package-dir = {"" = "src", "lab" = "lab"}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
+pythonpath = [".", "src"]

@@ -1,13 +1,14 @@
 framework_name,mode,total_scenarios,true_positives,false_positives,true_negatives,false_negatives,precision,precision_ci_95,recall,recall_ci_95,f1_score,specificity,specificity_ci_95,accuracy,accuracy_ci_95,false_positive_rate,cache_resets,state_transitions,distinct_principals_covered,total_requests,duration_seconds,requests_per_second,findings_count
-Baseline A (Matched-Budget Stateless DAST),V1_MISSING_TENANT_KEY,66,0,0,20,46,None,"(0.0, 0.0)",0.0,"(0.0, 0.0771)",None,1.0,"(0.8389, 1.0)",0.303,"(0.2055, 0.4222)",0.0,66,0,10,198,1.4449,137.03,0
-Baseline B (Matched-Budget Naive Diffing),V1_MISSING_TENANT_KEY,66,34,17,5,10,0.6667,"(0.5297, 0.7803)",0.7727,"(0.6301, 0.8716)",0.7158,0.2273,"(0.1012, 0.4344)",0.5909,"(0.4705, 0.7013)",0.7727,0,0,10,198,0.127,1558.45,39
-Baseline A (Capability Stateless DAST),V1_MISSING_TENANT_KEY,66,0,0,20,46,None,"(0.0, 0.0)",0.0,"(0.0, 0.0771)",None,1.0,"(0.8389, 1.0)",0.303,"(0.2055, 0.4222)",0.0,66,0,10,66,0.5347,123.44,0
-Baseline B (Capability Naive Diffing),V1_MISSING_TENANT_KEY,66,34,17,5,10,0.6667,"(0.5297, 0.7803)",0.7727,"(0.6301, 0.8716)",0.7158,0.2273,"(0.1012, 0.4344)",0.5909,"(0.4705, 0.7013)",0.7727,0,0,10,132,0.125,1055.79,39
-TenantCache (Capability Verification),V1_MISSING_TENANT_KEY,66,46,0,20,0,1.0,"(0.9229, 1.0)",1.0,"(0.9229, 1.0)",1.0,1.0,"(0.8389, 1.0)",1.0,"(0.945, 1.0)",0.0,66,8,10,132,0.5214,253.19,46
-TenantCache (Capability Verification),V2_MISSING_USER_AUTH,66,29,0,34,3,1.0,"(0.883, 1.0)",0.9062,"(0.7578, 0.9676)",0.9508,1.0,"(0.8985, 1.0)",0.9545,"(0.8747, 0.9844)",0.0,66,8,10,132,0.7435,177.54,29
-TenantCache (Capability Verification),V3_UNVALIDATED_HEADER,66,29,0,34,3,1.0,"(0.883, 1.0)",0.9062,"(0.7578, 0.9676)",0.9508,1.0,"(0.8985, 1.0)",0.9545,"(0.8747, 0.9844)",0.0,66,8,10,132,0.7111,185.63,29
-TenantCache (Capability Verification),V4_STALE_REVOCATION,66,8,0,58,0,1.0,"(0.6756, 1.0)",1.0,"(0.6756, 1.0)",1.0,1.0,"(0.9379, 1.0)",1.0,"(0.945, 1.0)",0.0,66,8,10,132,0.9479,139.26,8
-TenantCache (Capability Verification),V5_ERRONEOUS_PUBLIC,66,46,0,20,0,1.0,"(0.9229, 1.0)",1.0,"(0.9229, 1.0)",1.0,1.0,"(0.8389, 1.0)",1.0,"(0.945, 1.0)",0.0,66,8,10,132,0.6032,218.82,46
-TenantCache (Capability Verification),V6_NORMALIZATION,66,46,0,20,0,1.0,"(0.9229, 1.0)",1.0,"(0.9229, 1.0)",1.0,1.0,"(0.8389, 1.0)",1.0,"(0.945, 1.0)",0.0,66,8,10,132,0.5985,220.56,46
-TenantCache (Capability Verification),SECURE_S1_STRICT_PRIVATE,66,0,0,66,0,None,"(0.0, 0.0)",None,"(0.0, 0.0)",None,1.0,"(0.945, 1.0)",1.0,"(0.945, 1.0)",0.0,66,8,10,132,1.0712,123.22,0
-TenantCache (Capability Verification),SECURE_S2_IDENTITY_KEYED,66,0,0,66,0,None,"(0.0, 0.0)",None,"(0.0, 0.0)",None,1.0,"(0.945, 1.0)",1.0,"(0.945, 1.0)",0.0,66,8,10,132,1.1072,119.22,0
+Baseline A (Matched-Budget Stateless DAST),V1_MISSING_TENANT_KEY,66,0,0,20,46,None,None,0.0,"(0.0, 0.0771)",None,1.0,"(0.8389, 1.0)",0.303,"(0.2055, 0.4222)",0.0,66,0,10,198,0.6226,318.03,0
+Baseline B (Matched-Budget Naive Diffing),V1_MISSING_TENANT_KEY,66,38,12,8,8,0.76,"(0.6259, 0.857)",0.8261,"(0.6928, 0.9091)",0.7917,0.4,"(0.2188, 0.6134)",0.697,"(0.5778, 0.7945)",0.6,66,8,10,198,0.3501,565.55,50
+TenantCache (Matched-Budget Verification),V1_MISSING_TENANT_KEY,66,46,0,20,0,1.0,"(0.9229, 1.0)",1.0,"(0.9229, 1.0)",1.0,1.0,"(0.8389, 1.0)",1.0,"(0.945, 1.0)",0.0,66,8,10,198,0.5661,349.73,46
+Baseline A (Capability Stateless DAST),V1_MISSING_TENANT_KEY,66,0,0,20,46,None,None,0.0,"(0.0, 0.0771)",None,1.0,"(0.8389, 1.0)",0.303,"(0.2055, 0.4222)",0.0,66,0,10,66,0.25,263.99,0
+Baseline B (Capability Naive Diffing),V1_MISSING_TENANT_KEY,66,38,12,8,8,0.76,"(0.6259, 0.857)",0.8261,"(0.6928, 0.9091)",0.7917,0.4,"(0.2188, 0.6134)",0.697,"(0.5778, 0.7945)",0.6,66,8,10,132,0.3134,421.24,50
+TenantCache (Capability Verification),V1_MISSING_TENANT_KEY,66,46,0,20,0,1.0,"(0.9229, 1.0)",1.0,"(0.9229, 1.0)",1.0,1.0,"(0.8389, 1.0)",1.0,"(0.945, 1.0)",0.0,66,8,10,132,0.295,447.42,46
+TenantCache (Capability Verification),V2_MISSING_USER_AUTH,66,29,0,34,3,1.0,"(0.883, 1.0)",0.9062,"(0.7578, 0.9676)",0.9508,1.0,"(0.8985, 1.0)",0.9545,"(0.8747, 0.9844)",0.0,66,8,10,132,0.4334,304.55,29
+TenantCache (Capability Verification),V3_UNVALIDATED_HEADER,66,29,0,34,3,1.0,"(0.883, 1.0)",0.9062,"(0.7578, 0.9676)",0.9508,1.0,"(0.8985, 1.0)",0.9545,"(0.8747, 0.9844)",0.0,66,8,10,132,0.4262,309.7,29
+TenantCache (Capability Verification),V4_STALE_REVOCATION,66,8,0,58,0,1.0,"(0.6756, 1.0)",1.0,"(0.6756, 1.0)",1.0,1.0,"(0.9379, 1.0)",1.0,"(0.945, 1.0)",0.0,66,8,10,132,0.5075,260.11,8
+TenantCache (Capability Verification),V5_ERRONEOUS_PUBLIC,66,46,0,20,0,1.0,"(0.9229, 1.0)",1.0,"(0.9229, 1.0)",1.0,1.0,"(0.8389, 1.0)",1.0,"(0.945, 1.0)",0.0,66,8,10,132,0.3485,378.75,46
+TenantCache (Capability Verification),V6_NORMALIZATION,66,46,0,20,0,1.0,"(0.9229, 1.0)",1.0,"(0.9229, 1.0)",1.0,1.0,"(0.8389, 1.0)",1.0,"(0.945, 1.0)",0.0,66,8,10,132,0.3294,400.74,46
+TenantCache (Capability Verification),SECURE_S1_STRICT_PRIVATE,66,0,0,66,0,None,None,None,None,None,1.0,"(0.945, 1.0)",1.0,"(0.945, 1.0)",0.0,66,8,10,132,0.5925,222.77,0
+TenantCache (Capability Verification),SECURE_S2_IDENTITY_KEYED,66,0,0,66,0,None,None,None,None,None,1.0,"(0.945, 1.0)",1.0,"(0.945, 1.0)",0.0,66,8,10,132,0.6116,215.82,0

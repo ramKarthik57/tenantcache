@@ -4,7 +4,7 @@ import json
 import csv
 import os
 from typing import List, Dict, Any
-from src.tenantcache.evaluation import StatisticalBenchmarkResult
+from tenantcache.evaluation import StatisticalBenchmarkResult
 
 
 class ReportGenerator:
@@ -66,10 +66,10 @@ class ReportGenerator:
             "",
             "## 2. Statistical Invariant and Methodology Notes",
             "",
-            "- **Zero-Denominator Precision & Recall (Secure S1 & S2):** When a secure configuration yields 0 positive scenarios ($TP + FP = 0, TP + FN = 0$), Precision and Recall are mathematically undefined and reported as *N/A (Undefined)*. Specificity is calculated as $TN / (TN + FP) = 54/54 = 1.000$ (with Wilson CI $[0.93, 1.00]$) and Accuracy is $1.000$.",
+            "- **Zero-Denominator Precision & Recall (Secure S1 & S2):** When a secure configuration yields 0 positive scenarios ($TP + FP = 0, TP + FN = 0$), Precision and Recall are mathematically undefined and reported as *N/A (Undefined)*. Specificity is calculated as $TN / (TN + FP) = 66/66 = 1.000$ (with Wilson 95% CI $[0.94, 1.00]$) and Accuracy is $1.000$.",
             "- **Baseline A Precision:** When Baseline A generates zero positive predictions ($TP=0, FP=0$), Precision is mathematically undefined and reported as *N/A (Undefined)*.",
             "- **Exploration Budget Documentation:** Baseline comparisons track explicit operational parameters: `Total Requests`, `Cache Resets`, `State Transitions`, and `Distinct Principals Covered`.",
-            "- **Wilson Score Intervals:** Calculated at a 95% confidence level ($z = 1.96$), capturing sample size uncertainty over the 54-scenario benchmark corpus.",
+            "- **Wilson Score Intervals:** Calculated at a 95% confidence level dynamically ($z \\approx 1.96$), capturing sample size uncertainty over the benchmark corpus.",
             "",
             "## 3. Confirmed Vulnerability Findings Breakdown",
             ""

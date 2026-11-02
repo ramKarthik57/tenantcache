@@ -1,16 +1,25 @@
 """TenantCache Professional Command-Line Interface."""
 
-import typer
 import sys
-import time
 import os
+
+# Ensure project root is in sys.path for installed console script execution
+_cli_dir = os.path.dirname(os.path.abspath(__file__))
+_src_dir = os.path.dirname(_cli_dir)
+_root_dir = os.path.dirname(_src_dir)
+for _p in (_root_dir, _src_dir):
+    if _p and _p not in sys.path:
+        sys.path.insert(0, _p)
+
+import typer
+import time
 from typing import Optional
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
-from src.tenantcache.simulator import TenantSimulator
-from src.tenantcache.evaluation import BenchmarkSuite
-from src.tenantcache.reporting import ReportGenerator
+from tenantcache.simulator import TenantSimulator
+from tenantcache.evaluation import BenchmarkSuite
+from tenantcache.reporting import ReportGenerator
 from lab.application.database import lab_db
 
 app = typer.Typer(
@@ -54,7 +63,7 @@ def doctor():
 
     # 4. Proxy Cache Simulator
     try:
-        from src.tenantcache.cache import ProxyCacheSimulator
+        from tenantcache.cache import ProxyCacheSimulator
         p = ProxyCacheSimulator()
         table.add_row("Cache Simulator", "[green]PASS[/green]", "High-Fidelity RFC 9111 Proxy Engine Ready")
     except Exception as e:
@@ -185,6 +194,10 @@ def benchmark(
         res_baseline_b_matched = suite.run_baseline_b_token_substitution(config_archetype="V1_MISSING_TENANT_KEY", dataset_version=version, matched_budget=True)
         all_results.append(res_baseline_a_matched)
         all_results.append(res_baseline_b_matched)
+
+        # Matched-Budget TenantCache on V1 (198 requests)
+        res_tc_matched = suite.run_tenantcache(config_archetype="V1_MISSING_TENANT_KEY", dataset_version=version, matched_budget=True)
+        all_results.append(res_tc_matched)
 
         # 2. Capability Baselines on V1
         res_baseline_a_cap = suite.run_baseline_a_single_endpoint(config_archetype="V1_MISSING_TENANT_KEY", dataset_version=version, matched_budget=False)

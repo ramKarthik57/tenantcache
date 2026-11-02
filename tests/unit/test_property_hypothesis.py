@@ -2,16 +2,16 @@
 
 import pytest
 from hypothesis import given, strategies as st
-from src.tenantcache.simulator import TenantSimulator
-from src.tenantcache.oracle import SecurityOracle, AuthDecision
-from src.tenantcache.detection import LeakageDetector
-from src.tenantcache.models import ResponseRecord, CacheStatus, Visibility
+from tenantcache.simulator import TenantSimulator
+from tenantcache.oracle import SecurityOracle, AuthDecision
+from tenantcache.detection import LeakageDetector
+from tenantcache.models import ResponseRecord, CacheStatus, Visibility
 
 
 @given(st.integers(min_value=1, max_value=10000))
 def test_hypothesis_canary_uniqueness_and_invariant(seed):
     sim = TenantSimulator(seed=seed)
-    oracle = SecurityOracle(sim.resources)
+    oracle = SecurityOracle(sim.resources, sim.principals)
     detector = LeakageDetector(oracle, sim.canary_registry, sim.resources)
 
     # Invariant 1: All private canaries must be unique
@@ -36,7 +36,7 @@ def test_hypothesis_canary_uniqueness_and_invariant(seed):
 )
 def test_hypothesis_noise_resilience(tenant_id, random_noise):
     sim = TenantSimulator(seed=100)
-    oracle = SecurityOracle(sim.resources)
+    oracle = SecurityOracle(sim.resources, sim.principals)
     detector = LeakageDetector(oracle, sim.canary_registry, sim.resources)
 
     p = sim.get_principal("user_alice")

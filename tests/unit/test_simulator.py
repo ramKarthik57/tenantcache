@@ -1,7 +1,7 @@
 """Unit tests for TenantSimulator."""
 
-from src.tenantcache.simulator import TenantSimulator
-from src.tenantcache.models import Role, Visibility
+from tenantcache.simulator import TenantSimulator
+from tenantcache.models import Role, Visibility
 
 
 def test_tenant_simulator_universe():

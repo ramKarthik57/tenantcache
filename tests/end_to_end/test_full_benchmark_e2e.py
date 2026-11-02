@@ -1,7 +1,7 @@
 """End-to-End test executing the benchmark evaluation across all configurations."""
 
-from src.tenantcache.evaluation import BenchmarkSuite
-from src.tenantcache.reporting import ReportGenerator
+from tenantcache.evaluation import BenchmarkSuite
+from tenantcache.reporting import ReportGenerator
 import tempfile
 import os
 

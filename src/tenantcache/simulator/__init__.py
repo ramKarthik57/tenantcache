@@ -3,7 +3,7 @@
 import zlib
 import hashlib
 from typing import Dict, List, Tuple, Set
-from src.tenantcache.models import Tenant, User, Resource, Principal, Role, Visibility
+from tenantcache.models import Tenant, User, Resource, Principal, Role, Visibility
 
 
 class TenantSimulator:

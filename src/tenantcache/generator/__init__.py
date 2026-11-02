@@ -1,8 +1,8 @@
 """Request Generation Engine for Identity-Aware Differential Testing."""
 
 from typing import List, Dict, Any, Tuple
-from src.tenantcache.models import Principal, Resource, RequestSpec, Role, Visibility
-from src.tenantcache.simulator import TenantSimulator
+from tenantcache.models import Principal, Resource, RequestSpec, Role, Visibility
+from tenantcache.simulator import TenantSimulator
 
 
 class TestSequence:

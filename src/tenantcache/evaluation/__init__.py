@@ -5,15 +5,16 @@ import math
 import json
 import csv
 import os
+from statistics import NormalDist
 from typing import List, Dict, Any, Tuple, Optional
 from pydantic import BaseModel, Field
-from src.tenantcache.models import Finding, LeakageType, Severity, Visibility, Principal, Resource, Role, RequestSpec
-from src.tenantcache.simulator import TenantSimulator
-from src.tenantcache.oracle import SecurityOracle, AuthDecision
-from src.tenantcache.detection import LeakageDetector
-from src.tenantcache.generator import RequestGenerator, TestSequence
-from src.tenantcache.differential import DifferentialRunner
-from src.tenantcache.cache import ProxyCacheSimulator
+from tenantcache.models import Finding, LeakageType, Severity, Visibility, Principal, Resource, Role, RequestSpec
+from tenantcache.simulator import TenantSimulator
+from tenantcache.oracle import SecurityOracle, AuthDecision
+from tenantcache.detection import LeakageDetector, OracleFreeDifferentialDetector
+from tenantcache.generator import RequestGenerator, TestSequence
+from tenantcache.differential import DifferentialRunner
+from tenantcache.cache import ProxyCacheSimulator
 from lab.application.database import lab_db
 
 
@@ -40,14 +41,14 @@ class StatisticalBenchmarkResult(BaseModel):
     true_negatives: int
     false_negatives: int
     precision: Optional[float] = None
-    precision_ci_95: Tuple[float, float] = (0.0, 0.0)
+    precision_ci_95: Optional[Tuple[float, float]] = None
     recall: Optional[float] = None
-    recall_ci_95: Tuple[float, float] = (0.0, 0.0)
+    recall_ci_95: Optional[Tuple[float, float]] = None
     f1_score: Optional[float] = None
     specificity: Optional[float] = None
-    specificity_ci_95: Tuple[float, float] = (0.0, 0.0)
+    specificity_ci_95: Optional[Tuple[float, float]] = None
     accuracy: float = 0.0
-    accuracy_ci_95: Tuple[float, float] = (0.0, 0.0)
+    accuracy_ci_95: Optional[Tuple[float, float]] = None
     false_positive_rate: float = 0.0
     total_requests: int
     cache_resets: int = 0
@@ -59,15 +60,17 @@ class StatisticalBenchmarkResult(BaseModel):
     findings: List[Finding] = Field(default_factory=list)
 
 
-def wilson_score_ci(successes: int, total: int, confidence: float = 0.95) -> Tuple[float, float]:
-    """Calculates Wilson score interval for binomial proportions."""
+def wilson_score_ci(successes: int, total: int, confidence: float = 0.95) -> Optional[Tuple[float, float]]:
+    """Calculates Wilson score interval for binomial proportions.
+    Returns None if total <= 0 (e.g. undefined precision/recall when denominator is 0).
+    """
     if total <= 0:
-        return (0.0, 0.0)
-    z = 1.959963984540054  # 95% confidence z-score
+        return None
+    z = NormalDist().inv_cdf((1.0 + confidence) / 2.0)
     p_hat = successes / total
-    denominator = 1 + (z ** 2) / total
-    center = (p_hat + (z ** 2) / (2 * total)) / denominator
-    spread = (z / denominator) * math.sqrt((p_hat * (1 - p_hat) / total) + ((z ** 2) / (4 * (total ** 2))))
+    denominator = 1.0 + (z ** 2) / total
+    center = (p_hat + (z ** 2) / (2.0 * total)) / denominator
+    spread = (z / denominator) * math.sqrt((p_hat * (1.0 - p_hat) / total) + ((z ** 2) / (4.0 * (total ** 2))))
     lower = max(0.0, center - spread)
     upper = min(1.0, center + spread)
     return (round(lower, 4), round(upper, 4))
@@ -80,13 +83,13 @@ class BenchmarkSuite:
         self.seed = seed
         self.sim = TenantSimulator(seed=seed)
         lab_db.simulator = self.sim
-        self.oracle = SecurityOracle(self.sim.resources)
+        self.oracle = SecurityOracle(self.sim.resources, self.sim.principals)
         self.detector = LeakageDetector(self.oracle, self.sim.canary_registry, self.sim.resources)
         self.generator = RequestGenerator(self.sim)
 
     def generate_expanded_scenarios(self, version: str = "v1.1") -> List[Tuple[TestSequence, bool]]:
         """Generates test corpus:
-        - v1.0: Legacy 54-scenario corpus (44 positive, 10 negative due to 2 authorized probes).
+        - v1.0: 54-scenario corpus (46 vulnerable positive, 8 negative controls).
         - v1.1: Reconciled & expanded 66-scenario corpus (46 positive, 20 negative with balanced controls).
         """
         scenarios = []
@@ -313,14 +316,10 @@ class BenchmarkSuite:
         state_transitions = 0
         principals_seen = set()
 
-        for seq, _ in scenarios:
+        for seq, label in scenarios:
             probe_step = next((req for desc, req in seq.steps if "probe" in req.step_name), seq.steps[-1][1])
             principals_seen.add(probe_step.principal.user_id)
-            if seq.category == "STALE_REVOCATION":
-                oracle_decision = AuthDecision.DENY
-            else:
-                oracle_decision = self.oracle.evaluate(probe_step.principal, seq.resource)
-            is_vulnerable = (seq.category in active_vulns) and (oracle_decision == AuthDecision.DENY)
+            is_vulnerable = label and (seq.category in active_vulns)
 
             # Cold purge before probing
             cache_sim.purge_all()
@@ -376,12 +375,12 @@ class BenchmarkSuite:
             true_negatives=tn,
             false_negatives=fn,
             precision=round(precision, 4) if precision is not None else None,
-            precision_ci_95=wilson_score_ci(tp, tp + fp) if (tp + fp) > 0 else (0.0, 0.0),
+            precision_ci_95=wilson_score_ci(tp, tp + fp) if (tp + fp) > 0 else None,
             recall=round(recall, 4) if recall is not None else None,
-            recall_ci_95=wilson_score_ci(tp, tp + fn) if (tp + fn) > 0 else (0.0, 0.0),
+            recall_ci_95=wilson_score_ci(tp, tp + fn) if (tp + fn) > 0 else None,
             f1_score=round(f1, 4) if f1 is not None else None,
             specificity=round(specificity, 4) if specificity is not None else None,
-            specificity_ci_95=wilson_score_ci(tn, tn + fp) if (tn + fp) > 0 else (0.0, 0.0),
+            specificity_ci_95=wilson_score_ci(tn, tn + fp) if (tn + fp) > 0 else None,
             accuracy=round(accuracy, 4),
             accuracy_ci_95=wilson_score_ci(tp + tn, len(scenarios)),
             false_positive_rate=round(fpr, 4),
@@ -396,11 +395,18 @@ class BenchmarkSuite:
         )
 
     def run_baseline_b_token_substitution(self, config_archetype: str = "V1_MISSING_TENANT_KEY", dataset_version: str = "v1.1", matched_budget: bool = False) -> StatisticalBenchmarkResult:
-        """Baseline B: Simple Token Substitution. Swaps identities but lacks dynamic origin authorization synchronization."""
+        """Baseline B: Simple Token Substitution / Naive Differential Testing.
+        Executes prime-probe sequences and detects cache hits/collisions purely on observable HTTP evidence,
+        without access to an authorization oracle.
+        """
         start_time = time.time()
-        lab_db.reset()
+        fresh_sim = TenantSimulator(seed=self.seed)
+        lab_db.reset(fresh_sim)
         cache_sim = ProxyCacheSimulator(config_archetype=config_archetype)
-        runner = DifferentialRunner(self.oracle, self.detector, cache_simulator=cache_sim)
+        oracle = SecurityOracle(fresh_sim.resources, fresh_sim.principals)
+        detector = LeakageDetector(oracle, fresh_sim.canary_registry, fresh_sim.resources)
+        naive_detector = OracleFreeDifferentialDetector(canary_registry=fresh_sim.canary_registry)
+        runner = DifferentialRunner(oracle, detector, cache_simulator=cache_sim)
         scenarios = self.generate_expanded_scenarios(version=dataset_version)
 
         vuln_archetype_map = {
@@ -421,44 +427,67 @@ class BenchmarkSuite:
         state_transitions = 0
         principals_seen = set()
 
-        for seq, _ in scenarios:
+        for seq, label in scenarios:
+            # Per-scenario isolation
+            scenario_sim = TenantSimulator(seed=self.seed)
+            lab_db.reset(scenario_sim)
+            oracle.reset_ledger(scenario_sim.resources, scenario_sim.principals)
+            cache_sim.purge_all()
+            cache_resets += 1
+
+            prime_principal = seq.steps[0][1].principal
             probe_step = next((req for desc, req in seq.steps if "probe" in req.step_name), seq.steps[-1][1])
             principals_seen.add(probe_step.principal.user_id)
-            if seq.category == "STALE_REVOCATION":
-                oracle_decision = AuthDecision.DENY
-            else:
-                oracle_decision = self.oracle.evaluate(probe_step.principal, seq.resource)
-            is_vulnerable = (seq.category in active_vulns) and (oracle_decision == AuthDecision.DENY)
+            is_vulnerable = label and (seq.category in active_vulns)
+
+            # Matched budget 3-step sequence: cold probe, prime, differential probe
+            if matched_budget and len(seq.steps) < 3:
+                cold_probe = RequestSpec(
+                    step_name=f"{probe_step.step_name}_cold",
+                    method=probe_step.method,
+                    url_path=probe_step.url_path,
+                    principal=probe_step.principal,
+                    headers=dict(probe_step.headers),
+                    query_params=probe_step.query_params
+                )
+                runner.execute_request(cold_probe)
+
+            prime_resp = None
+            probe_resp = None
 
             for desc, req in seq.steps:
                 principals_seen.add(req.principal.user_id)
-                resp = runner.execute_request(req)
-                if "probe" in req.step_name:
-                    finding = self.detector.evaluate_response(
-                        principal=req.principal,
-                        target_resource=seq.resource,
-                        response=resp,
-                        step_name=req.step_name,
-                        sequence_category=seq.category
-                    )
-                    # Naive diffing misclassifies public and legitimate shared cache hits as cross-tenant leaks
-                    if finding is None and (seq.resource.visibility == Visibility.PUBLIC or "dashboard" in seq.resource.id) and "HIT" in resp.cache_status.value:
-                        fp += 1
-                    elif finding is not None:
-                        findings.append(finding)
-                        if is_vulnerable:
-                            tp += 1
-                        else:
-                            fp += 1
-                    else:
-                        if is_vulnerable:
-                            fn += 1
-                        else:
-                            tn += 1
+                if "post_revocation_probe" in req.step_name and seq.category == "STALE_REVOCATION":
+                    state_transitions += 1
+                    lab_db.revoke_user_access(seq.resource.id, req.principal.user_id)
+                    oracle.record_revocation(seq.resource.id, req.principal.user_id)
 
-            if matched_budget and len(seq.steps) < 3:
-                # Add one verification probe to reach exact 3-request budget per scenario
-                runner.execute_request(probe_step)
+                resp = runner.execute_request(req)
+                if "prime" in req.step_name or req == seq.steps[0][1]:
+                    prime_resp = resp
+                if "probe" in req.step_name:
+                    probe_resp = resp
+
+            # Evaluate purely with OracleFreeDifferentialDetector
+            finding = naive_detector.evaluate_differential(
+                prime_response=prime_resp,
+                probe_response=probe_resp,
+                probing_principal=probe_step.principal,
+                target_path=seq.resource.endpoint_path,
+                priming_principal=prime_principal
+            )
+
+            if finding is not None:
+                findings.append(finding)
+                if is_vulnerable:
+                    tp += 1
+                else:
+                    fp += 1
+            else:
+                if is_vulnerable:
+                    fn += 1
+                else:
+                    tn += 1
 
         duration = max(time.time() - start_time, 0.001)
         precision = (tp / (tp + fp)) if (tp + fp) > 0 else None
@@ -479,12 +508,12 @@ class BenchmarkSuite:
             true_negatives=tn,
             false_negatives=fn,
             precision=round(precision, 4) if precision is not None else None,
-            precision_ci_95=wilson_score_ci(tp, tp + fp) if (tp + fp) > 0 else (0.0, 0.0),
+            precision_ci_95=wilson_score_ci(tp, tp + fp) if (tp + fp) > 0 else None,
             recall=round(recall, 4) if recall is not None else None,
-            recall_ci_95=wilson_score_ci(tp, tp + fn) if (tp + fn) > 0 else (0.0, 0.0),
+            recall_ci_95=wilson_score_ci(tp, tp + fn) if (tp + fn) > 0 else None,
             f1_score=round(f1, 4) if f1 is not None else None,
             specificity=round(specificity, 4) if specificity is not None else None,
-            specificity_ci_95=wilson_score_ci(tn, tn + fp) if (tn + fp) > 0 else (0.0, 0.0),
+            specificity_ci_95=wilson_score_ci(tn, tn + fp) if (tn + fp) > 0 else None,
             accuracy=round(accuracy, 4),
             accuracy_ci_95=wilson_score_ci(tp + tn, tp + tn + fp + fn),
             false_positive_rate=round(fpr, 4),
@@ -503,7 +532,7 @@ class BenchmarkSuite:
         start_time = time.time()
         sim = TenantSimulator(seed=self.seed)
         lab_db.reset(sim)
-        oracle = SecurityOracle(sim.resources)
+        oracle = SecurityOracle(sim.resources, sim.principals)
         detector = LeakageDetector(oracle, sim.canary_registry, sim.resources)
         generator = RequestGenerator(sim)
         cache_sim = ProxyCacheSimulator(config_archetype=config_archetype)
@@ -532,29 +561,32 @@ class BenchmarkSuite:
             nonlocal state_transitions
             state_transitions += 1
             lab_db.revoke_user_access(res_id, user_id)
-            oracle.resources[res_id].is_revoked_for.add(user_id)
-            oracle.resources[res_id].allowed_user_ids.discard(user_id)
-            if "S2" in config_archetype:
-                runner.cache_sim.purge_all()
+            oracle.record_revocation(res_id, user_id)
 
-        for seq, _ in scenarios:
-            # Clean database and cache state per sequence
+        for seq, label in scenarios:
+            # Clean database, reference ledger, and cache state per sequence
             fresh_sim = TenantSimulator(seed=self.seed)
             lab_db.reset(fresh_sim)
-            oracle.resources = fresh_sim.resources
+            oracle.reset_ledger(fresh_sim.resources, fresh_sim.principals)
             detector.resources = fresh_sim.resources
             cache_sim.purge_all()
             cache_resets += 1
 
             probe_step = next((req for desc, req in seq.steps if "probe" in req.step_name), seq.steps[-1][1])
             principals_seen.add(probe_step.principal.user_id)
+            is_vuln = label and (seq.category in active_vulns)
 
-            if seq.category == "STALE_REVOCATION":
-                oracle_decision = AuthDecision.DENY
-            else:
-                oracle_decision = oracle.evaluate(probe_step.principal, seq.resource)
-
-            is_vuln = (seq.category in active_vulns) and (oracle_decision == AuthDecision.DENY)
+            # Matched budget 3-step sequence: cold probe, prime, differential probe
+            if matched_budget and len(seq.steps) < 3:
+                cold_probe = RequestSpec(
+                    step_name=f"{probe_step.step_name}_cold",
+                    method=probe_step.method,
+                    url_path=probe_step.url_path,
+                    principal=probe_step.principal,
+                    headers=dict(probe_step.headers),
+                    query_params=probe_step.query_params
+                )
+                runner.execute_request(cold_probe)
 
             seq_findings = runner.run_sequence(seq, on_revocation_hook=revocation_hook)
             detected = len(seq_findings) > 0
@@ -577,17 +609,19 @@ class BenchmarkSuite:
             precision = None
             recall = None
             f1 = None
-            precision_ci = (0.0, 0.0)
-            recall_ci = (0.0, 0.0)
+            precision_ci = None
+            recall_ci = None
         else:
             precision = (tp / (tp + fp)) if (tp + fp) > 0 else None
             recall = (tp / (tp + fn)) if (tp + fn) > 0 else 0.0
             f1 = (2 * precision * recall) / (precision + recall) if (precision is not None and (precision + recall) > 0) else 0.0
-            precision_ci = wilson_score_ci(tp, tp + fp) if (tp + fp) > 0 else (0.0, 0.0)
-            recall_ci = wilson_score_ci(tp, tp + fn) if (tp + fn) > 0 else (0.0, 0.0)
+            precision_ci = wilson_score_ci(tp, tp + fp) if (tp + fp) > 0 else None
+            recall_ci = wilson_score_ci(tp, tp + fn) if (tp + fn) > 0 else None
 
         specificity = (tn / (tn + fp)) if (tn + fp) > 0 else None
+        specificity_ci = wilson_score_ci(tn, tn + fp) if (tn + fp) > 0 else None
         accuracy = (tp + tn) / len(scenarios) if scenarios else 0.0
+        accuracy_ci = wilson_score_ci(tp + tn, len(scenarios))
         fpr = (fp / (fp + tn)) if (fp + tn) > 0 else 0.0
 
         budget_label = "Matched-Budget" if matched_budget else "Capability"
@@ -606,9 +640,9 @@ class BenchmarkSuite:
             recall_ci_95=recall_ci,
             f1_score=round(f1, 4) if f1 is not None else None,
             specificity=round(specificity, 4) if specificity is not None else None,
-            specificity_ci_95=wilson_score_ci(tn, tn + fp) if (tn + fp) > 0 else (0.0, 0.0),
+            specificity_ci_95=specificity_ci,
             accuracy=round(accuracy, 4),
-            accuracy_ci_95=wilson_score_ci(tp + tn, len(scenarios)),
+            accuracy_ci_95=accuracy_ci,
             false_positive_rate=round(fpr, 4),
             total_requests=runner.total_requests,
             cache_resets=cache_resets,
@@ -625,86 +659,180 @@ class BenchmarkSuite:
         categories = ["CROSS_TENANT", "CROSS_USER", "PRIVILEGE_BOUNDARY", "STALE_REVOCATION", "CACHE_KEY_SPOOFING", "BENIGN_CONTROLS"]
         scenarios = self.generate_expanded_scenarios(version=dataset_version)
 
-        # 1. Full TenantCache
-        res_full = self.run_tenantcache("V1_MISSING_TENANT_KEY", dataset_version=dataset_version)
+        # 1. Full TenantCache: Execute scenarios and accumulate category CM from actual predictions
+        res_full = self.run_tenantcache("V1_MISSING_TENANT_KEY", dataset_version=dataset_version, matched_budget=True)
         cm_full = {c: {"tp": 0, "fp": 0, "tn": 0, "fn": 0} for c in categories}
-        for f in res_full.findings:
-            res_obj = self.sim.get_resource(f.resource_id)
-            if res_obj and res_obj.visibility == Visibility.PUBLIC:
-                cat = "BENIGN_CONTROLS"
-            elif "invoice" in f.resource_id or "dashboard" in f.resource_id:
-                cat = "CROSS_TENANT"
-            elif "project" in f.resource_id:
-                cat = "STALE_REVOCATION"
-            elif "profile" in f.resource_id:
-                cat = "CROSS_USER"
-            elif "admin" in f.resource_id:
-                cat = "PRIVILEGE_BOUNDARY"
-            else:
-                cat = "CROSS_TENANT"
-            if cat in cm_full:
-                cm_full[cat]["tp"] += 1
+        sim_full = TenantSimulator(seed=self.seed)
+        cache_sim_full = ProxyCacheSimulator(config_archetype="V1_MISSING_TENANT_KEY")
+        oracle_full = SecurityOracle(sim_full.resources, sim_full.principals)
+        detector_full = LeakageDetector(oracle_full, sim_full.canary_registry, sim_full.resources)
+        runner_full = DifferentialRunner(oracle_full, detector_full, cache_simulator=cache_sim_full)
+
         for seq, label in scenarios:
             c = "BENIGN_CONTROLS" if not label else seq.category
-            if not label and c in cm_full:
-                cm_full[c]["tn"] += 1
+            cache_sim_full.purge_all()
+            lab_db.reset(sim_full)
+            oracle_full.reset_ledger(sim_full.resources, sim_full.principals)
 
-        # 2. Ablation 1: No Cache-State Sequencing (Stateless DAST)
+            def on_rev_full(r_id, u_id):
+                lab_db.revoke_user_access(r_id, u_id)
+                oracle_full.record_revocation(r_id, u_id)
+
+            findings = runner_full.run_sequence(seq, on_revocation_hook=on_rev_full)
+            has_leak = len(findings) > 0
+            if has_leak:
+                if label:
+                    cm_full[c]["tp"] += 1
+                else:
+                    cm_full[c]["fp"] += 1
+            else:
+                if label:
+                    cm_full[c]["fn"] += 1
+                else:
+                    cm_full[c]["tn"] += 1
+
+        # 2. Ablation 1: No Cache-State Sequencing (Stateless DAST): Accumulate from actual stateless executions
         res_no_cache = self.run_baseline_a_single_endpoint("V1_MISSING_TENANT_KEY", dataset_version=dataset_version, matched_budget=True)
         cm_no_cache = {c: {"tp": 0, "fp": 0, "tn": 0, "fn": 0} for c in categories}
+        sim_no_seq = TenantSimulator(seed=self.seed)
+        cache_sim_no_seq = ProxyCacheSimulator(config_archetype="V1_MISSING_TENANT_KEY")
+        oracle_no_seq = SecurityOracle(sim_no_seq.resources, sim_no_seq.principals)
+        detector_no_seq = LeakageDetector(oracle_no_seq, sim_no_seq.canary_registry, sim_no_seq.resources)
+        runner_no_seq = DifferentialRunner(oracle_no_seq, detector_no_seq, cache_simulator=cache_sim_no_seq)
+
         for seq, label in scenarios:
             c = "BENIGN_CONTROLS" if not label else seq.category
-            if label:
-                cm_no_cache[c]["fn"] += 1
+            cache_sim_no_seq.purge_all()
+            lab_db.reset(sim_no_seq)
+            oracle_no_seq.reset_ledger(sim_no_seq.resources, sim_no_seq.principals)
+
+            probe_step = next((req for desc, req in seq.steps if "probe" in req.step_name), seq.steps[-1][1])
+            resp = runner_no_seq.execute_request(probe_step)
+            finding = detector_no_seq.evaluate_response(
+                principal=probe_step.principal,
+                target_resource=seq.resource,
+                response=resp,
+                step_name="stateless_probe",
+                sequence_category=seq.category
+            )
+            has_leak = finding is not None
+            if has_leak:
+                if label:
+                    cm_no_cache[c]["tp"] += 1
+                else:
+                    cm_no_cache[c]["fp"] += 1
             else:
-                cm_no_cache[c]["tn"] += 1
+                if label:
+                    cm_no_cache[c]["fn"] += 1
+                else:
+                    cm_no_cache[c]["tn"] += 1
 
         # 3. Ablation 2: No Ground-Truth Oracle (Naive Diffing)
         res_no_oracle = self.run_baseline_b_token_substitution("V1_MISSING_TENANT_KEY", dataset_version=dataset_version, matched_budget=True)
         cm_no_oracle = {c: {"tp": 0, "fp": 0, "tn": 0, "fn": 0} for c in categories}
+        naive_det = OracleFreeDifferentialDetector(canary_registry=self.sim.canary_registry)
+        sim_ab2 = TenantSimulator(seed=self.seed)
+        cache_sim_ab2 = ProxyCacheSimulator(config_archetype="V1_MISSING_TENANT_KEY")
+        runner_ab2 = DifferentialRunner(self.oracle, self.detector, cache_simulator=cache_sim_ab2)
         for seq, label in scenarios:
             c = "BENIGN_CONTROLS" if not label else seq.category
-            if label:
-                cm_no_oracle[c]["tp"] += 1
-            else:
-                if seq.resource.visibility == Visibility.PUBLIC or "dashboard" in seq.resource.id:
-                    cm_no_oracle["BENIGN_CONTROLS"]["fp"] += 1
+            cache_sim_ab2.purge_all()
+            lab_db.reset(sim_ab2)
+            prime_principal = seq.steps[0][1].principal
+            prime_resp = None
+            probe_resp = None
+            probe_step = next((req for desc, req in seq.steps if "probe" in req.step_name), seq.steps[-1][1])
+            for desc, req in seq.steps:
+                if "post_revocation_probe" in req.step_name and seq.category == "STALE_REVOCATION":
+                    lab_db.revoke_user_access(seq.resource.id, req.principal.user_id)
+                resp = runner_ab2.execute_request(req)
+                if "prime" in req.step_name or req == seq.steps[0][1]:
+                    prime_resp = resp
+                if "probe" in req.step_name:
+                    probe_resp = resp
+            f_naive = naive_det.evaluate_differential(
+                prime_response=prime_resp,
+                probe_response=probe_resp,
+                probing_principal=probe_step.principal,
+                target_path=seq.resource.endpoint_path,
+                priming_principal=prime_principal
+            )
+            if f_naive is not None:
+                if label:
+                    cm_no_oracle[c]["tp"] += 1
                 else:
-                    cm_no_oracle["BENIGN_CONTROLS"]["tn"] += 1
+                    cm_no_oracle[c]["fp"] += 1
+            else:
+                if label:
+                    cm_no_oracle[c]["fn"] += 1
+                else:
+                    cm_no_oracle[c]["tn"] += 1
 
-        # 4. Ablation 3: No Identity Awareness (Single Anonymous Identity)
-        start_time = time.time()
-        sim = TenantSimulator(seed=self.seed)
-        lab_db.reset(sim)
-        oracle = SecurityOracle(sim.resources)
-        detector = LeakageDetector(oracle, sim.canary_registry, sim.resources)
-        cache_sim = ProxyCacheSimulator(config_archetype="V1_MISSING_TENANT_KEY")
-        runner = DifferentialRunner(oracle, detector, cache_simulator=cache_sim)
-        anon_principal = Principal(user_id="anon", username="anon", tenant_id="anon", role=Role.GUEST)
+        # 4. Control: Single-User Reachability Control (No Identity Diversity)
+        # Note: Single-user testing functions as a reachability control experiment (TP=0, FN=46 by construction).
+        # Tests entire corpus using a single authenticated principal (Alice vs. Alice)
+        # Without multi-principal diversity, cross-tenant/cross-user/privilege leaks cannot be triggered
+        sim3 = TenantSimulator(seed=self.seed)
+        cache_sim3 = ProxyCacheSimulator(config_archetype="V1_MISSING_TENANT_KEY")
+        oracle3 = SecurityOracle(sim3.resources, sim3.principals)
+        detector3 = LeakageDetector(oracle3, sim3.canary_registry, sim3.resources)
+        runner3 = DifferentialRunner(oracle3, detector3, cache_simulator=cache_sim3)
+        single_principal = sim3.get_principal("user_alice")
 
         cm_no_ident = {c: {"tp": 0, "fp": 0, "tn": 0, "fn": 0} for c in categories}
         tp3 = fp3 = tn3 = fn3 = 0
 
         for seq, label in scenarios:
             c = "BENIGN_CONTROLS" if not label else seq.category
+            cache_sim3.purge_all()
+            lab_db.reset(sim3)
+
+            prime_step = seq.steps[0][1]
             probe_step = next((req for desc, req in seq.steps if "probe" in req.step_name), seq.steps[-1][1])
-            probe_step.principal = anon_principal
-            resp = runner.execute_request(probe_step)
-            
-            # Anonymous probes cannot access tenant-bound endpoints (returns 401/403)
-            if resp.status_code == 200 and seq.resource.visibility != Visibility.PUBLIC:
-                tp3 += 1
-                if c in cm_no_ident:
+
+            # In single-user scanning, both prime and probe are executed by the single authenticated identity
+            single_prime = RequestSpec(
+                step_name="single_prime",
+                method=prime_step.method,
+                url_path=prime_step.url_path,
+                principal=single_principal,
+                headers={"Authorization": f"Bearer {single_principal.auth_token}"},
+                query_params=prime_step.query_params
+            )
+            single_probe = RequestSpec(
+                step_name="single_probe",
+                method=probe_step.method,
+                url_path=probe_step.url_path,
+                principal=single_principal,
+                headers={"Authorization": f"Bearer {single_principal.auth_token}"},
+                query_params=probe_step.query_params
+            )
+
+            runner3.execute_request(single_prime)
+            resp = runner3.execute_request(single_probe)
+
+            finding = detector3.evaluate_response(
+                principal=single_principal,
+                target_resource=seq.resource,
+                response=resp,
+                step_name="single_probe",
+                sequence_category=seq.category
+            )
+
+            if finding is not None:
+                if label:
+                    tp3 += 1
                     cm_no_ident[c]["tp"] += 1
+                else:
+                    fp3 += 1
+                    cm_no_ident[c]["fp"] += 1
             else:
                 if label:
                     fn3 += 1
-                    if c in cm_no_ident:
-                        cm_no_ident[c]["fn"] += 1
+                    cm_no_ident[c]["fn"] += 1
                 else:
                     tn3 += 1
-                    if c in cm_no_ident:
-                        cm_no_ident[c]["tn"] += 1
+                    cm_no_ident[c]["tn"] += 1
 
         ablation_records = [
             {
@@ -756,20 +884,20 @@ class BenchmarkSuite:
                 "role_in_system": "Relies on naive response/length diffing on public assets"
             },
             {
-                "variant": "Ablation 3: No Identity Awareness",
+                "variant": "Control: Single-User Reachability Control (No Identity Diversity)",
                 "identity_aware": False,
                 "cache_sequenced": True,
                 "oracle_enabled": True,
                 "precision": round(tp3 / (tp3 + fp3), 4) if (tp3 + fp3) > 0 else None,
                 "recall": round(tp3 / (tp3 + fn3), 4) if (tp3 + fn3) > 0 else 0.0,
-                "f1_score": None,
+                "f1_score": round((2 * (tp3 / (tp3 + fp3)) * (tp3 / (tp3 + fn3))) / ((tp3 / (tp3 + fp3)) + (tp3 / (tp3 + fn3))), 4) if (tp3 + fp3 > 0 and tp3 + fn3 > 0 and ((tp3 / (tp3 + fp3)) + (tp3 / (tp3 + fn3))) > 0) else None,
                 "false_positive_rate": round(fp3 / (fp3 + tn3), 4) if (fp3 + tn3) > 0 else 0.0,
                 "tp": tp3,
                 "fp": fp3,
                 "fn": fn3,
                 "tn": tn3,
                 "confusion_matrix": cm_no_ident,
-                "role_in_system": "Single anonymous identity without tenant matrix"
+                "role_in_system": "Single authenticated principal (Alice vs. Alice); without identity diversity, cross-tenant leaks are never triggered"
             }
         ]
 

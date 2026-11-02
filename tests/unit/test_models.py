@@ -1,7 +1,7 @@
 """Unit tests for TenantCache core data models."""
 
 import pytest
-from src.tenantcache.models import Principal, Resource, Role, Visibility, CacheStatus, Finding, LeakageType, Severity
+from tenantcache.models import Principal, Resource, Role, Visibility, CacheStatus, Finding, LeakageType, Severity
 
 
 def test_principal_model():

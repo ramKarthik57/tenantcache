@@ -1,18 +1,18 @@
 """Integration tests for DifferentialRunner."""
 
-from src.tenantcache.simulator import TenantSimulator
-from src.tenantcache.oracle import SecurityOracle
-from src.tenantcache.detection import LeakageDetector
-from src.tenantcache.generator import RequestGenerator
-from src.tenantcache.differential import DifferentialRunner
-from src.tenantcache.cache import ProxyCacheSimulator
+from tenantcache.simulator import TenantSimulator
+from tenantcache.oracle import SecurityOracle
+from tenantcache.detection import LeakageDetector
+from tenantcache.generator import RequestGenerator
+from tenantcache.differential import DifferentialRunner
+from tenantcache.cache import ProxyCacheSimulator
 from lab.application.database import lab_db
 
 
 def test_runner_v1_detects_cross_tenant_leak():
     sim = TenantSimulator(seed=42)
     lab_db.reset(sim)
-    oracle = SecurityOracle(sim.resources)
+    oracle = SecurityOracle(sim.resources, sim.principals)
     detector = LeakageDetector(oracle, sim.canary_registry, sim.resources)
     generator = RequestGenerator(sim)
 
@@ -36,7 +36,7 @@ def test_runner_v1_detects_cross_tenant_leak():
 def test_runner_s1_blocks_leak():
     sim = TenantSimulator(seed=42)
     lab_db.reset(sim)
-    oracle = SecurityOracle(sim.resources)
+    oracle = SecurityOracle(sim.resources, sim.principals)
     detector = LeakageDetector(oracle, sim.canary_registry, sim.resources)
     generator = RequestGenerator(sim)
 

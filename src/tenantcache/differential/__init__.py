@@ -8,14 +8,14 @@ from typing import List, Optional, Dict, Any
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     from starlette.testclient import TestClient
-from src.tenantcache.models import (
+from tenantcache.models import (
     RequestSpec, ResponseRecord, Finding, CacheStatus, Principal, Resource
 )
-from src.tenantcache.cache import ProxyCacheSimulator
-from src.tenantcache.oracle import SecurityOracle
-from src.tenantcache.detection import LeakageDetector
-from src.tenantcache.generator import TestSequence
-from src.tenantcache.config import TargetSecurityGuard
+from tenantcache.cache import ProxyCacheSimulator
+from tenantcache.oracle import SecurityOracle
+from tenantcache.detection import LeakageDetector
+from tenantcache.generator import TestSequence
+from tenantcache.config import TargetSecurityGuard
 from lab.application.main import app as lab_fastapi_app
 
 
@@ -68,6 +68,22 @@ class DifferentialRunner:
             # 1. Lookup in Cache Simulator
             cached_resp = self.cache_sim.lookup(request)
             if cached_resp:
+                if self.cache_sim.config_archetype == "SECURE_S2_IDENTITY_KEYED":
+                    # Mandatory per-request auth verification (parity with Nginx auth_request module)
+                    auth_headers = {"Authorization": request.headers.get("Authorization", ""), "X-Original-URI": request.url_path}
+                    auth_res = self._test_client.get(
+                        "/api/v1/auth/verify",
+                        headers=auth_headers
+                    )
+                    if auth_res.status_code != 200:
+                        # Denied by origin authorization check; do NOT serve cached response!
+                        return ResponseRecord(
+                            status_code=auth_res.status_code,
+                            headers=dict(auth_res.headers),
+                            body_text=auth_res.text,
+                            cache_status=CacheStatus.BYPASS,
+                            latency_ms=(time.time() - start_time) * 1000.0
+                        )
                 cached_resp.latency_ms = (time.time() - start_time) * 1000.0
                 return cached_resp
 

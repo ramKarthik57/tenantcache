@@ -2,11 +2,11 @@
 
 import time
 from typing import Optional, Dict, List
-from src.tenantcache.models import (
+from tenantcache.models import (
     Finding, LeakageType, Severity, Principal, Resource, ResponseRecord,
     CacheStatus, Visibility, Role
 )
-from src.tenantcache.oracle import SecurityOracle, AuthDecision
+from tenantcache.oracle import SecurityOracle, AuthDecision
 
 
 class LeakageDetector:
@@ -118,3 +118,82 @@ class LeakageDetector:
             return LeakageType.CROSS_USER_LEAK, Severity.HIGH
 
         return LeakageType.CROSS_TENANT_LEAK, Severity.HIGH
+
+
+class OracleFreeDifferentialDetector:
+    """Naive differential detector operating strictly without an authorization oracle.
+    
+    Evaluates observable HTTP response evidence (body text identity, canary reflection, cache status)
+    without consulting ground-truth authorization models. Consequently cannot distinguish legitimate
+    shared content (public documentation, intra-tenant shared dashboards) from true unauthorized leaks.
+    """
+
+    def __init__(self, canary_registry: Optional[Dict[str, str]] = None):
+        self.canary_registry = canary_registry or {}
+
+    def evaluate_differential(
+        self,
+        prime_response: Optional[ResponseRecord],
+        probe_response: ResponseRecord,
+        probing_principal: Principal,
+        target_path: str,
+        priming_principal: Optional[Principal] = None
+    ) -> Optional[Finding]:
+        """Evaluates whether probe_response appears to be a cache leakage based purely on observable evidence.
+        
+        A naive differential tester compares responses between substituted identity tokens.
+        If the probing user shares the identity of the priming user, a cache hit appears to be normal
+        same-user caching; without an authorization oracle, the tester cannot detect temporal revocation.
+        Across differing identities, cache hits and response collisions are flagged as leakages.
+        """
+        # Same-user cache hit is considered benign by naive diffing (lacks oracle to track revocation)
+        if priming_principal and priming_principal.user_id == probing_principal.user_id:
+            return None
+
+        # 1. Must be a successful response served from cache
+        is_cache_hit = "HIT" in probe_response.cache_status.value.upper()
+        if probe_response.status_code != 200 or not is_cache_hit:
+            return None
+
+        # 2. Check for response body identity or canary reflection from prime response
+        has_content_collision = False
+        detected_token = None
+
+        if prime_response and prime_response.status_code == 200:
+            if prime_response.body_text and prime_response.body_text == probe_response.body_text:
+                has_content_collision = True
+            if prime_response.matched_canaries:
+                for c in prime_response.matched_canaries:
+                    if c in probe_response.body_text:
+                        has_content_collision = True
+                        detected_token = c
+                        break
+
+        # Also scan response for known canaries in registry
+        if not detected_token and self.canary_registry:
+            for canary in self.canary_registry:
+                if canary in probe_response.body_text:
+                    has_content_collision = True
+                    detected_token = canary
+                    break
+
+        if has_content_collision:
+            res_id = self.canary_registry.get(detected_token, "res_unknown") if detected_token else "res_unknown"
+            return Finding(
+                leakage_type=LeakageType.CROSS_TENANT_LEAK,
+                severity=Severity.HIGH,
+                title=f"NAIVE_DIFF_LEAK: Cached response collision on {target_path}",
+                description=f"Observable cache collision detected for {probing_principal.username} on {target_path} without oracle validation.",
+                target_path=target_path,
+                resource_id=res_id,
+                resource_owner_tenant="unknown",
+                resource_owner_user="unknown",
+                victim_principal="prime_user",
+                adversary_principal=probing_principal.identifier(),
+                detected_canary=detected_token or "COLLISION",
+                response_cache_status=probe_response.cache_status,
+                evidence_headers=probe_response.headers,
+                timestamp=time.strftime("%Y-%m-%d %H:%M:%S")
+            )
+
+        return None

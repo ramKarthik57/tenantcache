@@ -1,7 +1,7 @@
 """Unit tests for ProxyCacheSimulator."""
 
-from src.tenantcache.cache import ProxyCacheSimulator
-from src.tenantcache.models import RequestSpec, Principal, Role, CacheStatus
+from tenantcache.cache import ProxyCacheSimulator
+from tenantcache.models import RequestSpec, Principal, Role, CacheStatus
 
 
 def test_proxy_cache_hit_and_miss():

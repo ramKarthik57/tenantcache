@@ -3,7 +3,7 @@
 import time
 import hashlib
 from typing import Dict, Optional, Tuple, Any
-from src.tenantcache.models import CacheStatus, RequestSpec, ResponseRecord
+from tenantcache.models import CacheStatus, RequestSpec, ResponseRecord
 
 
 class ProxyCacheEntry:
@@ -57,8 +57,9 @@ class ProxyCacheSimulator:
             raw_key = f"{scheme}{method}{host}{uri}"
 
         elif self.config_archetype == "V6_NORMALIZATION":
-            # Vulnerability 6: Path normalization inconsistency
-            normalized_path = uri.rstrip("/").lower()
+            # Vulnerability 6: Path-normalization aliasing (e.g. duplicate slashes collapsed)
+            import re
+            normalized_path = re.sub(r"/+", "/", uri).rstrip("/").lower()
             raw_key = f"{scheme}{method}{host}{normalized_path}"
 
         elif self.config_archetype == "SECURE_S1_STRICT_PRIVATE":
@@ -66,8 +67,11 @@ class ProxyCacheSimulator:
             raw_key = f"{scheme}{method}{host}{uri}"
 
         elif self.config_archetype == "SECURE_S2_IDENTITY_KEYED":
-            # Secure 2: Server-validated cryptographic identity key
-            raw_key = f"{scheme}{method}{host}{uri}|{auth_header}"
+            # Secure 2: Server-validated identity keying from auth_request subrequest variables ($auth_tenant, $auth_user)
+            # Untrusted client-supplied identity headers (X-Tenant-ID, X-User-ID) are stripped completely
+            tenant_id = request.principal.tenant_id
+            user_id = request.principal.user_id
+            raw_key = f"{scheme}{method}{host}{uri}|{tenant_id}|{user_id}"
 
         else:
             raw_key = f"{scheme}{method}{host}{uri}"
