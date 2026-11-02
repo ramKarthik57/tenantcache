@@ -36,11 +36,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y nginx
+          sudo systemctl stop nginx 2>/dev/null || sudo service nginx stop 2>/dev/null || true
 
       - name: Install Python Package & Dependencies
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install -r constraints.txt
+          python -m pip install -r requirements.txt
           python -m pip install -e .
 
       - name: Run TenantCache Doctor Health Check
@@ -70,11 +71,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: 'pip'
 
       - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r constraints.txt
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install -r requirements.txt
           python -m pip install -e .
 
       - name: Validate 66-Scenario Benchmark

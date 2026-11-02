@@ -11,7 +11,7 @@ class TargetSecurityGuard:
     ALLOWED_HOSTS = {
         "localhost",
         "127.0.0.1",
-        "0.0.0.0",
+        "0.0.0.0",  # nosec: B104
         "testserver",
         "tenantcache_app",
         "tenantcache_proxy",

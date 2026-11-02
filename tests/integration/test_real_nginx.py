@@ -126,7 +126,12 @@ def _start_nginx(conf_rel_path: str, cache_folder: str, ctx: LiveLabContext = No
     with open(runtime_conf, "w", encoding="utf-8") as f:
         f.write(conf_content)
 
-    cmd = [NGINX_EXE, "-p", NGINX_CWD, "-c", runtime_conf, "-g", "daemon off;"]
+    cmd = [
+        NGINX_EXE,
+        "-p", NGINX_CWD,
+        "-c", runtime_conf,
+        "-g", f"daemon off; pid temp/nginx_{cache_folder}.pid; error_log logs/error_{cache_folder}.log info;"
+    ]
     proc = subprocess.Popen(cmd, cwd=NGINX_CWD, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     time.sleep(1.2)
     return proc
