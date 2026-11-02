@@ -1,13 +1,74 @@
-lab/nginx_runtime/
-*.zip
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Release artifacts (built dynamically via scripts/build_release_zip.py)
+*.zip
+
+# PyInstaller / Nginx runtime
+lab/nginx_runtime/
+lab/nginx_runtime/nginx-1.26.2/logs/
+lab/nginx_runtime/nginx-1.26.2/temp/
+logs/
+temp/
+*.log
+*.pid
+
+# Unit test / coverage reports
 .pytest_cache/
 .hypothesis/
-*.egg-info/
-dist/
-build/
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Environments
 .env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Editor / IDE configurations
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 .DS_Store
 Thumbs.db

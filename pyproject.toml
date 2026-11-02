@@ -8,7 +8,7 @@ version = "1.1.0"
 description = "Automated Differential Verification of Cache Isolation in Multi-Tenant Web Applications"
 readme = "README.md"
 requires-python = ">=3.11"
-license = "MIT"
+license = { text = "MIT" }
 authors = [
     { name = "Ramkumar V.", email = "ramkumar.v@research.tenantcache.org" },
     { name = "Advanced Systems & Cybersecurity Research Group" }
@@ -19,7 +19,9 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
-    "Topic :: Security"
+    "Topic :: Security",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
 ]
 dependencies = [
     "fastapi>=0.110.0",
@@ -35,14 +37,60 @@ dependencies = [
     "python-dotenv>=1.0.0"
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "hypothesis>=6.98.0",
+    "black>=24.0.0",
+    "flake8>=7.0.0",
+    "mypy>=1.9.0",
+    "pip-audit>=2.7.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/ramKarthik57/tenantcache"
+Documentation = "https://github.com/ramKarthik57/tenantcache#readme"
+Repository = "https://github.com/ramKarthik57/tenantcache.git"
+Issues = "https://github.com/ramKarthik57/tenantcache/issues"
+Changelog = "https://github.com/ramKarthik57/tenantcache/releases"
+
 [project.scripts]
 tenantcache = "tenantcache.cli:app"
 
 [tool.setuptools]
-packages = ["tenantcache", "tenantcache.cache", "tenantcache.detection", "tenantcache.differential", "tenantcache.evaluation", "tenantcache.generator", "tenantcache.models", "tenantcache.oracle", "tenantcache.reporting", "tenantcache.simulator", "lab", "lab.application"]
+packages = [
+    "tenantcache",
+    "tenantcache.cache",
+    "tenantcache.detection",
+    "tenantcache.differential",
+    "tenantcache.evaluation",
+    "tenantcache.generator",
+    "tenantcache.models",
+    "tenantcache.oracle",
+    "tenantcache.reporting",
+    "tenantcache.simulator",
+    "lab",
+    "lab.application"
+]
 package-dir = {"" = "src", "lab" = "lab"}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 pythonpath = [".", "src"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311", "py312"]
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
