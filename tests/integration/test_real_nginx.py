@@ -80,21 +80,34 @@ pytestmark = pytest.mark.skipif(NGINX_EXE is None, reason="No native Nginx binar
 
 
 def _stop_process_safe(proc):
-    """Safely terminates only the specific child process PID without affecting unrelated system processes."""
+    """Safely terminates only the specific child process PID and its workers without affecting unrelated system processes."""
     if proc is None:
         return
+
+    cache_folder = getattr(proc, "cache_folder", None)
+    nginx_port = getattr(proc, "nginx_port", None)
+
     try:
         if IS_WINDOWS:
             subprocess.run(["taskkill.exe", "/F", "/T", "/PID", str(proc.pid)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         else:
+            if cache_folder:
+                subprocess.run(["pkill", "-9", "-f", f"runtime_{cache_folder}.conf"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["pkill", "-9", "-P", str(proc.pid)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             proc.kill()
-            proc.wait(timeout=2.0)
+            proc.wait(timeout=1.0)
     except Exception:
-        try:
-            proc.kill()
-        except Exception:
-            pass
+        pass
+
+    # Ensure port is completely released before subsequent tests execute
+    if nginx_port:
+        deadline = time.time() + 2.0
+        while time.time() < deadline:
+            try:
+                with socket.create_connection(("127.0.0.1", nginx_port), timeout=0.05):
+                    time.sleep(0.05)
+            except (OSError, ConnectionRefusedError):
+                break
 
 
 def _start_nginx(conf_rel_path: str, cache_folder: str, ctx: LiveLabContext = None):
@@ -120,6 +133,11 @@ def _start_nginx(conf_rel_path: str, cache_folder: str, ctx: LiveLabContext = No
     # Dynamic port substitutions
     nginx_port = ctx.nginx_port if ctx else 8080
     backend_port = ctx.backend_port if ctx else 8000
+
+    # Ensure port is free on Linux before binding
+    if not IS_WINDOWS:
+        subprocess.run(f"fuser -k -9 {nginx_port}/tcp 2>/dev/null || true", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
     conf_content = re.sub(r"listen\s+\d+;", f"listen {nginx_port};", conf_content)
     conf_content = conf_content.replace(":8000", f":{backend_port}")
 
@@ -152,6 +170,8 @@ def _start_nginx(conf_rel_path: str, cache_folder: str, ctx: LiveLabContext = No
         "-g", "daemon off;"
     ]
     proc = subprocess.Popen(cmd, cwd=NGINX_CWD, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+    proc.cache_folder = cache_folder
+    proc.nginx_port = nginx_port
 
     # Socket polling loop to ensure Nginx is accepting connections before test proceeds
     deadline = time.time() + 5.0
