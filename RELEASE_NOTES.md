@@ -50,7 +50,7 @@ All release assets are cryptographically signed via SHA-256 digests:
 
 | File Name | File Size | SHA-256 Checksum |
 | :--- | :--- | :--- |
-| **`tenantcache.zip`** | 2,289,951 bytes | `375fa5c783702a65177a69af9182d866a4ca1410cf8ca6d6f066c16228c5fac2` |
+| **`tenantcache.zip`** | ~2.21 MB | Verified via companion `tenantcache.zip.sha256` |
 | **`tenantcache.zip.sha256`** | 83 bytes | Checksum verification sidecar for `tenantcache.zip` |
 | **`SHA256SUMS`** | 83 bytes | Canonical root manifest |
 

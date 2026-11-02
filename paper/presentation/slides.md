@@ -236,4 +236,4 @@ Evaluated on **Dataset v1.1** (66 scenarios: 46 vulnerable, 20 balanced controls
 * **Open-Source Availability:**
   * **Repository:** `https://github.com/ramKarthik57/tenantcache`
   * **Release:** `v1.1.0` (Canonical archive: `tenantcache.zip`)
-  * **Checksum:** `375fa5c783702a65177a69af9182d866a4ca1410cf8ca6d6f066c16228c5fac2`
+  * **Checksum:** Verified via companion `tenantcache.zip.sha256`
