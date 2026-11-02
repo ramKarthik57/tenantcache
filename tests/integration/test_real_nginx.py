@@ -143,13 +143,15 @@ def _start_nginx(conf_rel_path: str, cache_folder: str, ctx: LiveLabContext = No
     with open(runtime_conf, "w", encoding="utf-8") as f:
         f.write(conf_content)
 
+    err_log_rel = f"logs/error_{cache_folder}.log"
     cmd = [
         NGINX_EXE,
+        "-e", err_log_rel,
         "-p", NGINX_CWD,
         "-c", runtime_conf,
         "-g", "daemon off;"
     ]
-    proc = subprocess.Popen(cmd, cwd=NGINX_CWD, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    proc = subprocess.Popen(cmd, cwd=NGINX_CWD, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
 
     # Socket polling loop to ensure Nginx is accepting connections before test proceeds
     deadline = time.time() + 5.0
@@ -160,7 +162,13 @@ def _start_nginx(conf_rel_path: str, cache_folder: str, ctx: LiveLabContext = No
             if os.path.exists(err_log_path):
                 with open(err_log_path, "r", encoding="utf-8", errors="ignore") as f:
                     err_content = f.read()
-            raise RuntimeError(f"Nginx terminated unexpectedly (code {proc.returncode}). Error log:\n{err_content}")
+            stderr_out = ""
+            if proc.stderr:
+                try:
+                    stderr_out = proc.stderr.read().decode("utf-8", errors="ignore")
+                except Exception:
+                    pass
+            raise RuntimeError(f"Nginx terminated unexpectedly (code {proc.returncode}). Stderr:\n{stderr_out}\nError log:\n{err_content}")
         try:
             with socket.create_connection(("127.0.0.1", nginx_port), timeout=0.1):
                 break
