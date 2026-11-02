@@ -1,0 +1,90 @@
+name: CI & Quality Assurance
+
+on:
+  push:
+    branches: [ master ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ master ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test (${{ matrix.os }} / Python ${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install System Dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nginx
+
+      - name: Install Python Package & Dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install -r constraints.txt
+          python -m pip install -e .
+
+      - name: Run TenantCache Doctor Health Check
+        run: |
+          python -m tenantcache.cli doctor
+
+      - name: Run Core Test Suite (without Hypothesis)
+        run: |
+          pytest tests/ -v --ignore=tests/unit/test_property_hypothesis.py
+
+      - name: Run Full Test Suite (with Hypothesis Property Engine)
+        run: |
+          pytest tests/ -v
+
+      - name: Verify Live Nginx Integration (8 Archetypes)
+        run: |
+          pytest tests/integration/test_real_nginx.py -v
+
+  benchmark-validation:
+    name: Deterministic Benchmark Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r constraints.txt
+          python -m pip install -e .
+
+      - name: Validate 66-Scenario Benchmark
+        run: |
+          python -m tenantcache.cli benchmark --version v1.1 --profile comprehensive
+
+      - name: Validate Component Ablation Study
+        run: |
+          python -m tenantcache.cli ablation --version v1.1
+
+      - name: Validate Multi-Seed Reproducibility
+        run: |
+          python -m tenantcache.cli reproducibility --version v1.1
